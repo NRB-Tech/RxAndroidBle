@@ -119,6 +119,7 @@ class RxBleClientImpl extends RxBleClient {
     public Set<RxBleDevice> getBondedDevices() {
         guardBluetoothAdapterAvailable();
         Set<RxBleDevice> rxBleDevices = new HashSet<>();
+        // TODO: check BLUETOOTH_CONNECT permission
         Set<BluetoothDevice> bluetoothDevices = rxBleAdapterWrapper.getBondedDevices();
         for (BluetoothDevice bluetoothDevice : bluetoothDevices) {
             rxBleDevices.add(getBleDevice(bluetoothDevice.getAddress()));
