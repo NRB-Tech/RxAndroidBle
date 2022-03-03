@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 
 import com.polidea.rxandroidble2.helpers.LocationServicesOkObservable;
@@ -90,6 +91,7 @@ public interface ClientComponent {
         public static final String BOOL_IS_ANDROID_WEAR = "android-wear";
         public static final String BOOL_IS_NEARBY_PERMISSION_NEVER_FOR_LOCATION = "nearby-permission-never-for-location";
         public static final String STRING_ARRAY_SCAN_PERMISSIONS = "scan-permissions";
+        public static final String STRING_ARRAY_CONNECT_PERMISSIONS = "connect-permissions";
         public static final String PACKAGE_INFO = "package-info";
 
         private PlatformConstants() {
@@ -187,6 +189,22 @@ public interface ClientComponent {
                     new String[]{Manifest.permission.BLUETOOTH_SCAN},
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
             };
+        }
+
+        @Provides
+        @Named(PlatformConstants.STRING_ARRAY_CONNECT_PERMISSIONS)
+        static String[][] provideRecommendedConnectRuntimePermissionNames(
+                @Named(PlatformConstants.INT_DEVICE_SDK) int deviceSdk,
+                @Named(PlatformConstants.INT_TARGET_SDK) int targetSdk
+        ) {
+            int sdkVersion = Math.min(deviceSdk, targetSdk);
+            if (sdkVersion < 31  /* pre Android 12 */) {
+                // Before API 31 (Android 12) no connect permissions are needed
+                return new String[][]{};
+            }
+
+            // Since API 31 (Android 12) BLUETOOTH_CONNECT is required to establish a connection to a device
+            return new String[][]{new String[]{Manifest.permission.BLUETOOTH_CONNECT}};
         }
 
         @Provides
@@ -301,6 +319,7 @@ public interface ClientComponent {
                     && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.S)
         @Provides
         @Named(PlatformConstants.BOOL_IS_NEARBY_PERMISSION_NEVER_FOR_LOCATION)
         @ClientScope
