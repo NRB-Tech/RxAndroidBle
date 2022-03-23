@@ -16,16 +16,19 @@ import com.polidea.rxandroidble2.internal.scan.ScanPreconditionsVerifier;
 import com.polidea.rxandroidble2.internal.scan.ScanSetup;
 import com.polidea.rxandroidble2.internal.scan.ScanSetupBuilder;
 import com.polidea.rxandroidble2.internal.serialization.ClientOperationQueue;
-import com.polidea.rxandroidble2.internal.util.CheckerLocationPermission;
+import com.polidea.rxandroidble2.internal.util.CheckerScanPermission;
 import com.polidea.rxandroidble2.internal.util.ClientStateObservable;
 import com.polidea.rxandroidble2.internal.util.LocationServicesStatus;
 import com.polidea.rxandroidble2.internal.util.RxBleAdapterWrapper;
+import com.polidea.rxandroidble2.internal.util.ScanRecordParser;
 import com.polidea.rxandroidble2.scan.BackgroundScanner;
 import com.polidea.rxandroidble2.scan.ScanFilter;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 
 import io.reactivex.functions.Consumer;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -50,8 +53,7 @@ class RxBleClientImpl extends RxBleClient {
     @Deprecated
     public static final String TAG = "RxBleClient";
     final ClientOperationQueue operationQueue;
-    @SuppressWarnings("deprecation")
-    private final com.polidea.rxandroidble2.internal.util.UUIDUtil uuidUtil;
+    private final ScanRecordParser scanRecordParser;
     private final RxBleDeviceProvider rxBleDeviceProvider;
     final ScanSetupBuilder scanSetupBuilder;
     final ScanPreconditionsVerifier scanPreconditionVerifier;
@@ -64,14 +66,13 @@ class RxBleClientImpl extends RxBleClient {
     private final LocationServicesStatus locationServicesStatus;
     private final Lazy<ClientStateObservable> lazyClientStateObservable;
     private final BackgroundScanner backgroundScanner;
-    private final CheckerLocationPermission checkerLocationPermission;
+    private final CheckerScanPermission checkerScanPermission;
 
     @Inject
-    @SuppressWarnings("deprecation")
     RxBleClientImpl(RxBleAdapterWrapper rxBleAdapterWrapper,
                     ClientOperationQueue operationQueue,
                     Observable<BleAdapterState> adapterStateObservable,
-                    com.polidea.rxandroidble2.internal.util.UUIDUtil uuidUtil,
+                    ScanRecordParser scanRecordParser,
                     LocationServicesStatus locationServicesStatus,
                     Lazy<ClientStateObservable> lazyClientStateObservable,
                     RxBleDeviceProvider rxBleDeviceProvider,
@@ -81,11 +82,11 @@ class RxBleClientImpl extends RxBleClient {
                     @Named(ClientComponent.NamedSchedulers.BLUETOOTH_INTERACTION) Scheduler bluetoothInteractionScheduler,
                     ClientComponent.ClientComponentFinalizer clientComponentFinalizer,
                     BackgroundScanner backgroundScanner,
-                    CheckerLocationPermission checkerLocationPermission) {
-        this.uuidUtil = uuidUtil;
+                    CheckerScanPermission checkerScanPermission) {
         this.operationQueue = operationQueue;
         this.rxBleAdapterWrapper = rxBleAdapterWrapper;
         this.rxBleAdapterStateObservable = adapterStateObservable;
+        this.scanRecordParser = scanRecordParser;
         this.locationServicesStatus = locationServicesStatus;
         this.lazyClientStateObservable = lazyClientStateObservable;
         this.rxBleDeviceProvider = rxBleDeviceProvider;
@@ -95,7 +96,7 @@ class RxBleClientImpl extends RxBleClient {
         this.bluetoothInteractionScheduler = bluetoothInteractionScheduler;
         this.clientComponentFinalizer = clientComponentFinalizer;
         this.backgroundScanner = backgroundScanner;
-        this.checkerLocationPermission = checkerLocationPermission;
+        this.checkerScanPermission = checkerScanPermission;
     }
 
     @Override
@@ -151,7 +152,7 @@ class RxBleClientImpl extends RxBleClient {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public Observable<RxBleScanResult> scanBleDevices(@Nullable final UUID... filterServiceUUIDs) {
         return Observable.defer(new Callable<ObservableSource<? extends RxBleScanResult>>() {
             @Override
@@ -162,8 +163,13 @@ class RxBleClientImpl extends RxBleClient {
         });
     }
 
+    private Set<UUID> toDistinctSet(@Nullable UUID[] uuids) {
+        if (uuids == null) uuids = new UUID[0];
+        return new HashSet<>(Arrays.asList(uuids));
+    }
+
     Observable<RxBleScanResult> initializeScan(@Nullable UUID[] filterServiceUUIDs) {
-        final Set<UUID> filteredUUIDs = uuidUtil.toDistinctSet(filterServiceUUIDs);
+        final Set<UUID> filteredUUIDs = toDistinctSet(filterServiceUUIDs);
 
         synchronized (queuedScanOperations) {
             Observable<RxBleScanResult> matchingQueuedScan = queuedScanOperations.get(filteredUUIDs);
@@ -206,9 +212,9 @@ class RxBleClientImpl extends RxBleClient {
     }
 
     private Observable<RxBleScanResult> createScanOperationApi18(@Nullable final UUID[] filterServiceUUIDs) {
-        final Set<UUID> filteredUUIDs = uuidUtil.toDistinctSet(filterServiceUUIDs);
+        final Set<UUID> filteredUUIDs = toDistinctSet(filterServiceUUIDs);
         final LegacyScanOperation
-                scanOperation = new LegacyScanOperation(filterServiceUUIDs, rxBleAdapterWrapper, uuidUtil);
+                scanOperation = new LegacyScanOperation(filterServiceUUIDs, rxBleAdapterWrapper, scanRecordParser);
         return operationQueue.queue(scanOperation)
                 .doFinally(new Action() {
                     @Override
@@ -266,11 +272,11 @@ class RxBleClientImpl extends RxBleClient {
 
     @Override
     public boolean isScanRuntimePermissionGranted() {
-        return checkerLocationPermission.isScanRuntimePermissionGranted();
+        return checkerScanPermission.isScanRuntimePermissionGranted();
     }
 
     @Override
     public String[] getRecommendedScanRuntimePermissions() {
-        return checkerLocationPermission.getRecommendedScanRuntimePermissions();
+        return checkerScanPermission.getRecommendedScanRuntimePermissions();
     }
 }

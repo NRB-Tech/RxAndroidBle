@@ -1,18 +1,15 @@
 package com.polidea.rxandroidble2.mockrxandroidble
 
-import android.os.Build
+
 import android.os.ParcelUuid
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
-import com.polidea.rxandroidble2.scan.ScanFilter;
-import com.polidea.rxandroidble2.scan.ScanSettings;
-import hkhc.electricspock.ElectricSpecification
+import com.polidea.rxandroidble2.scan.ScanFilter
+import com.polidea.rxandroidble2.scan.ScanSettings
 import io.reactivex.subjects.PublishSubject
-import org.robolectric.annotation.Config
-import com.polidea.rxandroidble2.BuildConfig
+import spock.lang.Specification
 
-@Config(manifest = Config.NONE, constants = BuildConfig, sdk = Build.VERSION_CODES.LOLLIPOP)
-public class RxBleClientMockTest extends ElectricSpecification {
+public class RxBleClientMockTest extends Specification {
 
     def serviceUUID = UUID.fromString("00001234-0000-0000-8000-000000000000")
     def serviceUUID2 = UUID.fromString("00001235-0000-0000-8000-000000000000")
@@ -32,6 +29,7 @@ public class RxBleClientMockTest extends ElectricSpecification {
                         .setAdvertiseFlags(1)
                         .addServiceUuid(new ParcelUuid(serviceUUID))
                         .addServiceUuid(new ParcelUuid(serviceUUID2))
+                        .addServiceSolicitionUuid(new ParcelUuid(serviceUUID))
                         .addManufacturerSpecificData(0x2211, [0x33, 0x44] as byte[])
                         .addServiceData(new ParcelUuid(serviceUUID), [0x11, 0x22] as byte[])
                         .setTxPowerLevel(12)
@@ -129,6 +127,66 @@ public class RxBleClientMockTest extends ElectricSpecification {
         def scanSettings = new ScanSettings.Builder().build()
         def scanFilter = new ScanFilter.Builder()
                 .setServiceUuid(
+                        new ParcelUuid(UUID.fromString("00001200-0000-0000-8000-000000000000")),
+                        new ParcelUuid(UUID.fromString("0000FFF0-0000-0000-8000-000000000000"))
+                )
+                .build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .test()
+
+        then:
+        testSubscriber.assertEmpty()
+    }
+
+    def "should return filtered BluetoothDevice filtered on service solicitation UUID"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder().setServiceSolicitationUuid(new ParcelUuid(serviceUUID)).build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .take(1)
+                .map { scanResult -> scanResult.getBleDevice().getMacAddress() }
+                .test()
+
+        then:
+        testSubscriber.assertValue("AA:BB:CC:DD:EE:FF")
+    }
+
+    def "should not return filtered BluetoothDevice filtered on invalid service solicitation UUID"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder().setServiceSolicitationUuid(
+                new ParcelUuid(UUID.fromString("00001236-0000-0000-8000-000000000000"))
+        ).build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .test()
+
+        then:
+        testSubscriber.assertEmpty()
+    }
+
+    def "should return filtered BluetoothDevice filtered on masked service solicitation UUID"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder()
+                .setServiceSolicitationUuid(
+                        new ParcelUuid(UUID.fromString("00001230-0000-0000-8000-000000000000")),
+                        new ParcelUuid(UUID.fromString("0000FFF0-0000-0000-8000-000000000000"))
+                )
+                .build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .take(1)
+                .map { scanResult -> scanResult.getBleDevice().getMacAddress() }
+                .test()
+
+        then:
+        testSubscriber.assertValue("AA:BB:CC:DD:EE:FF")
+    }
+
+    def "should not return filtered BluetoothDevice filtered on invalid masked service solicitation UUID"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder()
+                .setServiceSolicitationUuid(
                         new ParcelUuid(UUID.fromString("00001200-0000-0000-8000-000000000000")),
                         new ParcelUuid(UUID.fromString("0000FFF0-0000-0000-8000-000000000000"))
                 )
