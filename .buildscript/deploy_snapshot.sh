@@ -5,7 +5,7 @@
 # Adapted from https://coderwall.com/p/9b_lfq and
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 
-SLUG="Polidea/RxAndroidBle"
+SLUG="nrbtech/RxAndroidBle"
 JDK="oraclejdk8"
 WHITELIST_BRANCHES=("master" "develop")
 # TODO [PU] Eventually branch name should be set to master and the RxJava 1.0 version should be moved to "master-rxjava1.X
