@@ -35,11 +35,13 @@ def getSnapshotRepositoryUrl() {
 }
 
 def getRepositoryUsername() {
-    return hasProperty('SONATYPE_NEXUS_USERNAME') ? property('SONATYPE_NEXUS_USERNAME') : ""
+    return System.getenv("SONATYPE_NEXUS_USERNAME") != null ? System.getenv("SONATYPE_NEXUS_USERNAME") :
+            hasProperty('SONATYPE_NEXUS_USERNAME') ? property('SONATYPE_NEXUS_USERNAME') : ""
 }
 
 def getRepositoryPassword() {
-    return hasProperty('SONATYPE_NEXUS_PASSWORD') ? property('SONATYPE_NEXUS_PASSWORD') : ""
+    return System.getenv("SONATYPE_NEXUS_PASSWORD") != null ? System.getenv("SONATYPE_NEXUS_PASSWORD") :
+            hasProperty('SONATYPE_NEXUS_PASSWORD') ? property('SONATYPE_NEXUS_PASSWORD') : ""
 }
 
 def getPgpSigningKey() {
