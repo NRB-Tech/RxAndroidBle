@@ -17,68 +17,58 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-version = VERSION_NAME
-group = GROUP
-
-def isReleaseBuild() {
-    return !VERSION_NAME.endsWith("SNAPSHOT")
-}
-
-def getReleaseRepositoryUrl() {
-    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
-            : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-}
-
-def getSnapshotRepositoryUrl() {
-    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
-            : "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-}
-
-def getRepositoryUsername() {
-    return System.getenv("SONATYPE_NEXUS_USERNAME") != null ? System.getenv("SONATYPE_NEXUS_USERNAME") :
-            hasProperty('SONATYPE_NEXUS_USERNAME') ? property('SONATYPE_NEXUS_USERNAME') : ""
-}
-
-def getRepositoryPassword() {
-    return System.getenv("SONATYPE_NEXUS_PASSWORD") != null ? System.getenv("SONATYPE_NEXUS_PASSWORD") :
-            hasProperty('SONATYPE_NEXUS_PASSWORD') ? property('SONATYPE_NEXUS_PASSWORD') : ""
-}
-
-def getPgpSigningKey() {
-    return System.getenv("PGP_SIGNING_KEY") != null ? System.getenv("PGP_SIGNING_KEY") :
-            hasProperty('PGP_SIGNING_KEY') ? property('PGP_SIGNING_KEY') : ""
-}
-
-def getPgpSigningPassword() {
-    return System.getenv("PGP_SIGNING_PASSWORD") != null ? System.getenv("PGP_SIGNING_PASSWORD") :
-            hasProperty('PGP_SIGNING_PASSWORD') ? property('PGP_SIGNING_PASSWORD') : ""
-}
-
-def isAndroidProject() {
-    return project.getPlugins().hasPlugin('com.android.application') || project.getPlugins().hasPlugin('com.android.library')
-}
-
 afterEvaluate { project ->
-    if(!isAndroidProject()) {
-        return
-    }
-    publishing {
-        repositories {
-            maven {
-                url = uri(isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl())
-                credentials {
-                    username = getRepositoryUsername()
-                    password = getRepositoryPassword()
-                }
+    if (isAndroidProject(project)) {
+        android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
+            task javadocs(type: Javadoc, dependsOn: 'assembleRelease') {
+                source = android.sourceSets.main.java.source
+                classpath += project.files(
+                        files(releaseVariant.javaCompileProvider.get().classpath),
+                        project.android.getBootClasspath().join(File.pathSeparator),
+                        files("$buildDir/intermediates/classes/release"),
+                        files("$buildDir/generated/ap_generated_sources/release/out"),
+                        files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
+                )
+                title = null
+                options.noTimestamp(false)
+                options.doclet = "com.google.doclava.Doclava"
+                options.docletpath = configurations.doclava.files.asType(List)
             }
         }
+    } else {
+        task javadocs(type: Javadoc) {
+            source = sourceSets.main.java.source
+            classpath += configurations.compileClasspath
+            title = null
+            options.noTimestamp(false)
+            options.doclet = "com.google.doclava.Doclava"
+            options.docletpath = configurations.doclava.files.asType(List)
+        }
+    }
+    task javadocsJar(type: Jar, dependsOn: javadocs) {
+        archiveClassifier.set('javadoc')
+        from javadocs.destinationDir
+    }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier.set('sources')
+        if (isAndroidProject(project)) {
+            from android.sourceSets.main.java.source
+        } else {
+            from sourceSets.main.allSource
+        }
+    }
+
+    publishing {
         publications {
             release(MavenPublication) {
                 afterEvaluate {
-                    from components.release
+                    from isAndroidProject(project) ? components.release : components.java
                     groupId = GROUP
                     artifactId = POM_ARTIFACT_ID
                     version = VERSION_NAME
+                    artifact sourcesJar
+                    artifact javadocsJar
                     pom {
                         name = POM_NAME
                         description = POM_DESCRIPTION
@@ -110,40 +100,7 @@ afterEvaluate { project ->
 
     signing {
         required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-        useInMemoryPgpKeys(getPgpSigningKey(), getPgpSigningPassword())
+        useInMemoryPgpKeys(rootProject.ext["signing.key"], rootProject.ext["signing.password"])
         sign(publishing.publications.release)
     }
-
-    android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
-        task androidJavadocs(type: Javadoc, dependsOn: 'assembleRelease') {
-            source = android.sourceSets.main.java.source
-            classpath += project.files(
-                    files(releaseVariant.javaCompileProvider.get().classpath),
-                    project.android.getBootClasspath().join(File.pathSeparator),
-                    files("$buildDir/intermediates/classes/release"),
-                    files("$buildDir/generated/ap_generated_sources/release/out"),
-                    files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
-            )
-            title = null
-            options.noTimestamp(false)
-            options.doclet = "com.google.doclava.Doclava"
-            options.docletpath = configurations.doclava.files.asType(List)
-        }
-    }
-
-    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-        archiveClassifier.set('javadoc')
-        from androidJavadocs.destinationDir
-    }
-
-    task androidSourcesJar(type: Jar) {
-        archiveClassifier.set('sources')
-        from android.sourceSets.main.java.source
-    }
-
-    artifacts {
-        archives androidJavadocsJar
-        archives androidSourcesJar
-    }
-
 }
