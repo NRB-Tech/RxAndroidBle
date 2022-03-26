@@ -20,6 +20,9 @@ subprojects {
     ext.VERSION_NAME = rootProject.ext.VERSION_NAME
 }
 
+version = VERSION_NAME
+group = GROUP
+
 println "RxAndroidBle version \"$VERSION_NAME\""
 
 ext.isReleaseBuild = {
