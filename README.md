@@ -33,6 +33,18 @@ If you use Gradle to build your project — as a Gradle project implementation d
 ```groovy
 implementation "io.nrbtech.rxandroidble:rxandroidble:1.2.0"
 ```
+#### Development
+If you want to help build the library, add it as a submodule to your project in `RxAndroidBle` and substitute the dependencies in `settings.gradle`:
+```
+// tag::composite_substitution[]
+includeBuild('RxAndroidBle') {
+    dependencySubstitution {
+        substitute module('io.nrbtech.rxandroidble:rxandroidble') with project(':rxandroidble')
+        substitute module('io.nrbtech.rxandroidble:mockclient') with project(':mockrxandroidble')
+    }
+}
+// end::composite_substitution[]
+```
 ### Maven
 If you use Maven to build your project — as a Maven project dependency:
 ```xml
