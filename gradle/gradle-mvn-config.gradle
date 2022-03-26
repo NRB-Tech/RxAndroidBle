@@ -1,6 +1,3 @@
-version = VERSION_NAME
-group = GROUP
-
 File secretPropsFile = project.rootProject.file('local.properties')
 
 if (secretPropsFile.exists()) {
@@ -15,6 +12,12 @@ if (secretPropsFile.exists()) {
     ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
     ext["signing.key"] = System.getenv('PGP_SIGNING_KEY')
     ext["signing.password"] = System.getenv('PGP_SIGNING_PASSWORD')
+    ext["versionName"] = System.getenv('VERSION_NAME')
+}
+
+ext.VERSION_NAME = ext["versionName"]?.trim() ?: VERSION_NAME
+subprojects {
+    ext.VERSION_NAME = rootProject.ext.VERSION_NAME
 }
 
 ext.isReleaseBuild = {
