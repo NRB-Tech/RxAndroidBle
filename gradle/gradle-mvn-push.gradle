@@ -17,6 +17,9 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+version = VERSION_NAME
+group = GROUP
+
 afterEvaluate { project ->
     if (isAndroidProject(project)) {
         android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
