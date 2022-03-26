@@ -20,6 +20,10 @@ For support head to [StackOverflow #rxandroidble](http://stackoverflow.com/quest
 
 This repository is a fork of the [original project](https://github.com/polidea/RxAndroidBle) which was not very actively maintained.
 
+## Collaborators
+
+We are actively seeking collaborators. If you have good knowledge of RxJava, Bluetooth and ideally Dagger, or just a keen interest in helping build RxAndroidBle, we'd love to hear from you. Create an issue, submit a PR or [contact us](https://www.nrbtech.io/contact).
+
 ## Getting Started
 
 The first step is to include RxAndroidBle into your project.
