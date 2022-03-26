@@ -57,12 +57,12 @@ If you use Maven to build your project — as a Maven project dependency:
 ```
 
 ### Snapshot
-If your are interested in cutting-edge build you can get a `x.y.z-SNAPSHOT` version of the library.
+If your are interested in cutting-edge build you can get a `master-SNAPSHOT` or `develop-SNAPSHOT` version of the library.
 NOTE: Snapshots are built from the top of the `master` and `develop` branches and a subject to more frequent changes that may break the API and/or change behavior.
 
 To be able to download it you need to add Sonatype Snapshot repository site to your `build.gradle` file:
 ```groovy
-maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
 ```
 
 ### Permissions
