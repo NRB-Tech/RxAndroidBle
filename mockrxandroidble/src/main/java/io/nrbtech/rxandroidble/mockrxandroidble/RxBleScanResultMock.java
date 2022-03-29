@@ -7,8 +7,13 @@ import io.nrbtech.rxandroidble.scan.ScanRecord;
 import io.nrbtech.rxandroidble.scan.ScanResult;
 
 public class RxBleScanResultMock extends ScanResult implements ScanResultInterface {
-    public RxBleScanResultMock(RxBleDevice bleDevice, int rssi, long timestampNanos, ScanCallbackType callbackType, ScanRecord scanRecord) {
-        super(bleDevice, rssi, timestampNanos, callbackType, scanRecord);
+    public RxBleScanResultMock(RxBleDevice bleDevice,
+                               int rssi,
+                               long timestampNanos,
+                               ScanCallbackType callbackType,
+                               ScanRecord scanRecord,
+                               IsConnectableStatus isConnectable) {
+        super(bleDevice, rssi, timestampNanos, callbackType, scanRecord, isConnectable);
     }
 
     public String getAddress() {
