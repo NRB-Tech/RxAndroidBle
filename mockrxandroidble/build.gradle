@@ -32,10 +32,6 @@ android {
         }
     }
 
-    sourceSets {
-        test.java.srcDirs += 'src/test/groovy'
-    }
-
     lintOptions {
         abortOnError false
     }
@@ -48,6 +44,16 @@ android {
                 srcDir("../rxandroidble/src/test/java") // Add android stubs from main lib tests
             }
         }
+    }
+}
+
+// add explicit dependencies to prevent warnings
+afterEvaluate {
+    tasks.named('testDebugUnitTest') {
+        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+    }
+    tasks.named('testReleaseUnitTest') {
+        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
     }
 }
 
