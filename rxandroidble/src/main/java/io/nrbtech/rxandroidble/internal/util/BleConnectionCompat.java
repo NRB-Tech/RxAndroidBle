@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Build;
 
@@ -53,7 +54,7 @@ public class BleConnectionCompat {
 
         try {
             RxBleLog.v("Trying to connectGatt using reflection.");
-            Object iBluetoothGatt = getIBluetoothGatt(getIBluetoothManager());
+            Object iBluetoothGatt = getIBluetoothGatt(getIBluetoothManager(context));
 
             if (iBluetoothGatt == null) {
                 RxBleLog.w("Couldn't get iBluetoothGatt object");
@@ -131,9 +132,10 @@ public class BleConnectionCompat {
         return getBluetoothGattMethod.invoke(iBluetoothManager);
     }
 
-    private static Object getIBluetoothManager() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private static Object getIBluetoothManager(Context context)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
         if (bluetoothAdapter == null) {
             return null;
