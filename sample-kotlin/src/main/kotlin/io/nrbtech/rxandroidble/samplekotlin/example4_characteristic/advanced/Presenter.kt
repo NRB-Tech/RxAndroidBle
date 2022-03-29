@@ -290,7 +290,7 @@ private fun setupNotificationOrIndication(
  * @param <T>            the type of the passed observable
  * @return the observable
  */
-private fun <T> takeUntil(beforeEmission: Observable<*>, afterEmission: Observable<*>): ObservableTransformer<T, T> =
+private fun <T : Any> takeUntil(beforeEmission: Observable<*>, afterEmission: Observable<*>): ObservableTransformer<T, T> =
     ObservableTransformer { observable ->
         observable.publish { publishedObservable ->
             publishedObservable
@@ -322,7 +322,7 @@ private val BluetoothGattCharacteristic.notificationSetupMode: NotificationSetup
  */
 private fun transformToPresenterEvent(type: Type): ObservableTransformer<ByteArray, PresenterEvent> =
     ObservableTransformer {
-        it.map { writtenBytes -> ResultEvent(writtenBytes.toList(), type) as PresenterEvent }
+        it.map<PresenterEvent> { writtenBytes: ByteArray -> ResultEvent(writtenBytes.toList(), type) }
             .onErrorReturn { throwable -> ErrorEvent(throwable, type) }
     }
 
@@ -338,7 +338,7 @@ private fun transformToNotificationPresenterEvent(
 ): ObservableTransformer<Observable<ByteArray>, PresenterEvent> =
     ObservableTransformer { observableObservable ->
         observableObservable
-            .flatMap { it.map { bytes -> ResultEvent(bytes.toList(), type) as PresenterEvent } }
+            .flatMap { it.map<PresenterEvent> { bytes -> ResultEvent(bytes.toList(), type) } }
             .onErrorReturn { throwable -> ErrorEvent(throwable, type) }
     }
 
@@ -348,5 +348,5 @@ private fun transformToNotificationPresenterEvent(
  * @param <T> the type of the transformed observable
  * @return transformer that will emit observable that will never complete (source will be subscribed again)
  */
-private fun <T> repeatAfterCompleted(): ObservableTransformer<T, T> =
+private fun <T : Any> repeatAfterCompleted(): ObservableTransformer<T, T> =
     ObservableTransformer { observable -> observable.repeatWhen { it } }

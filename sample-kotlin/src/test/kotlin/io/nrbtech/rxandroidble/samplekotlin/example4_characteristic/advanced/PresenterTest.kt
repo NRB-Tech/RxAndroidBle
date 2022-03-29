@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.mockrxandroidble.RxBleClientMock
+import io.nrbtech.rxandroidble.mockrxandroidble.RxBleConnectionMock
+import io.nrbtech.rxandroidble.mockrxandroidble.RxBleDeviceMock
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import org.junit.jupiter.api.Test
@@ -117,24 +119,27 @@ class PresenterTest {
         rssi: Int,
         characteristicProperties: Int
     ): RxBleDevice =
-        RxBleClientMock.DeviceBuilder()
+        RxBleDeviceMock.Builder()
             .deviceMacAddress(macAddress)
             .deviceName(deviceName)
             .scanRecord("ScanRecord".toByteArray())
-            .rssi(rssi)
-            .notificationSource(characteristicNotifiedUUID, characteristicNotificationSubject)
-            .addService(
-                serviceUUID,
-                RxBleClientMock.CharacteristicsBuilder()
-                    .addCharacteristic(
-                        characteristicUUID,
-                        characteristicData,
-                        characteristicProperties,
-                        RxBleClientMock.DescriptorsBuilder()
-                            .addDescriptor(clientCharacteristicConfigDescriptorUuid, descriptorData)
+            .connection(
+                RxBleConnectionMock.Builder()
+                    .rssi(rssi)
+                    .notificationSource(characteristicNotifiedUUID, characteristicNotificationSubject)
+                    .addService(
+                        serviceUUID,
+                        RxBleClientMock.CharacteristicsBuilder()
+                            .addCharacteristic(
+                                characteristicUUID,
+                                characteristicData,
+                                characteristicProperties,
+                                RxBleClientMock.DescriptorsBuilder()
+                                    .addDescriptor(clientCharacteristicConfigDescriptorUuid, descriptorData)
+                                    .build()
+                            )
                             .build()
-                    )
-                    .build()
+                    ).build()
             ).build()
 
     /**
