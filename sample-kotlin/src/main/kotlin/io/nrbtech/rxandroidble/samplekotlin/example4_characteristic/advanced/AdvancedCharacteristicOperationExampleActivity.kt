@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.Button
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort

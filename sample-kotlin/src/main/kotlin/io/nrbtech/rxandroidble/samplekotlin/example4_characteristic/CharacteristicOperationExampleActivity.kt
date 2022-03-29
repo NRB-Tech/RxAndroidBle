@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rx.ReplayingShare
+import com.jakewharton.rx3.ReplayingShare
 import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R

@@ -8,7 +8,7 @@ import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxjava3.kotlin.Observables
 import java.util.UUID
 
 private const val DUMMY_DEVICE_ADDRESS = "AA:AA:AA:AA:AA:AA"

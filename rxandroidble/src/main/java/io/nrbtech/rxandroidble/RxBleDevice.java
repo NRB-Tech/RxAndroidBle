@@ -20,7 +20,7 @@ public interface RxBleDevice {
      * Observe changes to connection state of the device's {@link android.bluetooth.BluetoothGatt}.
      * This Observable will never emit errors.
      *
-     * If you would like to have the initial state as well you can use observeConnectionStateChanges().startWith(getConnectionState())
+     * If you would like to have the initial state as well you can use observeConnectionStateChanges().startWithItem(getConnectionState())
      *
      * NOTE: This is a convenience function for easy state changes monitoring of an individual peripheral that may be useful in the UI.
      * It is not meant to be a trigger for reconnecting a particular device—for this purpose one should react on the errors emitted from

@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.jakewharton.rx.ReplayingShare;
+import com.jakewharton.rx3.ReplayingShare;
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding3.view.RxView;
+import com.jakewharton.rxbinding4.view.RxView;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;
 import io.nrbtech.rxandroidble.sample.R;
