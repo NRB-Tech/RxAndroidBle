@@ -5,7 +5,7 @@ import io.nrbtech.rxandroidble.internal.serialization.ClientOperationQueue;
 
 import bleshadow.javax.inject.Inject;
 
-import io.reactivex.internal.functions.Functions;
+import io.reactivex.rxjava3.internal.functions.Functions;
 
 @ConnectionScope
 class DisconnectAction implements ConnectionSubscriptionWatcher {

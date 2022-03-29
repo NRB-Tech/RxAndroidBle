@@ -2,7 +2,7 @@ package io.nrbtech.rxandroidble.internal
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
-import com.jakewharton.rxrelay2.BehaviorRelay
+import com.jakewharton.rxrelay3.BehaviorRelay
 import io.nrbtech.rxandroidble.ConnectionSetup
 import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
@@ -12,8 +12,8 @@ import io.nrbtech.rxandroidble.exceptions.BleGattOperationType
 import io.nrbtech.rxandroidble.exceptions.BlePermissionException
 import io.nrbtech.rxandroidble.internal.connection.Connector
 import io.nrbtech.rxandroidble.internal.util.LocationServicesStatus
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -350,7 +350,7 @@ class RxBleDeviceTest extends Specification {
         rxStartConnecting().subscribe({}, {})
     }
 
-    io.reactivex.Observable<RxBleConnection> rxStartConnecting() {
+    io.reactivex.rxjava3.core.Observable<RxBleConnection> rxStartConnecting() {
         return rxBleDevice.establishConnection(false)
     }
 
@@ -391,7 +391,7 @@ class RxBleDeviceTest extends Specification {
             this.connectionSetup = connectionSetup
         }
 
-        io.reactivex.Observable<RxBleConnection> establishConnection(RxBleDevice d) {
+        io.reactivex.rxjava3.core.Observable<RxBleConnection> establishConnection(RxBleDevice d) {
             return establishConnectionCaller.connectionStartClosure.call(d, connectionSetup)
         }
 

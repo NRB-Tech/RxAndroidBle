@@ -2,7 +2,7 @@ package io.nrbtech.rxandroidble.internal.serialization;
 
 import io.nrbtech.rxandroidble.internal.operations.Operation;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Interface used for serialization of {@link Operation} execution.

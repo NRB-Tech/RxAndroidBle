@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rx.ReplayingShare
+import com.jakewharton.rx3.ReplayingShare
 import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R
@@ -15,10 +15,10 @@ import io.nrbtech.rxandroidble.samplekotlin.util.hasProperty
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.nrbtech.rxandroidble.samplekotlin.util.toHex
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_example4.connect
 import kotlinx.android.synthetic.main.activity_example4.notify
 import kotlinx.android.synthetic.main.activity_example4.read

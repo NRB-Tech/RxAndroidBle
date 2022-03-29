@@ -62,6 +62,10 @@ import java.util.UUID;
     private final byte[] mManufacturerData;
     @Nullable
     private final byte[] mManufacturerDataMask;
+
+    @Nullable
+    private final Boolean mIsConnectable;
+
     private static final ScanFilter EMPTY = new ScanFilter.Builder().build();
 
 
@@ -69,7 +73,8 @@ import java.util.UUID;
                @Nullable ParcelUuid uuidMask, @Nullable ParcelUuid solicitationUuid,
                @Nullable ParcelUuid solicitationUuidMask, @Nullable ParcelUuid serviceDataUuid,
                @Nullable byte[] serviceData, @Nullable byte[] serviceDataMask,
-               int manufacturerId, @Nullable byte[] manufacturerData, @Nullable byte[] manufacturerDataMask) {
+               int manufacturerId, @Nullable byte[] manufacturerData, @Nullable byte[] manufacturerDataMask,
+               Boolean isConnectable) {
         mDeviceName = name;
         mServiceUuid = uuid;
         mServiceUuidMask = uuidMask;
@@ -82,6 +87,7 @@ import java.util.UUID;
         mManufacturerId = manufacturerId;
         mManufacturerData = manufacturerData;
         mManufacturerDataMask = manufacturerDataMask;
+        mIsConnectable = isConnectable;
     }
 
     @Override
@@ -141,6 +147,11 @@ import java.util.UUID;
                 dest.writeInt(mManufacturerDataMask.length);
                 dest.writeByteArray(mManufacturerDataMask);
             }
+        }
+
+        dest.writeInt(mIsConnectable == null ? 0 : 1);
+        if (mIsConnectable != null) {
+            dest.writeInt(mIsConnectable ? 1 : 0);
         }
     }
 
@@ -217,6 +228,10 @@ import java.util.UUID;
                     builder.setManufacturerData(manufacturerId, manufacturerData,
                             manufacturerDataMask);
                 }
+            }
+
+            if (in.readInt() == 1) {
+                builder.setIsConnectable(in.readInt() == 1);
             }
 
             return builder.build();
@@ -296,6 +311,11 @@ import java.util.UUID;
         return mManufacturerDataMask;
     }
 
+    @Nullable
+    public Boolean getIsConnectable() {
+        return mIsConnectable;
+    }
+
     /**
      * Check if the scan filter matches a {@code scanResult}. A scan result is considered as a match
      * if it matches all the field filters.
@@ -350,6 +370,13 @@ import java.util.UUID;
         if (mManufacturerId >= 0) {
             if (!matchesPartialData(mManufacturerData, mManufacturerDataMask,
                     scanRecord.getManufacturerSpecificData(mManufacturerId))) {
+                return false;
+            }
+        }
+
+        ScanResultInterface.IsConnectableStatus isConnectable = scanResult.isConnectable();
+        if (mIsConnectable != null && isConnectable != ScanResultInterface.IsConnectableStatus.LEGACY_UNKNOWN) {
+            if ((isConnectable == ScanResultInterface.IsConnectableStatus.CONNECTABLE) != mIsConnectable) {
                 return false;
             }
         }
@@ -546,6 +573,8 @@ import java.util.UUID;
         private byte[] mManufacturerData;
         private byte[] mManufacturerDataMask;
 
+        private Boolean mIsConnectable;
+
         /**
          * Set filter on device name.
          */
@@ -729,6 +758,14 @@ import java.util.UUID;
         }
 
         /**
+         * Set filter on isConnectable state. Filter will only be performed on API 27 and higher.
+         */
+        public ScanFilter.Builder setIsConnectable(boolean isConnectable) {
+            mIsConnectable = isConnectable;
+            return this;
+        }
+
+        /**
          * Build {@link ScanFilter}.
          *
          * @throws IllegalArgumentException If the filter cannot be built.
@@ -738,7 +775,8 @@ import java.util.UUID;
                     mServiceUuid, mServiceUuidMask,
                     mServiceSolicitationUuid, mServiceSolicitationUuidMask,
                     mServiceDataUuid, mServiceData, mServiceDataMask,
-                    mManufacturerId, mManufacturerData, mManufacturerDataMask);
+                    mManufacturerId, mManufacturerData, mManufacturerDataMask,
+                    mIsConnectable);
         }
     }
 }

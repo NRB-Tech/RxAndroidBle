@@ -3,8 +3,8 @@ package io.nrbtech.rxandroidble.internal.scan
 import android.bluetooth.BluetoothDevice
 import io.nrbtech.rxandroidble.scan.ScanCallbackType
 import io.nrbtech.rxandroidble.scan.ScanSettings
-import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.schedulers.TestScheduler
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Specification
 import spock.lang.Unroll
 

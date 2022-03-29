@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import io.nrbtech.rxandroidble.RxBleClient;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.RxBleScanResult;
+import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.scan.BackgroundScanner;
 import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanFilter;
@@ -24,10 +25,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
 
 /**
  * A mocked {@link RxBleClient}. Callers supply device parameters such as services,
@@ -371,17 +372,26 @@ public class RxBleClientMock extends RxBleClient {
 
     @NonNull
     private RxBleScanResultMock createScanResult(RxBleDeviceMock rxBleDeviceMock) {
-        return convertToPublicScanResult(rxBleDeviceMock, rxBleDeviceMock.getRssi(), rxBleDeviceMock.getScanRecord());
+        return convertToPublicScanResult(
+                rxBleDeviceMock,
+                rxBleDeviceMock.getRssi(),
+                rxBleDeviceMock.getScanRecord(),
+                rxBleDeviceMock.getIsConnectable()
+        );
     }
 
     @NonNull
-    private static RxBleScanResultMock convertToPublicScanResult(RxBleDevice bleDevice, Integer rssi, ScanRecord scanRecord) {
+    private static RxBleScanResultMock convertToPublicScanResult(RxBleDevice bleDevice,
+                                                                 Integer rssi,
+                                                                 ScanRecord scanRecord,
+                                                                 ScanResultInterface.IsConnectableStatus isConnectable) {
         return new RxBleScanResultMock(
                 bleDevice,
                 rssi,
                 System.currentTimeMillis() * 1000000,
                 ScanCallbackType.CALLBACK_TYPE_FIRST_MATCH,
-                scanRecord);
+                scanRecord,
+                isConnectable);
     }
 
     private static boolean maskedDataEquals(@NonNull byte[] data1, @NonNull byte[] data2, @Nullable byte[] mask) {

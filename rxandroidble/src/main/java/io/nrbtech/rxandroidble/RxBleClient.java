@@ -13,7 +13,7 @@ import io.nrbtech.rxandroidble.scan.ScanSettings;
 import java.util.Set;
 import java.util.UUID;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 
 public abstract class RxBleClient {
@@ -171,7 +171,7 @@ public abstract class RxBleClient {
      * - If the device is in {@link State#BLUETOOTH_NOT_AVAILABLE} then this {@link Observable} will complete because any other checks
      * will not be performed as devices are not expected to obtain bluetooth capabilities during runtime
      *
-     * To get the initial {@link State} and then observe changes you can use: `observeStateChanges().startWith(getState())`.
+     * To get the initial {@link State} and then observe changes you can use: `observeStateChanges().startWithItem(getState())`.
      *
      * @return the observable
      */

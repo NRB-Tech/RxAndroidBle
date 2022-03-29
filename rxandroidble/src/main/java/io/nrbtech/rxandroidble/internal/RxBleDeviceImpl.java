@@ -6,7 +6,7 @@ import android.os.Build;
 
 import androidx.annotation.Nullable;
 
-import com.jakewharton.rxrelay2.BehaviorRelay;
+import com.jakewharton.rxrelay3.BehaviorRelay;
 import io.nrbtech.rxandroidble.ConnectionSetup;
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleDevice;
@@ -19,13 +19,13 @@ import io.nrbtech.rxandroidble.internal.connection.Connector;
 import io.nrbtech.rxandroidble.internal.logger.LoggerUtil;
 import io.nrbtech.rxandroidble.internal.util.LocationServicesStatus;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import bleshadow.javax.inject.Inject;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Action;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Supplier;
 
 @DeviceScope
 class RxBleDeviceImpl implements RxBleDevice {
@@ -79,9 +79,9 @@ class RxBleDeviceImpl implements RxBleDevice {
     }
 
     public Observable<RxBleConnection> establishConnection(final ConnectionSetup options) {
-        return Observable.defer(new Callable<ObservableSource<RxBleConnection>>() {
+        return Observable.defer(new Supplier<ObservableSource<RxBleConnection>>() {
             @Override
-            public ObservableSource<RxBleConnection> call() {
+            public ObservableSource<RxBleConnection> get() {
                 if (!locationServicesStatus.isConnectPermissionOk()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         return Observable.error(new BlePermissionException(Manifest.permission.BLUETOOTH_CONNECT));

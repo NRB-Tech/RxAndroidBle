@@ -7,7 +7,7 @@ import io.nrbtech.rxandroidble.internal.operations.OperationsProvider;
 import io.nrbtech.rxandroidble.internal.serialization.ConnectionOperationQueue;
 
 import bleshadow.javax.inject.Inject;
-import io.reactivex.Completable;
+import io.reactivex.rxjava3.core.Completable;
 
 @ConnectionScope
 class DescriptorWriter {

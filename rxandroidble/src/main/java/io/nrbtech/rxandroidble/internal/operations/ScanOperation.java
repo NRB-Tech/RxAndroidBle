@@ -9,8 +9,8 @@ import io.nrbtech.rxandroidble.internal.RxBleLog;
 import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface;
 import io.nrbtech.rxandroidble.internal.util.RxBleAdapterWrapper;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.functions.Cancellable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.functions.Cancellable;
 
 /**
  * A class that handles starting and stopping BLE scans.

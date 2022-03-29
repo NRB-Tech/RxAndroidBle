@@ -8,10 +8,10 @@ import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback
 import io.nrbtech.rxandroidble.internal.operations.TimeoutConfiguration
 import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface
 import io.nrbtech.rxandroidble.internal.util.MockOperationTimeoutConfiguration
-import io.reactivex.Single
-import io.reactivex.observers.TestObserver
-import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.schedulers.TestScheduler
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll

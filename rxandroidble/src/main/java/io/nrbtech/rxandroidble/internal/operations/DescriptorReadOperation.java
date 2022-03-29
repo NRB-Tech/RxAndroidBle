@@ -13,7 +13,7 @@ import io.nrbtech.rxandroidble.internal.util.ByteAssociation;
 import bleshadow.javax.inject.Inject;
 import bleshadow.javax.inject.Named;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 import static io.nrbtech.rxandroidble.internal.util.ByteAssociationUtil.descriptorPredicate;
 

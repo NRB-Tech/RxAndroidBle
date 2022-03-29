@@ -9,7 +9,7 @@ import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback;
 
 import bleshadow.javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
 public class MtuRequestOperation extends SingleResponseOperation<Integer> {

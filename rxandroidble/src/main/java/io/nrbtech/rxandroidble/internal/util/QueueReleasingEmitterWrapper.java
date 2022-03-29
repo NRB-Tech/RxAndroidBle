@@ -6,15 +6,15 @@ import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.Emitter;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Cancellable;
+import io.reactivex.rxjava3.core.Emitter;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Cancellable;
 
 /**
  * A convenience class to use in {@link QueueOperation} subclasses. It wraps the {@link Emitter}
- * and {@link QueueReleaseInterface} and makes sure that the {@link io.reactivex.disposables.Disposable} it was subscribed to will finish
+ * and {@link QueueReleaseInterface} and makes sure that the {@link Disposable} it was subscribed to will finish
  * and call {@link QueueReleaseInterface#release()} in either {@link #onComplete()} or {@link #onError(Throwable)} in case of the wrapped
  * emitter being unsubscribed / canceled.
  * @param <T> parameter of the wrapped {@link Emitter}

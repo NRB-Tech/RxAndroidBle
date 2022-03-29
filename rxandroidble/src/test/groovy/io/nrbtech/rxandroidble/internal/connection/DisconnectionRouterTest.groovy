@@ -8,7 +8,7 @@ import io.nrbtech.rxandroidble.exceptions.BleGattException
 import io.nrbtech.rxandroidble.exceptions.BleGattOperationType
 import io.nrbtech.rxandroidble.internal.util.RxBleAdapterWrapper
 import spock.lang.Specification
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Shared
 import spock.lang.Unroll
 

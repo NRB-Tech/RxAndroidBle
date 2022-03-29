@@ -7,8 +7,8 @@ import io.nrbtech.rxandroidble.exceptions.BleGattCharacteristicException
 import io.nrbtech.rxandroidble.exceptions.BleGattDescriptorException
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.results.RxBleGattReadResultMock
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.results.RxBleGattWriteResultMock
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Specification
 
 public class RxBleConnectionMockTest extends Specification {

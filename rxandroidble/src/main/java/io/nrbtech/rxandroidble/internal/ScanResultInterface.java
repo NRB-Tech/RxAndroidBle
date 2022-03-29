@@ -33,4 +33,27 @@ public interface ScanResultInterface {
      * Get the type of scan callback
      */
     ScanCallbackType getScanCallbackType();
+
+    /**
+     * An enum representing the connectable status of a device
+     */
+    enum IsConnectableStatus {
+        /**
+         * The connectable status cannot be determined on this device
+         */
+        LEGACY_UNKNOWN,
+        /**
+         * The BLE device is not connectable
+         */
+        NOT_CONNECTABLE,
+        /**
+         * The BLE device is connectable
+         */
+        CONNECTABLE
+    }
+
+    /**
+     * Determine if the BLE device is connectable
+     */
+    IsConnectableStatus isConnectable();
 }
