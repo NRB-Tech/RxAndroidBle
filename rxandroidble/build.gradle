@@ -40,6 +40,10 @@ android {
         }
     }
 
+    sourceSets {
+        test.java.srcDirs += 'src/test/groovy'
+    }
+
     lintOptions {
         abortOnError false
     }
