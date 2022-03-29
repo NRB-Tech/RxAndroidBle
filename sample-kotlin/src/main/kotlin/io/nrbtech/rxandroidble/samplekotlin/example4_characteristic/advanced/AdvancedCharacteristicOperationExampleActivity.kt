@@ -13,10 +13,10 @@ import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.nrbtech.rxandroidble.samplekotlin.util.toHex
-import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_example4_advanced.compat_only_warning
 import kotlinx.android.synthetic.main.activity_example4_advanced.connect_button
 import kotlinx.android.synthetic.main.activity_example4_advanced.indicate_button

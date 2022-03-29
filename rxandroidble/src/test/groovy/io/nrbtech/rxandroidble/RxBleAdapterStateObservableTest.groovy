@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import spock.lang.Specification
 
 import static io.nrbtech.rxandroidble.RxBleAdapterStateObservable.BleAdapterState.*

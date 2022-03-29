@@ -14,12 +14,12 @@ import io.nrbtech.rxandroidble.internal.util.ScanRecordParser
 import io.nrbtech.rxandroidble.scan.BackgroundScanner
 import io.nrbtech.rxandroidble.scan.ScanSettings
 import spock.lang.Specification
-import io.reactivex.Observable
-import io.reactivex.ObservableSource
-import io.reactivex.ObservableTransformer
-import io.reactivex.annotations.NonNull
-import io.reactivex.observers.TestObserver
-import io.reactivex.schedulers.TestScheduler
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableSource
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.annotations.NonNull
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import spock.lang.Unroll
 
 import static io.nrbtech.rxandroidble.exceptions.BleScanException.*

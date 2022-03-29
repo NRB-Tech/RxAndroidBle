@@ -13,9 +13,9 @@ import io.nrbtech.rxandroidble.samplekotlin.util.showError
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanResult
 import io.nrbtech.rxandroidble.scan.ScanSettings
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_example1.background_scan_btn
 import kotlinx.android.synthetic.main.activity_example1.scan_results
 import kotlinx.android.synthetic.main.activity_example1.scan_toggle_btn

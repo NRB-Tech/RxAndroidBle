@@ -2,8 +2,8 @@ package io.nrbtech.rxandroidble.internal.util
 
 import io.nrbtech.rxandroidble.RxBleAdapterStateObservable
 import io.nrbtech.rxandroidble.RxBleClient
-import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.schedulers.TestScheduler
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import spock.lang.Specification
 import spock.lang.Unroll
 

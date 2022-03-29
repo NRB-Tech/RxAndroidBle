@@ -11,8 +11,8 @@ import io.nrbtech.rxandroidble.samplekotlin.example3_discovery.DiscoveryResultsA
 import io.nrbtech.rxandroidble.samplekotlin.example4_characteristic.CharacteristicOperationExampleActivity
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_example3.connect
 import kotlinx.android.synthetic.main.activity_example3.scan_results
 

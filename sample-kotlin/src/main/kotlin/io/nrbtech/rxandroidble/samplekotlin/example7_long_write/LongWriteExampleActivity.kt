@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxkotlin.Observables
 import java.util.UUID
 

@@ -2,7 +2,7 @@ package io.nrbtech.rxandroidble.internal;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.jakewharton.rxrelay2.BehaviorRelay;
+import com.jakewharton.rxrelay3.BehaviorRelay;
 import io.nrbtech.rxandroidble.ClientComponent;
 import io.nrbtech.rxandroidble.ClientComponent.NamedSchedulers;
 import io.nrbtech.rxandroidble.RxBleConnection;
@@ -20,7 +20,7 @@ import bleshadow.dagger.Binds;
 import bleshadow.dagger.Module;
 import bleshadow.dagger.Provides;
 import bleshadow.javax.inject.Named;
-import io.reactivex.Scheduler;
+import io.reactivex.rxjava3.core.Scheduler;
 
 @Module(subcomponents = ConnectionComponent.class)
 public abstract class DeviceModule {

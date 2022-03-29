@@ -5,7 +5,7 @@ import io.nrbtech.rxandroidble.exceptions.BleGattCannotStartException
 import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback
 import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface
 import io.nrbtech.rxandroidble.internal.util.MockOperationTimeoutConfiguration
-import io.reactivex.schedulers.TestScheduler
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import spock.lang.Specification
 
 import java.util.concurrent.TimeUnit

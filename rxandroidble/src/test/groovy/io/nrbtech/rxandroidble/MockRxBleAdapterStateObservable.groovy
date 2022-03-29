@@ -1,11 +1,11 @@
 package io.nrbtech.rxandroidble
 
 import io.nrbtech.rxandroidble.internal.util.DisposableUtil
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.annotations.NonNull
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.annotations.NonNull
+import io.reactivex.rxjava3.subjects.ReplaySubject
 
 class MockRxBleAdapterStateObservable {
 

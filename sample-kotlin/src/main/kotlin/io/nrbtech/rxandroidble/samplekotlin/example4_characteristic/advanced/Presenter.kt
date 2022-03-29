@@ -9,9 +9,9 @@ import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.example4_characteristic.advanced.Type.INDICATE
 import io.nrbtech.rxandroidble.samplekotlin.example4_characteristic.advanced.Type.NOTIFY
 import io.nrbtech.rxandroidble.samplekotlin.util.hasProperty
-import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.Single
 import java.util.Arrays.asList
 import java.util.UUID
 

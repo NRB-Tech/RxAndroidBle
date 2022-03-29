@@ -6,7 +6,7 @@ import io.nrbtech.rxandroidble.RxBleClient
 import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanSettings
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Specification
 
 public class RxBleClientMockTest extends Specification {

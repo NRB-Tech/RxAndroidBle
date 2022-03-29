@@ -3,9 +3,9 @@ package io.nrbtech.rxandroidble.extensions
 import android.bluetooth.BluetoothGattService
 import io.nrbtech.rxandroidble.RxBleDeviceServices
 import io.nrbtech.rxandroidble.RxBleScanResult
-import io.reactivex.observers.BaseTestConsumer
-import io.reactivex.observers.TestObserver
-import io.reactivex.subscribers.TestSubscriber
+import io.reactivex.rxjava3.observers.BaseTestConsumer
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.subscribers.TestSubscriber
 
 class TestSubscriberExtension {
 
