@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import io.nrbtech.rxandroidble.ClientScope;
 import io.nrbtech.rxandroidble.internal.RxBleLog;
+import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.internal.util.ScanRecordParser;
 import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanRecord;
@@ -66,11 +67,12 @@ public class InternalScanResultCreator {
         }
     }
 
-    private Boolean isConnectable(ScanResult scanResult) {
-        Boolean isConnectable = null;
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O && !scanResult.isLegacy()) {
-            isConnectable = scanResult.isConnectable();
+    private ScanResultInterface.IsConnectableStatus isConnectable(ScanResult scanResult) {
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.O || scanResult.isLegacy()) {
+            return ScanResultInterface.IsConnectableStatus.LEGACY_UNKNOWN;
         }
-        return isConnectable;
+        return scanResult.isConnectable()
+                ? ScanResultInterface.IsConnectableStatus.CONNECTABLE
+                : ScanResultInterface.IsConnectableStatus.NOT_CONNECTABLE;
     }
 }

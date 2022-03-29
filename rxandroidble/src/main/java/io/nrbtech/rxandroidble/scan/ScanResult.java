@@ -3,6 +3,7 @@ package io.nrbtech.rxandroidble.scan;
 import androidx.annotation.NonNull;
 
 import io.nrbtech.rxandroidble.RxBleDevice;
+import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.internal.logger.LoggerUtil;
 
 public class ScanResult {
@@ -12,10 +13,10 @@ public class ScanResult {
     private final long timestampNanos;
     private final ScanCallbackType callbackType;
     private final ScanRecord scanRecord;
-    private final Boolean isConnectable;
+    private final ScanResultInterface.IsConnectableStatus isConnectable;
 
     public ScanResult(RxBleDevice bleDevice, int rssi, long timestampNanos, ScanCallbackType callbackType,
-                      ScanRecord scanRecord, Boolean isConnectable) {
+                      ScanRecord scanRecord, ScanResultInterface.IsConnectableStatus isConnectable) {
         this.bleDevice = bleDevice;
         this.rssi = rssi;
         this.timestampNanos = timestampNanos;
@@ -44,7 +45,7 @@ public class ScanResult {
         return scanRecord;
     }
 
-    public Boolean isConnectable() {
+    public ScanResultInterface.IsConnectableStatus isConnectable() {
         return isConnectable;
     }
 

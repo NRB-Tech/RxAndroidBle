@@ -33,4 +33,12 @@ public interface ScanResultInterface {
      * Get the type of scan callback
      */
     ScanCallbackType getScanCallbackType();
+
+    enum IsConnectableStatus {
+        LEGACY_UNKNOWN,
+        NOT_CONNECTABLE,
+        CONNECTABLE
+    }
+
+    IsConnectableStatus isConnectable();
 }
