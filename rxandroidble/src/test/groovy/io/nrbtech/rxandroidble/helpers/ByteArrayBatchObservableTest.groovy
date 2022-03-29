@@ -1,7 +1,7 @@
 package io.nrbtech.rxandroidble.helpers
 
-import io.reactivex.annotations.NonNull
-import io.reactivex.functions.Predicate
+import io.reactivex.rxjava3.annotations.NonNull
+import io.reactivex.rxjava3.functions.Predicate
 import spock.lang.Specification
 import spock.lang.Unroll
 
