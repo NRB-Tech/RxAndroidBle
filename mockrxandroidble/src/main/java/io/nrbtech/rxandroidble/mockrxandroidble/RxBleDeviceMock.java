@@ -13,6 +13,7 @@ import io.nrbtech.rxandroidble.RxBleDeviceServices;
 import io.nrbtech.rxandroidble.Timeout;
 import io.nrbtech.rxandroidble.exceptions.BleAlreadyConnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleException;
+import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleCharacteristicReadCallback;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleCharacteristicWriteCallback;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleDescriptorReadCallback;
@@ -53,17 +54,20 @@ public class RxBleDeviceMock implements RxBleDevice {
     private List<UUID> advertisedUUIDs;
     private BluetoothDevice bluetoothDevice;
     private AtomicBoolean isConnected = new AtomicBoolean(false);
+    private ScanResultInterface.IsConnectableStatus isConnectable;
 
     private RxBleDeviceMock(String name,
                             String macAddress,
                             @Nullable BluetoothDevice bluetoothDevice,
-                            RxBleConnectionMock connectionMock) {
+                            RxBleConnectionMock connectionMock,
+                            ScanResultInterface.IsConnectableStatus isConnectable) {
         this.name = name;
         this.macAddress = macAddress;
         this.rssi = connectionMock.getRssi();
         this.advertisedUUIDs = connectionMock.getServiceUuids();
         this.bluetoothDevice = bluetoothDevice;
         this.rxBleConnection = connectionMock;
+        this.isConnectable = isConnectable;
         connectionMock.setDeviceMock(this);
     }
 
@@ -73,7 +77,8 @@ public class RxBleDeviceMock implements RxBleDevice {
                            Integer rssi,
                            RxBleDeviceServices rxBleDeviceServices,
                            Map<UUID, Observable<byte[]>> characteristicNotificationSources,
-                           @Nullable BluetoothDevice bluetoothDevice) {
+                           @Nullable BluetoothDevice bluetoothDevice,
+                           ScanResultInterface.IsConnectableStatus isConnectable) {
         this(
                 name,
                 macAddress,
@@ -85,7 +90,8 @@ public class RxBleDeviceMock implements RxBleDevice {
                         new HashMap<UUID, RxBleCharacteristicReadCallback>(),
                         new HashMap<UUID, RxBleCharacteristicWriteCallback>(),
                         new HashMap<UUID, Map<UUID, RxBleDescriptorReadCallback>>(),
-                        new HashMap<UUID, Map<UUID, RxBleDescriptorWriteCallback>>())
+                        new HashMap<UUID, Map<UUID, RxBleDescriptorWriteCallback>>()),
+                isConnectable
                 );
         this.legacyScanRecord = scanRecord;
     }
@@ -94,13 +100,15 @@ public class RxBleDeviceMock implements RxBleDevice {
                            String macAddress,
                            ScanRecord scanRecord,
                            @Nullable BluetoothDevice bluetoothDevice,
-                           RxBleConnectionMock connectionMock
+                           RxBleConnectionMock connectionMock,
+                           ScanResultInterface.IsConnectableStatus isConnectable
     ) {
         this(
                 name,
                 macAddress,
                 bluetoothDevice,
-                connectionMock
+                connectionMock,
+                isConnectable
         );
         this.scanRecord = scanRecord;
     }
@@ -114,6 +122,7 @@ public class RxBleDeviceMock implements RxBleDevice {
         private BluetoothDevice bluetoothDevice;
         RxBleConnectionMock connectionMock;
         RxBleConnectionMock.Builder connectionMockBuilder;
+        ScanResultInterface.IsConnectableStatus isConnectable;
 
         /**
          * Build a new {@link RxBleDevice}.
@@ -144,7 +153,8 @@ public class RxBleDeviceMock implements RxBleDevice {
                         connMock.getRssi(),
                         connMock.getRxBleDeviceServices(),
                         connMock.getCharacteristicNotificationSources(),
-                        bluetoothDevice);
+                        bluetoothDevice,
+                        isConnectable);
                 for (UUID service : connMock.getServiceUuids()) {
                     rxBleDeviceMock.addAdvertisedUUID(service);
                 }
@@ -154,7 +164,8 @@ public class RxBleDeviceMock implements RxBleDevice {
                     deviceMacAddress,
                     scanRecord,
                     bluetoothDevice,
-                    connMock
+                    connMock,
+                    isConnectable
                     );
         }
 
@@ -243,6 +254,15 @@ public class RxBleDeviceMock implements RxBleDevice {
          */
         public Builder connection(@NonNull RxBleConnectionMock connectionMock) {
             this.connectionMock = connectionMock;
+            return this;
+        }
+
+        /**
+         * Set if the mock is connectable
+         */
+        public Builder isConnectable(boolean isConnectable) {
+            this.isConnectable = isConnectable ? ScanResultInterface.IsConnectableStatus.CONNECTABLE
+                    : ScanResultInterface.IsConnectableStatus.NOT_CONNECTABLE;
             return this;
         }
     }
@@ -343,6 +363,10 @@ public class RxBleDeviceMock implements RxBleDevice {
 
     public ScanRecord getScanRecord() {
         return scanRecord;
+    }
+
+    public ScanResultInterface.IsConnectableStatus getIsConnectable() {
+        return isConnectable;
     }
 
     @Override

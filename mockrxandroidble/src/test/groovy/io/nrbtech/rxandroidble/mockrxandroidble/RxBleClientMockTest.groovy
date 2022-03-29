@@ -4,6 +4,7 @@ package io.nrbtech.rxandroidble.mockrxandroidble
 import android.os.ParcelUuid
 import io.nrbtech.rxandroidble.RxBleClient
 import io.nrbtech.rxandroidble.RxBleConnection
+import io.nrbtech.rxandroidble.internal.ScanResultInterface
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanSettings
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -20,10 +21,11 @@ public class RxBleClientMockTest extends Specification {
     def descriptorData = "Config".getBytes()
     RxBleClient rxBleClient
 
-    def createDevice(deviceName, macAddress, rssi) {
+    def createDevice(deviceName, macAddress, rssi, isConnectable = true) {
         new RxBleDeviceMock.Builder()
                 .deviceMacAddress(macAddress)
                 .deviceName(deviceName)
+                .isConnectable(isConnectable)
                 .scanRecord(
                     new RxBleScanRecordMock.Builder()
                         .setAdvertiseFlags(1)
@@ -329,9 +331,34 @@ public class RxBleClientMockTest extends Specification {
         testSubscriber.assertEmpty()
     }
 
+    def "should return filtered BluetoothDevice filtered on is connectable"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder().setIsConnectable(true).build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .take(1)
+                .map { scanResult -> scanResult.getBleDevice().getMacAddress() }
+                .test()
+
+        then:
+        testSubscriber.assertValue("AA:BB:CC:DD:EE:FF")
+    }
+
+    def "should not return filtered BluetoothDevice filtered on is connectable"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def scanFilter = new ScanFilter.Builder().setIsConnectable(false).build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings, scanFilter)
+                .test()
+
+        then:
+        testSubscriber.assertEmpty()
+    }
+
     def "should return the BluetoothDevice name"() {
         when:
-        def testSubscriber = rxBleClient.scanBleDevices()
+        def scanSettings = new ScanSettings.Builder().build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings)
                 .take(1)
                 .map { scanResult -> scanResult.getBleDevice().getName() }
                 .test()
@@ -342,7 +369,8 @@ public class RxBleClientMockTest extends Specification {
 
     def "should return the BluetoothDevice address"() {
         when:
-        def testSubscriber = rxBleClient.scanBleDevices()
+        def scanSettings = new ScanSettings.Builder().build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings)
                 .take(1)
                 .map { scanResult -> scanResult.getBleDevice().getMacAddress() }
                 .test()
@@ -353,13 +381,26 @@ public class RxBleClientMockTest extends Specification {
 
     def "should return the BluetoothDevice rssi"() {
         when:
-        def testSubscriber = rxBleClient.scanBleDevices()
+        def scanSettings = new ScanSettings.Builder().build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings)
                 .take(1)
                 .map { scanResult -> scanResult.getRssi() }
                 .test()
 
         then:
         testSubscriber.assertValue(42)
+    }
+
+    def "should return the BluetoothDevice isConnectable"() {
+        when:
+        def scanSettings = new ScanSettings.Builder().build()
+        def testSubscriber = rxBleClient.scanBleDevices(scanSettings)
+                .take(1)
+                .map { scanResult -> scanResult.isConnectable() }
+                .test()
+
+        then:
+        testSubscriber.assertValue(ScanResultInterface.IsConnectableStatus.CONNECTABLE)
     }
 
     def "should return BluetoothDevices that were added on the fly"() {
