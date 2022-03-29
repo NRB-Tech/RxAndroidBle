@@ -15,7 +15,7 @@ if (secretPropsFile.exists()) {
     ext["versionName"] = System.getenv('VERSION_NAME')
 }
 
-ext.VERSION_NAME = ext.has("versionName") ? ext["versionName"] : VERSION_NAME
+ext.VERSION_NAME = ext.has("versionName") && ext["versionName"]?.trim() ? ext["versionName"] : VERSION_NAME
 subprojects {
     ext.VERSION_NAME = rootProject.ext.VERSION_NAME
 }
