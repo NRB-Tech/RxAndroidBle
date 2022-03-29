@@ -9,14 +9,12 @@ import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample5Binding
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.android.synthetic.main.activity_example5.connect_toggle
-import kotlinx.android.synthetic.main.activity_example5.connection_state
-import kotlinx.android.synthetic.main.activity_example5.rssi
 import java.util.concurrent.TimeUnit.SECONDS
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
@@ -36,6 +34,8 @@ class RssiPeriodicExampleActivity : AppCompatActivity() {
 
     private var connectionDisposable: Disposable? = null
 
+    private var binding: ActivityExample5Binding? = null
+
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,8 @@ class RssiPeriodicExampleActivity : AppCompatActivity() {
         title = getString(R.string.mac_address, macAddress)
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress!!)
 
-        connect_toggle.setOnClickListener { onConnectToggleClick() }
+        binding = ActivityExample5Binding.inflate(layoutInflater)
+        binding!!.connectToggle.setOnClickListener { onConnectToggleClick() }
 
         // How to listen for connection state changes
         bleDevice.observeConnectionStateChanges()
@@ -71,11 +72,11 @@ class RssiPeriodicExampleActivity : AppCompatActivity() {
     }
 
     private fun updateRssi(rssiValue: Int) {
-        rssi.text = getString(R.string.format_rssi, rssiValue)
+        binding!!.rssi.text = getString(R.string.format_rssi, rssiValue)
     }
 
     private fun onConnectionStateChange(newState: RxBleConnection.RxBleConnectionState) {
-        connection_state.text = newState.toString()
+        binding!!.connectionState.text = newState.toString()
         updateUI()
     }
 
@@ -87,7 +88,7 @@ class RssiPeriodicExampleActivity : AppCompatActivity() {
     private fun triggerDisconnect() = connectionDisposable?.dispose()
 
     private fun updateUI() =
-        connect_toggle.setText(if (bleDevice.isConnected) R.string.button_disconnect else R.string.button_connect)
+        binding!!.connectToggle.setText(if (bleDevice.isConnected) R.string.button_disconnect else R.string.button_connect)
 
     override fun onPause() {
         super.onPause()
