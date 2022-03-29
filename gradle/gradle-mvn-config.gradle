@@ -15,7 +15,7 @@ if (secretPropsFile.exists()) {
     ext["versionName"] = System.getenv('VERSION_NAME')
 }
 
-ext.VERSION_NAME = ext["versionName"]?.trim() ?: VERSION_NAME
+ext.VERSION_NAME = ext.has("versionName") ? ext["versionName"] : VERSION_NAME
 subprojects {
     ext.VERSION_NAME = rootProject.ext.VERSION_NAME
 }
@@ -33,6 +33,22 @@ ext.isAndroidProject = { project ->
     return project.getPlugins().hasPlugin('com.android.application') || project.getPlugins().hasPlugin('com.android.library')
 }
 
+def getSonatypeUsername() {
+    return hasProperty('ossrhUsername') ? ossrhUsername : ""
+}
+
+def getSonatypePassword() {
+    return hasProperty('ossrhPassword') ? ossrhPassword : ""
+}
+
+ext.getSigningKey = {
+    return ext.has('signing.key') ? ext["signing.key"] : ""
+}
+
+ext.getSigningKeyPassword = {
+    return ext.has('signing.password') ? ext["signing.password"] : ""
+}
+
 def getSonatypeReleaseRepositoryUrl() {
     return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
             : "https://s01.oss.sonatype.org/service/local/"
@@ -48,9 +64,11 @@ nexusPublishing {
         sonatype {
             nexusUrl = uri(getSonatypeReleaseRepositoryUrl())
             snapshotRepositoryUrl = uri(getSonatypeSnapshotRepositoryUrl())
-            stagingProfileId = sonatypeStagingProfileId
-            username = ossrhUsername
-            password = ossrhPassword
+            if (ext.has("sonatypeStagingProfileId")) {
+                stagingProfileId = sonatypeStagingProfileId
+            }
+            username = getSonatypeUsername()
+            password = getSonatypePassword()
         }
     }
 }
