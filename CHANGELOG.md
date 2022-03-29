@@ -5,6 +5,7 @@ Version 2.0.0
 * Switched to RxJava 3, thanks @z3ntu, @Drjacky (https://github.com/NRB-Tech/RxAndroidBle/pull/5)
 * Added `isConnectable` to scan result, thanks @MartinSadovy, @BeBetterBee (https://github.com/NRB-Tech/RxAndroidBle/pull/4)
 * Added `maxSdkVersion` to `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` permissions
+* Updated GATT status code URLs, thanks @ariccio
 
 Version 1.2.1
 * Resolving issues with repository – no code changes
