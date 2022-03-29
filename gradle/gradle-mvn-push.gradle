@@ -23,7 +23,7 @@ group = GROUP
 afterEvaluate { project ->
     if (isAndroidProject(project)) {
         android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
-            task javadocs(type: Javadoc, dependsOn: 'assembleRelease') {
+            task javadocs(type: Javadoc, dependsOn: ['assembleRelease', project.configurations.doclava]) {
                 source = android.sourceSets.main.java.source
                 classpath += project.files(
                         files(releaseVariant.javaCompileProvider.get().classpath),
@@ -35,7 +35,7 @@ afterEvaluate { project ->
                 title = null
                 options.noTimestamp(false)
                 options.doclet = "com.google.doclava.Doclava"
-                options.docletpath = configurations.doclava.files.asType(List)
+                options.docletpath = project.configurations.doclava.files.asType(List)
             }
         }
     } else {

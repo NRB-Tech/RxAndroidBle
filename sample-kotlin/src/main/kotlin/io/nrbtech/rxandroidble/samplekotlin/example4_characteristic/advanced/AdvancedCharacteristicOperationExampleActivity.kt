@@ -11,21 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding4.view.clicks
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample4AdvancedBinding
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.nrbtech.rxandroidble.samplekotlin.util.toHex
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.android.synthetic.main.activity_example4_advanced.compat_only_warning
-import kotlinx.android.synthetic.main.activity_example4_advanced.connect_button
-import kotlinx.android.synthetic.main.activity_example4_advanced.indicate_button
-import kotlinx.android.synthetic.main.activity_example4_advanced.notify_button
-import kotlinx.android.synthetic.main.activity_example4_advanced.read_button
-import kotlinx.android.synthetic.main.activity_example4_advanced.read_hex_output
-import kotlinx.android.synthetic.main.activity_example4_advanced.read_output
-import kotlinx.android.synthetic.main.activity_example4_advanced.write_button
-import kotlinx.android.synthetic.main.activity_example4_advanced.write_input
 import java.util.UUID
 
 private val TAG = AdvancedCharacteristicOperationExampleActivity::class.java.simpleName
@@ -66,7 +58,9 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var presenterEventObservable: Observable<PresenterEvent>
 
     private val inputBytes: ByteArray
-        get() = write_input.text.toString().toByteArray()
+        get() = binding!!.writeButton.text.toString().toByteArray()
+
+    private var binding: ActivityExample4AdvancedBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,21 +72,23 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
 
+        binding = ActivityExample4AdvancedBinding.inflate(layoutInflater)
+
         /*
          * Since in this activity we use the same button for user interaction for connecting the peripheral, disconnecting before connection
          * is established and disconnecting after the connection is being made we need to share the same activatedClicksObservable.
          * It would be perfectly fine to use three different buttons and pass those observables to the Presenter.
          */
-        val sharedConnectButtonClicks = connect_button.activatedClicksObservable().share()
+        val sharedConnectButtonClicks = binding!!.connectButton.activatedClicksObservable().share()
         // same goes for setting up notifications and indications below
-        val sharedNotifyButtonClicks = notify_button.activatedClicksObservable().share()
-        val sharedIndicateButtonClicks = indicate_button.activatedClicksObservable().share()
+        val sharedNotifyButtonClicks = binding!!.notifyButton.activatedClicksObservable().share()
+        val sharedIndicateButtonClicks = binding!!.indicateButton.activatedClicksObservable().share()
 
         // We setup the button texts reflecting the current state of the button for connect button, notification button
         // and indication button.
         val (connect, connecting, disconnect) =
             sharedConnectButtonClicks.setupButtonTexts(
-                connect_button,
+                binding!!.connectButton,
                 R.string.button_connect,
                 R.string.connecting,
                 R.string.button_disconnect
@@ -100,7 +96,7 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         val (setupNotification, settingNotification, teardownNotification) =
             sharedNotifyButtonClicks.setupButtonTexts(
-                notify_button,
+                binding!!.notifyButton,
                 R.string.button_setup_notification,
                 R.string.setting_notification,
                 R.string.teardown_notification
@@ -108,20 +104,20 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         val (setupIndication, settingIndication, teardownIndication) =
             sharedIndicateButtonClicks.setupButtonTexts(
-                indicate_button,
+                binding!!.indicateButton,
                 R.string.button_setup_indication,
                 R.string.setting_indication,
                 R.string.teardown_indication
             )
 
-        val readObservable = read_button.activatedClicksObservable()
+        val readObservable = binding!!.readButton.activatedClicksObservable()
 
         /*
          * Write button clicks are then mapped to byte[] from the editText. If there is a problem parsing input then a notification
          * is shown and we wait for another click to write to try to parse again.
          */
         val writeObservable =
-            write_button.activatedClicksObservable()
+            binding!!.writeButton.activatedClicksObservable()
                 .map { inputBytes }
                 .doOnError { throwable -> showSnackbarShort("Could not parse input: $throwable") }
                 .retryWhen { it }
@@ -174,7 +170,7 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
      * Handles compatibility mode event.
      */
     private fun CompatibilityModeEvent.handleCompatibility() {
-        compat_only_warning.visibility = if (isCompatibility) View.VISIBLE else View.INVISIBLE
+        binding!!.compatOnlyWarning.visibility = if (isCompatibility) View.VISIBLE else View.INVISIBLE
         if (isCompatibility) {
             /*
             All characteristics that have PROPERTY_NOTIFY or PROPERTY_INDICATE should contain
@@ -199,9 +195,9 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
     private fun ResultEvent.handleResult() {
         when (type) {
             Type.READ -> {
-                read_output.text = String(result.toByteArray())
-                read_hex_output.text = result.toByteArray().toHex()
-                write_input.setText(result.toByteArray().toHex())
+                binding!!.readOutput.text = String(result.toByteArray())
+                binding!!.readHexOutput.text = result.toByteArray().toHex()
+                binding!!.writeInput.setText(result.toByteArray().toHex())
             }
             Type.WRITE -> showSnackbarShort("Write success")
             Type.NOTIFY -> showSnackbarShort("Notification: ${result.toByteArray().toHex()}")

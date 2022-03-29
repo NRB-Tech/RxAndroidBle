@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityDeviceBinding
 import io.nrbtech.rxandroidble.samplekotlin.example2_connection.ConnectionExampleActivity
 import io.nrbtech.rxandroidble.samplekotlin.example3_discovery.ServiceDiscoveryExampleActivity
-import kotlinx.android.synthetic.main.activity_device.connect
-import kotlinx.android.synthetic.main.activity_device.discovery
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
 
@@ -20,6 +19,8 @@ class DeviceActivity : AppCompatActivity() {
 
     private lateinit var macAddress: String
 
+    private var binding: ActivityDeviceBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
@@ -27,7 +28,9 @@ class DeviceActivity : AppCompatActivity() {
         macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)!!
         supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
 
-        connect.setOnClickListener { startActivity(ConnectionExampleActivity.newInstance(this, macAddress)) }
-        discovery.setOnClickListener { startActivity(ServiceDiscoveryExampleActivity.newInstance(this, macAddress)) }
+        binding = ActivityDeviceBinding.inflate(layoutInflater)
+
+        binding!!.connect.setOnClickListener { startActivity(ConnectionExampleActivity.newInstance(this, macAddress)) }
+        binding!!.discovery.setOnClickListener { startActivity(ServiceDiscoveryExampleActivity.newInstance(this, macAddress)) }
     }
 }

@@ -10,14 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import io.nrbtech.rxandroidble.exceptions.BleScanException
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1aBinding
 import io.nrbtech.rxandroidble.samplekotlin.util.isLocationPermissionGranted
 import io.nrbtech.rxandroidble.samplekotlin.util.requestLocationPermission
 import io.nrbtech.rxandroidble.samplekotlin.util.showError
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanSettings
-import kotlinx.android.synthetic.main.activity_example1a.scan_start_btn
-import kotlinx.android.synthetic.main.activity_example1a.scan_stop_btn
 
 class BackgroundScanActivity : AppCompatActivity() {
 
@@ -31,14 +30,18 @@ class BackgroundScanActivity : AppCompatActivity() {
 
     private var hasClickedScan = false
 
+    private var binding: ActivityExample1aBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_example1a)
 
         callbackIntent = ScanReceiver.newPendingIntent(this)
 
-        scan_start_btn.setOnClickListener { onScanStartClick() }
-        scan_stop_btn.setOnClickListener { onScanStopClick() }
+        binding = ActivityExample1aBinding.inflate(layoutInflater)
+
+        binding!!.scanStartBtn.setOnClickListener { onScanStartClick() }
+        binding!!.scanStopBtn.setOnClickListener { onScanStopClick() }
     }
 
     private fun onScanStartClick() {

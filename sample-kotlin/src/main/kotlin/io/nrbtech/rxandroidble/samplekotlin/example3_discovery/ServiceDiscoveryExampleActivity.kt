@@ -7,14 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample3Binding
 import io.nrbtech.rxandroidble.samplekotlin.example3_discovery.DiscoveryResultsAdapter.AdapterItem
 import io.nrbtech.rxandroidble.samplekotlin.example4_characteristic.CharacteristicOperationExampleActivity
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_example3.connect
-import kotlinx.android.synthetic.main.activity_example3.scan_results
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
 
@@ -35,16 +34,21 @@ class ServiceDiscoveryExampleActivity : AppCompatActivity() {
 
     private val discoveryDisposable = CompositeDisposable()
 
+    private var binding: ActivityExample3Binding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_example3)
-        connect.setOnClickListener { onConnectToggleClick() }
+
+        binding = ActivityExample3Binding.inflate(layoutInflater)
+
+        binding!!.connect.setOnClickListener { onConnectToggleClick() }
 
         macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)!!
         supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress)
 
-        scan_results.apply {
+        binding!!.scanResults.apply {
             setHasFixedSize(true)
             adapter = resultsAdapter
         }
@@ -73,7 +77,7 @@ class ServiceDiscoveryExampleActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        connect.isEnabled = !bleDevice.isConnected
+        binding!!.connect.isEnabled = !bleDevice.isConnected
     }
 
     override fun onPause() {
