@@ -47,6 +47,16 @@ android {
     }
 }
 
+// add explicit dependencies to prevent warnings
+afterEvaluate {
+    tasks.named('testDebugUnitTest') {
+        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+    }
+    tasks.named('testReleaseUnitTest') {
+        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
+    }
+}
+
 dependencies {
 
     // Test dependencies

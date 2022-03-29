@@ -104,8 +104,8 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     binding!!.readOutput.text = String(bytes)
-                    binding!!.readHexOutput.text = bytes?.toHex()
-                    binding!!.writeInput.setText(bytes?.toHex())
+                    binding!!.readHexOutput.text = bytes.toHex()
+                    binding!!.writeInput.setText(bytes.toHex())
                 }, { onReadFailure(it) })
                 .let { connectionDisposable.add(it) }
         }

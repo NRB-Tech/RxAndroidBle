@@ -47,6 +47,16 @@ android {
     preBuild.dependsOn 'checkstyle'
 }
 
+// add explicit dependencies to prevent warnings
+afterEvaluate {
+    tasks.named('testDebugUnitTest') {
+        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+    }
+    tasks.named('testReleaseUnitTest') {
+        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
+    }
+}
+
 androidGroovy {
     skipJavaC = true
 }
