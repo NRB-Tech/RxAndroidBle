@@ -39,4 +39,4 @@
 
         <service android:name=".DeviceService"/>
     </application>
-</manifest>
+</manifest> 
