@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback;
 import io.nrbtech.rxandroidble.internal.serialization.ConnectionOperationQueue;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.Scheduler;
 
 /**
  * Represents a custom operation that will be enqueued for future execution within the client instance.

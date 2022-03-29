@@ -2,6 +2,7 @@ package io.nrbtech.rxandroidble.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.nrbtech.rxandroidble.sample.example2_connection.ConnectionExampleActivity;

@@ -23,7 +23,7 @@ import io.nrbtech.rxandroidble.scan.ScanSettings;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableEmitter;
 
 @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
 public class ScanOperationApi21 extends ScanOperation<RxBleInternalScanResult, ScanCallback> {

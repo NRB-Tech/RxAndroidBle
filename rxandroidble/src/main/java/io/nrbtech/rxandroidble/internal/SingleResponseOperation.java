@@ -16,10 +16,10 @@ import io.nrbtech.rxandroidble.internal.util.QueueReleasingEmitterWrapper;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.Single;
 
 /**
  * A convenience class intended to use with {@link BluetoothGatt} functions that fire one-time actions.
@@ -65,7 +65,8 @@ public abstract class SingleResponseOperation<T> extends QueueOperation<T> {
     /**
      * A function that should return {@link Observable} derived from the passed {@link RxBleGattCallback}.
      * The returned {@link Observable} will be automatically unsubscribed after the first emission.
-     * The returned {@link Observable} is a subject to {@link Observable#timeout(long, TimeUnit, Scheduler, io.reactivex.ObservableSource)}
+     * The returned {@link Observable} is a subject to
+     * {@link Observable#timeout(long, TimeUnit, Scheduler, io.reactivex.rxjava3.core.ObservableSource)}
      * and by default it will throw {@link BleGattCallbackTimeoutException}. This behaviour can be overridden by overriding
      * {@link #timeoutFallbackProcedure(BluetoothGatt, RxBleGattCallback, Scheduler)}.
      *

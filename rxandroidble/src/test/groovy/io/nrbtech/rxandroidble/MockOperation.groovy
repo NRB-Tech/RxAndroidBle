@@ -6,8 +6,8 @@ import io.nrbtech.rxandroidble.exceptions.BleException
 import io.nrbtech.rxandroidble.internal.Priority
 import io.nrbtech.rxandroidble.internal.QueueOperation
 import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface
-import io.reactivex.ObservableEmitter
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 public class MockOperation extends QueueOperation<Object> {
 
@@ -53,7 +53,7 @@ public class MockOperation extends QueueOperation<Object> {
         return new BleDisconnectedException("MockDeviceAddress")
     }
 
-    public io.reactivex.Observable<MockOperation> getFinishedRunningObservable() {
+    public io.reactivex.rxjava3.core.Observable<MockOperation> getFinishedRunningObservable() {
         behaviorSubject
     }
 }

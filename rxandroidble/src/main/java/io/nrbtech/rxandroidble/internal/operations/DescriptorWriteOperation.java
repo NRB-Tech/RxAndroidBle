@@ -12,7 +12,7 @@ import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback;
 import bleshadow.javax.inject.Named;
 
 import io.nrbtech.rxandroidble.internal.logger.LoggerUtil;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 import static io.nrbtech.rxandroidble.internal.util.ByteAssociationUtil.descriptorPredicate;
 import static io.nrbtech.rxandroidble.internal.util.ByteAssociationUtil.getBytesFromAssociation;

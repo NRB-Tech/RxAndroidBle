@@ -6,8 +6,8 @@ import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.mockrxandroidble.RxBleClientMock
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
@@ -46,7 +46,7 @@ class PresenterTest {
         connectClicks.onNext(true)
         readClicks.onNext(true)
 
-        testObserver.assertValueSet(
+        testObserver.assertValueSequence(
             listOf(
                 InfoEvent("Hey, connection has been established!"),
                 CompatibilityModeEvent(false),
@@ -63,7 +63,7 @@ class PresenterTest {
         connectClicks.onNext(true)
         writeClicks.onNext("TestWrite".toByteArray())
 
-        testObserver.assertValueSet(
+        testObserver.assertValueSequence(
             listOf(
                 InfoEvent("Hey, connection has been established!"),
                 CompatibilityModeEvent(false),
@@ -81,7 +81,7 @@ class PresenterTest {
         enableNotifyClicks.onNext(true)
         characteristicNotificationSubject.onNext("TestNotification".toByteArray())
 
-        testObserver.assertValueSet(
+        testObserver.assertValueSequence(
             listOf(
                 InfoEvent("Hey, connection has been established!"),
                 CompatibilityModeEvent(false),
@@ -99,7 +99,7 @@ class PresenterTest {
         enableIndicateClicks.onNext(true)
         characteristicNotificationSubject.onNext("TestIndication".toByteArray())
 
-        testObserver.assertValueSet(
+        testObserver.assertValueSequence(
             listOf(
                 InfoEvent("Hey, connection has been established!"),
                 CompatibilityModeEvent(false),

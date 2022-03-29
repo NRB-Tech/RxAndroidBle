@@ -4,10 +4,10 @@ import io.nrbtech.rxandroidble.RxBleConnection;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.functions.Action;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.core.ObservableTransformer;
+import io.reactivex.rxjava3.functions.Action;
 
 /**
  * Observable transformer that can be used to share connection between many subscribers.

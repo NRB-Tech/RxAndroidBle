@@ -14,7 +14,7 @@ import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface
 import io.nrbtech.rxandroidble.internal.util.RxBleAdapterWrapper
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanSettings
-import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import spock.lang.Specification
 import spock.lang.Unroll
 

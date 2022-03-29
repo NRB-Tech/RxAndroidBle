@@ -1,6 +1,6 @@
 package io.nrbtech.rxandroidble.internal.serialization;
 
-import io.reactivex.internal.schedulers.NonBlockingThread;
+import io.reactivex.rxjava3.internal.schedulers.NonBlockingThread;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 

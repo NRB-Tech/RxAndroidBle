@@ -3,9 +3,9 @@ package io.nrbtech.rxandroidble.extensions
 import android.bluetooth.BluetoothGattService
 import io.nrbtech.rxandroidble.RxBleDeviceServices
 import io.nrbtech.rxandroidble.RxBleScanResult
-import io.reactivex.observers.BaseTestConsumer
-import io.reactivex.observers.TestObserver
-import io.reactivex.subscribers.TestSubscriber
+import io.reactivex.rxjava3.observers.BaseTestConsumer
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.subscribers.TestSubscriber
 
 class TestSubscriberExtension {
 
@@ -48,6 +48,26 @@ class TestSubscriberExtension {
 
     static public <T> void assertValues(final TestObserver<T> subscriber, List<T> values) {
         subscriber.assertValueSequence(values)
+    }
+
+    static <T> void assertTerminated(final TestObserver<T> subscriber) {
+        try {
+            subscriber.assertComplete()
+        } catch (Throwable ignored) {
+            subscriber.assertError({ true })
+        }
+    }
+
+    static <T> void assertNotTerminated(final TestObserver<T> subscriber) {
+        subscriber.assertNotComplete()
+        subscriber.assertNoErrors()
+        if (subscriber.isDisposed()) {
+            throw AssertionError("TestObserver is disposed")
+        }
+    }
+
+    static <T> void assertErrorMessage(final TestObserver<T> subscriber, final String errorMessage) {
+        subscriber.assertError { it.message == errorMessage }
     }
 
     static boolean assertAllBatchesSmaller(final TestSubscriber<byte[]> subscriber, int maxBatchSize) {

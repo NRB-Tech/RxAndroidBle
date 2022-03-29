@@ -24,15 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Supplier;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
 
 import static io.nrbtech.rxandroidble.RxBleConnection.RxBleConnectionState.CONNECTED;
 import static io.nrbtech.rxandroidble.RxBleConnection.RxBleConnectionState.CONNECTING;
@@ -272,9 +273,9 @@ public class RxBleDeviceMock implements RxBleDevice {
 
     @Override
     public Observable<RxBleConnection> establishConnection(boolean autoConnect) {
-        return Observable.defer(new Callable<Observable<RxBleConnection>>() {
+        return Observable.defer(new Supplier<ObservableSource<? extends RxBleConnection>>() {
             @Override
-            public Observable<RxBleConnection> call() {
+            public ObservableSource<? extends RxBleConnection> get() {
                 if (isConnected.compareAndSet(false, true)) {
                     return RxBleDeviceMock.this.emitConnectionWithoutCompleting()
                             .doOnSubscribe(new Consumer<Disposable>() {

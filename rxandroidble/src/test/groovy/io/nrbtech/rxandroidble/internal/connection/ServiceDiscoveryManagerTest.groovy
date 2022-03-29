@@ -6,8 +6,8 @@ import io.nrbtech.rxandroidble.RxBleDeviceServices
 import io.nrbtech.rxandroidble.internal.operations.OperationsProvider
 import io.nrbtech.rxandroidble.internal.operations.ServiceDiscoveryOperation
 import io.nrbtech.rxandroidble.internal.serialization.ConnectionOperationQueue
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import spock.lang.Specification
 
 import java.util.concurrent.TimeUnit

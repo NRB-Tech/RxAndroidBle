@@ -1,8 +1,8 @@
 package io.nrbtech.rxandroidble.internal.scan
 
 import io.nrbtech.rxandroidble.exceptions.BleScanException
-import io.reactivex.Scheduler
-import io.reactivex.schedulers.TestScheduler
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import spock.lang.Specification
 import spock.lang.Unroll
 
