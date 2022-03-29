@@ -8,7 +8,7 @@ ext {
             /* Library-only dependencies */
             rxjava                : "io.reactivex.rxjava3:rxjava:$rxJavaVersion",
             rxandroid             : 'io.reactivex.rxjava3:rxandroid:3.0.0',
-            rxrelay               : 'com.jakewharton.rxrelay2:rxrelay:2.1.1',
+            rxrelay               : 'com.jakewharton.rxrelay3:rxrelay:3.0.1',
             junit                 : 'org.junit.jupiter:junit-jupiter:5.8.1',
             groovy                : ['org.codehaus.groovy:groovy:3.0.9', 'org.codehaus.groovy:groovy-test:3.0.9'],
             spock                 : 'org.spockframework:spock-core:2.0-groovy-3.0',
@@ -17,8 +17,8 @@ ext {
             /* Shared library-sample apps dependencies */
             annotations           : "androidx.annotation:annotation:1.1.0",
             /* Sample apps-only dependencies */
-            rxjava_replayingshare : 'com.jakewharton.rx2:replaying-share:2.2.0',
-            rxjava_binding        : 'com.jakewharton.rxbinding3:rxbinding:3.1.0',
+            rxjava_replayingshare : 'com.jakewharton.rx3:replaying-share:3.0.0',
+            rxjava_binding        : 'com.jakewharton.rxbinding4:rxbinding:4.0.0',
             appcompat             : 'androidx.appcompat:appcompat:1.1.0',
             material_design       : 'com.google.android.material:material:1.0.0'
     ]
