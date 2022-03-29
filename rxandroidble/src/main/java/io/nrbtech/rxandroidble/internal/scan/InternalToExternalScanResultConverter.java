@@ -8,7 +8,7 @@ import io.nrbtech.rxandroidble.scan.ScanResult;
 
 import bleshadow.javax.inject.Inject;
 
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.functions.Function;
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public class InternalToExternalScanResultConverter implements Function<RxBleInternalScanResult, ScanResult> {

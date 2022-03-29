@@ -9,7 +9,7 @@ import io.nrbtech.rxandroidble.LogOptions;
 import io.nrbtech.rxandroidble.RxBleClient;
 import io.nrbtech.rxandroidble.exceptions.BleException;
 import io.reactivex.exceptions.UndeliverableException;
-import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 public class SampleApplication extends Application {
 

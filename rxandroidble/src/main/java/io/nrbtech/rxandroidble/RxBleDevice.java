@@ -11,7 +11,7 @@ import io.nrbtech.rxandroidble.exceptions.BleDisconnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleGattCallbackTimeoutException;
 import io.nrbtech.rxandroidble.exceptions.BleGattException;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 
 public interface RxBleDevice {

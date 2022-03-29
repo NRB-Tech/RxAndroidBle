@@ -2,7 +2,7 @@ package io.nrbtech.rxandroidble.internal.operations;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Scheduler;
+import io.reactivex.rxjava3.core.Scheduler;
 
 
 public class TimeoutConfiguration {

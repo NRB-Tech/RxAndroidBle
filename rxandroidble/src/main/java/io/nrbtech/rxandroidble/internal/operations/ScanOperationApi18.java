@@ -13,7 +13,7 @@ import io.nrbtech.rxandroidble.internal.scan.InternalScanResultCreator;
 import io.nrbtech.rxandroidble.internal.scan.RxBleInternalScanResult;
 import io.nrbtech.rxandroidble.internal.util.RxBleAdapterWrapper;
 
-import io.reactivex.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableEmitter;
 
 public class ScanOperationApi18 extends ScanOperation<RxBleInternalScanResult, BluetoothAdapter.LeScanCallback> {
 

@@ -10,7 +10,7 @@ import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback;
 import bleshadow.javax.inject.Inject;
 import bleshadow.javax.inject.Named;
 
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 public class ReadRssiOperation extends SingleResponseOperation<Integer> {
 

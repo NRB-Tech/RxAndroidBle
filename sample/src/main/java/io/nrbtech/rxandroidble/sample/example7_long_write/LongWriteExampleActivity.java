@@ -11,9 +11,9 @@ import io.nrbtech.rxandroidble.sample.SampleApplication;
 
 import java.util.UUID;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * For the sake of this example lets assume that we have a Bluetooth Device that is retrieved by:
