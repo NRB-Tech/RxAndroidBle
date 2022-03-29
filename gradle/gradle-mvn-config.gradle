@@ -1,0 +1,56 @@
+File secretPropsFile = project.rootProject.file('local.properties')
+
+if (secretPropsFile.exists()) {
+    // Read local.properties file first if it exists
+    Properties p = new Properties()
+    new FileInputStream(secretPropsFile).withCloseable { is -> p.load(is) }
+    p.each { name, value -> ext[name] = value }
+} else {
+    // Use system environment variables
+    ext["ossrhUsername"] = System.getenv('SONATYPE_NEXUS_USERNAME')
+    ext["ossrhPassword"] = System.getenv('SONATYPE_NEXUS_PASSWORD')
+    ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
+    ext["signing.key"] = System.getenv('PGP_SIGNING_KEY')
+    ext["signing.password"] = System.getenv('PGP_SIGNING_PASSWORD')
+    ext["versionName"] = System.getenv('VERSION_NAME')
+}
+
+ext.VERSION_NAME = ext["versionName"]?.trim() ?: VERSION_NAME
+subprojects {
+    ext.VERSION_NAME = rootProject.ext.VERSION_NAME
+}
+
+version = VERSION_NAME
+group = GROUP
+
+println "RxAndroidBle version \"$VERSION_NAME\""
+
+ext.isReleaseBuild = {
+    return !VERSION_NAME.endsWith("SNAPSHOT")
+}
+
+ext.isAndroidProject = { project ->
+    return project.getPlugins().hasPlugin('com.android.application') || project.getPlugins().hasPlugin('com.android.library')
+}
+
+def getSonatypeReleaseRepositoryUrl() {
+    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://s01.oss.sonatype.org/service/local/"
+}
+
+def getSonatypeSnapshotRepositoryUrl() {
+    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl = uri(getSonatypeReleaseRepositoryUrl())
+            snapshotRepositoryUrl = uri(getSonatypeSnapshotRepositoryUrl())
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+        }
+    }
+}
