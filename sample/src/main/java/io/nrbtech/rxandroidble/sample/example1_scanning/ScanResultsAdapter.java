@@ -1,7 +1,6 @@
 package io.nrbtech.rxandroidble.sample.example1_scanning;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,15 +97,15 @@ class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHol
         holder.line1.setText(String.format(Locale.getDefault(), "%s (%s)", bleDevice.getMacAddress(), bleDevice.getName()));
         if (showDetails) {
             holder.line2.setText(String.format(Locale.getDefault(),
-                    "RSSI: %d\n" +
-                            "legacy: %s\n" +
-                            "connectable: %s\n" +
-                            "data status: %d\n" +
-                            "primary phy: %d\n" +
-                            "secondary phy %d\n" +
-                            "advertising sid: %d\n" +
-                            "tx power: %d\n" +
-                            "periodic adv interval: %d",
+                    "RSSI: %d\n"
+                            + "legacy: %s\n"
+                            + "connectable: %s\n"
+                            + "data status: %d\n"
+                            + "primary phy: %d\n"
+                            + "secondary phy %d\n"
+                            + "advertising sid: %d\n"
+                            + "tx power: %d\n"
+                            + "periodic adv interval: %d",
                     rxBleScanResult.getRssi(),
                     rxBleScanResult.isLegacy(),
                     rxBleScanResult.isConnectable(),
