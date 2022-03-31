@@ -3,11 +3,11 @@ apply plugin: 'groovyx.android'
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 1
         versionName VERSION_NAME
     }
@@ -17,12 +17,43 @@ android {
         targetCompatibility rootProject.ext.targetCompatibilityVersion
     }
 
+    publishing {
+        singleVariant('release')
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
+            }
+        }
     }
 
     lintOptions {
         abortOnError false
+    }
+
+    preBuild.dependsOn 'checkstyle'
+
+    sourceSets {
+        test {
+            java {
+                srcDir("../rxandroidble/src/test/java") // Add android stubs from main lib tests
+            }
+        }
+    }
+}
+
+// add explicit dependencies to prevent warnings
+afterEvaluate {
+    tasks.named('testDebugUnitTest') {
+        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+    }
+    tasks.named('testReleaseUnitTest') {
+        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
     }
 }
 
@@ -32,10 +63,6 @@ dependencies {
     testImplementation rootProject.ext.libs.junit
     testImplementation rootProject.ext.libs.groovy
     testImplementation rootProject.ext.libs.spock
-    testImplementation rootProject.ext.libs.robolectric
-    testImplementation(rootProject.ext.libs.electricspock) {
-        exclude group: 'org.robolectric', module: 'android-all'
-    }
     api project(path: ':rxandroidble')
     api rootProject.ext.libs.rxjava
 }

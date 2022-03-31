@@ -1,4 +1,4 @@
-# RxAndroidBle [![Build Status](https://travis-ci.org/Polidea/RxAndroidBle.svg?branch=master)](https://travis-ci.org/Polidea/RxAndroidBle) [![Maven Central](https://img.shields.io/maven-central/v/com.polidea.rxandroidble2/rxandroidble.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.polidea.rxandroidble2%22%20AND%20a%3A%22rxandroidble%22)
+# RxAndroidBle [![Maven Central](https://img.shields.io/maven-central/v/io.nrbtech.rxandroidble/rxandroidble.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22io.nrbtech.rxandroidble%22%20AND%20a%3A%22rxandroidble%22)
 <p align="center">
   <img 
     alt="Tailored software services including concept, design, development and testing"
@@ -18,10 +18,106 @@ RxAndroidBle is a powerful painkiller for Android's Bluetooth Low Energy headach
 
 For support head to [StackOverflow #rxandroidble](http://stackoverflow.com/questions/tagged/rxandroidble?sort=active)
 
-Read the official announcement at [Polidea Blog](https://www.polidea.com/blog/RXAndroidBLE/).
+This repository is a fork of the [original project](https://github.com/polidea/RxAndroidBle) which was not very actively maintained.
 
-## RxAndroidBLE @ Mobile Central Europe 2016
-[![RxAndroidBLE @ Mobile Central Europe 2016](https://img.youtube.com/vi/0aKfUGCxUDM/0.jpg)](https://www.youtube.com/watch?v=0aKfUGCxUDM)
+## Collaborators
+
+NRB Tech is actively seeking collaborators to maintain this fork. If you have good knowledge of RxJava, Bluetooth and ideally Dagger, or just a keen interest in helping build RxAndroidBle, we'd love to hear from you. Create an issue, submit a PR or [contact us](https://www.nrbtech.io/contact).
+
+## Getting Started
+
+The first step is to include RxAndroidBle into your project.
+
+### Gradle
+If you use Gradle to build your project — as a Gradle project implementation dependency:
+```groovy
+implementation "io.nrbtech.rxandroidble:rxandroidble:2.0.0"
+```
+#### Development
+If you want to help build the library, add it as a submodule to your project in `RxAndroidBle` and substitute the dependencies in `settings.gradle`:
+```
+// tag::composite_substitution[]
+includeBuild('RxAndroidBle') {
+    dependencySubstitution {
+        substitute module('io.nrbtech.rxandroidble:rxandroidble') with project(':rxandroidble')
+        substitute module('io.nrbtech.rxandroidble:mockclient') with project(':mockrxandroidble')
+    }
+}
+// end::composite_substitution[]
+```
+### Maven
+If you use Maven to build your project — as a Maven project dependency:
+```xml
+<dependency>
+  <groupId>io.nrbtech.rxandroidble</groupId>
+  <artifactId>rxandroidble</artifactId>
+  <version>2.0.0</version>
+  <type>aar</type>
+</dependency>
+```
+
+### Snapshot
+If your are interested in cutting-edge build you can get a `master-SNAPSHOT` or `develop-SNAPSHOT` version of the library.
+NOTE: Snapshots are built from the top of the `master` and `develop` branches and a subject to more frequent changes that may break the API and/or change behavior.
+
+To be able to download it you need to add Sonatype Snapshot repository site to your `build.gradle` file:
+```groovy
+maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+```
+
+### Permissions
+Android requires additional permissions declared in the manifest for an app to run a BLE scan since API 23 (6.0 / Marshmallow) and perform a BLE connection since API 31 (Android 12). RxAndroidBle provides a minimal set of commonly used Bluetooth permissions for you in its `AndroidManifest.xml`. These permissions assume scanning is only used when the App is in the foreground, and that the App does not want to derive the user's location from BLE advertisements. Below are a number of additions you can make to your `AndroidManifext.xml` for your specific use case.
+
+#### If you want to derive the user's location in your App
+RxAndroidBle uses the `uses-permission-sdk-23` tag and `android:maxSdkVersion` attribute to require location only on APIs 23-30, where it is required for BLE scanning. To ensure you can derive the user's location in your App with all API versions, and avoid any issues with merging of permissions when uploading to the Play Store, add the following to your `AndroidManifest.xml`:
+```xml
+<uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="remove" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+```
+
+##### If you want to derive the user's location from BLE scanning in API >= 31
+
+API 31 (Android 12) introduced new Bluetooth permissions. RxAndroidBle uses the `android:usesPermissionFlags="neverForLocation"` attribute on the `BLUETOOTH_SCAN` permission, which indicates scanning will not be used to derive the user's location, so location permissions are not required. If you need to locate the user with BLE scanning, use this instead, but keep in mind that you will still need `ACCESS_FINE_LOCATION`:
+```xml
+<uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:node="replace" />
+```
+
+#### If you want to scan in the background and support APIs 29 & 30
+You should add the following to your `AndroidManifest.xml`:
+```xml
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" android:maxSdkVersion="30" />
+```
+If you want to access the user's location in the background on APIs > 30, remove the `android:maxSdkVersion` attribute.
+
+#### If you do not need to connect to peripherals
+You can remove the `BLUETOOTH_CONNECT` permission that RxAndroidBle requests in APIs >= 31:
+```xml
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:node="remove" />
+```
+
+#### Summary of available permissions
+##### Scanning
+A summary of available runtime permissions used for BLE scanning:
+
+| from API | to API (inclusive) | Acceptable runtime permissions |
+|:---:|:---:| --- |
+| 18 | 22 | (No runtime permissions needed) |
+| 23 | 28 | One of below:<br>- `android.permission.ACCESS_COARSE_LOCATION`<br>- `android.permission.ACCESS_FINE_LOCATION` |
+| 29 | 30 | - `android.permission.ACCESS_FINE_LOCATION`<br>- `android.permission.ACCESS_BACKGROUND_LOCATION`\* |
+| 31 | current | - `android.permission.BLUETOOTH_SCAN`<br>- `android.permission.ACCESS_FINE_LOCATION`\*\* |
+
+\* Needed if [scan is performed in background](https://developer.android.com/about/versions/10/privacy/changes#app-access-device-location)
+
+\*\* Only needed if you want to obtain user's location with BLE scanning (`BLUETOOTH_SCAN` is not using `neverForLocation` attribute in your App)
+
+##### Connecting
+A summary of available runtime permissions used for BLE connections:
+| from API | to API (inclusive) | Acceptable runtime permissions |
+|:---:|:---:| --- |
+| 18 | 30 | (No runtime permissions needed) |
+| 31 | current | - `android.permission.BLUETOOTH_CONNECT` |
 
 ## Usage
 ### Obtaining the client
@@ -43,7 +139,7 @@ context.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 ```
 
 ### Device discovery
-Scanning devices in the area is simple as that:
+Scanning for devices nearby is simple as:
 
 ```java
 Disposable scanSubscription = rxBleClient.scanBleDevices(
@@ -68,7 +164,7 @@ scanSubscription.dispose();
 For devices with API <21 (before Lollipop) the scan API is emulated to get the same behaviour.
 
 ### Observing client state
-On Android it is not always trivial to determine if a particular BLE operation has a potential to succeed. e.g. to scan on Android 6.0 the device needs to have a `BluetoothAdapter`, the application needs to have a granted [runtime permission](https://github.com/Polidea/RxAndroidBle#permissions) for either `ACCESS_COARSE_LOCATION` or `ACCESS_FINE_LOCATION`, additionally `Location Services` need to be turned on.
+On Android it is not always trivial to determine if a particular BLE operation has a potential to succeed. e.g. to scan on Android 6.0 the device needs to have a `BluetoothAdapter`, the application needs to have a granted [runtime permission](https://github.com/nrb-tech/RxAndroidBle#permissions) for either `ACCESS_COARSE_LOCATION` or `ACCESS_FINE_LOCATION`, additionally `Location Services` need to be turned on.
 To be sure that the scan will work only when everything is ready you could use:
 
 ```java
@@ -99,7 +195,7 @@ Disposable flowDisposable = rxBleClient.observeStateChanges()
     	    // Handle an error here.
     	}
     );
-    
+
 // When done, just dispose.
 flowDisposable.dispose();
 ```
@@ -269,9 +365,9 @@ Every error you may encounter is provided via `onError` callback. Each public me
 From different interfaces, you can obtain different `Observable`s which exhibit different behaviours.
 There are two types of `Observable`s that you may encounter.
 1. Multiple values - i.e. `RxBleClient.scan()`, `RxBleDevice.observeConnectionStateChanges()` and `Observable` emitted by `RxBleConnection.setupNotification()` / `RxBleConnection.setupIndication()`
-2. One value — these usually are meant for auto cleanup upon disposing i.e. `setupNotification()` / `setupIndication()` — when you will dispose the notification / indication will be disabled 
+2. One value — these usually are meant for auto cleanup upon disposing i.e. `setupNotification()` / `setupIndication()` — when you will dispose the notification / indication will be disabled
 
-`RxBleDevice.establishConnection()` is an `Observable` that will emit a single `RxBleConnection` but will not complete as the connection may be later a subject to an error (i.e. external disconnection). Whenever you are no longer interested in keeping the connection open you should dispose it which will cause disconnection and cleanup of resources. 
+`RxBleDevice.establishConnection()` is an `Observable` that will emit a single `RxBleConnection` but will not complete as the connection may be later a subject to an error (i.e. external disconnection). Whenever you are no longer interested in keeping the connection open you should dispose it which will cause disconnection and cleanup of resources.
 
 The below table contains an overview of used `Observable` patterns
 
@@ -291,7 +387,7 @@ The below table contains an overview of used `Observable` patterns
 \** this `Observable` may complete. For example `observeStateChanges()` does emit only a single value and finishes in exactly one situation — when Bluetooth Adapter is not available on the device. There is no reason to monitor other states as the adapter does not appear during runtime. A second example: Observables emitted from `setupNotification` / `setupIndication` may complete when the parent Observable is disposed.
 
 ### Helpers
-We encourage you to check the package [`com.polidea.rxandroidble2.helpers`](https://github.com/Polidea/RxAndroidBle/tree/master/rxandroidble/src/main/java/com/polidea/rxandroidble2/helpers) and [`com.polidea.rxandroidble2.utils`](https://github.com/Polidea/RxAndroidBle/tree/master/rxandroidble/src/main/java/com/polidea/rxandroidble2/utils) which contain handy reactive wrappers for some typical use-cases.
+We encourage you to check the package [`io.nrbtech.rxandroidble.helpers`](https://github.com/nrb-tech/RxAndroidBle/tree/master/rxandroidble/src/main/java/io/nrbtech/rxandroidble/helpers) and [`io.nrbtech.rxandroidble.utils`](https://github.com/nrb-tech/RxAndroidBle/tree/master/rxandroidble/src/main/java/io/nrbtech/rxandroidble/utils) which contain handy reactive wrappers for some typical use-cases.
 
 #### Value interpretation
 Bluetooth Specification specifies formats in which `int`/`float`/`String` values may be stored in characteristics. `BluetoothGattCharacteristic` has functions for retrieving those (`.getIntValue()`/`.getFloatValue()`/`.getStringValue()`).
@@ -300,63 +396,13 @@ Since `RxAndroidBle` reads and notifications emit `byte[]` you may want to use `
 #### Observing BluetoothAdapter state
 If you would like to observe `BluetoothAdapter` state changes you can use `RxBleAdapterStateObservable`.
 
-### Permissions
-Android since API 23 (6.0 / Marshmallow) requires location permissions declared in the manifest for an app to run a BLE scan. RxAndroidBle already provides all the necessary bluetooth permissions for you in AndroidManifest.
-
-Runtime permissions required for running a BLE scan:
-
-| from API | to API (inclusive) | Acceptable runtime permissions |
-|:---:|:---:| --- |
-| 18 | 22 | (No runtime permissions needed) |
-| 23 | 28 | One of below:<br>- `android.permission.ACCESS_COARSE_LOCATION`<br>- `android.permission.ACCESS_FINE_LOCATION` |
-| 29 | current | - `android.permission.ACCESS_FINE_LOCATION` |
-
-#### Potential permission issues
-Google is checking `AndroidManifest` for declaring permissions when releasing to the Play Store. If you have `ACCESS_COARSE_LOCATION` or `ACCESS_FINE_LOCATION` set manually using tag `uses-permission` (as opposed to `uses-permission-sdk-23`) you may run into an issue where your manifest does not merge with RxAndroidBle's, resulting in a failure to upload to the Play Store. These permissions are only required on SDK 23+. If you need any of these permissions on a lower version of Android replace your statement with:
-```xml
-<uses-permission
-  android:name="android.permission.ACCESS_COARSE_LOCATION"
-  android:maxSdkVersion="22"/>
-```
-```xml
-<uses-permission
-  android:name="android.permission.ACCESS_FINE_LOCATION"
-  android:maxSdkVersion="22"/>
-```
-
 ## More examples
 
 Usage examples are located in:
-- [`/sample`](https://github.com/Polidea/RxAndroidBle/tree/master/sample/src/main/java/com/polidea/rxandroidble2/sample)
-- [`/sample-kotlin`](https://github.com/Polidea/RxAndroidBle/tree/master/sample-kotlin/src/main/kotlin/com/polidea/rxandroidble2/samplekotlin)
+- [`/sample`](https://github.com/nrb-tech/RxAndroidBle/tree/master/sample/src/main/java/io/nrbtech/rxandroidble/sample)
+- [`/sample-kotlin`](https://github.com/nrb-tech/RxAndroidBle/tree/master/sample-kotlin/src/main/kotlin/io/nrbtech/rxandroidble/samplekotlin)
 
 Keep in mind that these are only _samples_ to show how the library can be used. These are not meant for being role model of a good application architecture.
-
-## Download
-### Gradle
-
-```groovy
-implementation "com.polidea.rxandroidble2:rxandroidble:1.11.1"
-```
-### Maven
-
-```xml
-<dependency>
-  <groupId>com.polidea.rxandroidble2</groupId>
-  <artifactId>rxandroidble</artifactId>
-  <version>1.11.1</version>
-  <type>aar</type>
-</dependency>
-```
-
-### Snapshot
-If your are interested in cutting-edge build you can get a `SNAPSHOT` version of the library. 
-NOTE: Snapshots are built from the top of the `master` and `develop` branches and a subject to more frequent changes that may break the API and/or change behavior.
-
-To be able to download it you need to add Sonatype Snapshot repository site to your `build.gradle` file:
-```groovy
-maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-```
 
 ## Testing
 Using RxAndroidBle enables you to test your application easily.
@@ -367,11 +413,11 @@ Most of the objects that the library uses are implementations of interfaces whic
 Alternatively one could use `MockRxAndroidBle` (more info below). Note: Using `MockRxAndroidBle` in unit tests needs [Robolectric](https://github.com/robolectric/robolectric).
 
 ### Integration tests
-Sometimes there is a need to develop the application without the access to a physical device. We have created [MockRxAndroidBle](https://github.com/Polidea/RxAndroidBle/tree/master/mockrxandroidble) as a drop-in addon for mocking a simple peripheral.
+Sometimes there is a need to develop the application without the access to a physical device. We have created [MockRxAndroidBle](https://github.com/nrb-tech/RxAndroidBle/tree/master/mockrxandroidble) as a drop-in addon for mocking a simple peripheral.
 
 Unfortunately it is not under active development—PRs are welcomed though. ;)
 
-## [Small performance comparison](https://github.com/Polidea/RxAndroidBle/issues/41#issuecomment-333513707)
+## [Small performance comparison](https://github.com/nrb-tech/RxAndroidBle/issues/41#issuecomment-333513707)
 
 ## Contributing
 If you would like to contribute code you can do so through GitHub by forking the repository and sending a pull request.
@@ -380,28 +426,26 @@ When submitting code, please make every effort to follow existing conventions an
 
 ## FAQ
 If you encounter seemingly incorrect behaviour in your application that is regarding this library please check the below list of Frequently Asked Questions:
-- [Cannot connect](https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-Cannot-connect)
-- [UndeliverableException](https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException)
+- [Cannot connect](https://github.com/nrb-tech/RxAndroidBle/wiki/FAQ:-Cannot-connect)
+- [UndeliverableException](https://github.com/nrb-tech/RxAndroidBle/wiki/FAQ:-UndeliverableException)
 
 ## Support
 * non-commercial — head to [StackOverflow #rxandroidble](https://stackoverflow.com/questions/tagged/rxandroidble)
-* commercial — drop an email to hello@polidea.com for more info
+* commercial — drop an email to hello@nrbtech.io for more info
 
-[Contact us](https://www.polidea.com/project/?utm_source=Github&utm_medium=Npaid&utm_campaign=Kontakt&utm_term=Code&utm_content=GH_NOP_KKT_COD_RAB001)
+[Contact us](https://www.nrbtech.io/contact)
 
-Learn more about Polidea's BLE services [here](https://www.polidea.com/services/ble/?utm_source=Github&utm_medium=Npaid&utm_campaign=Tech_BLE&utm_term=Code&utm_content=GH_NOP_BLE_COD_RAB001)
-
-## Discussions
-Want to talk about it? Join our discussion on [Gitter](https://gitter.im/RxBLELibraries/RxAndroidBle)
+Learn more about NRB Tech's BLE services [here](https://www.nrbtech.io/)
 
 ## Maintainers
-* Dariusz Seweryn (github: dariuszseweryn)
+* Nick Brook (github: nrbrook)
 
-## [Contributors](https://github.com/Polidea/RxAndroidBle/graphs/contributors), thank you!
+## [Contributors](https://github.com/nrb-tech/RxAndroidBle/graphs/contributors), thank you!
 
 ## License
 
-    Copyright 2016 Polidea Sp. z o.o
+    Parts Copyright 2016 Polidea Sp. z o.o
+    Parts Copyright 2022 NRB Tech Ltd
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -419,4 +463,4 @@ Want to talk about it? Join our discussion on [Gitter](https://gitter.im/RxBLELi
 
 ## Maintained by
 
-[![Polidea](https://raw.githubusercontent.com/Polidea/RxAndroidBle/master/site/polidea_logo.png "Tailored software services including concept, design, development and testing")](http://www.polidea.com)
+[![NRB Tech](https://raw.githubusercontent.com/nrb-tech/RxAndroidBle/master/site/nrbtech_logo.png "Start building your new IOT Product today")](http://www.nrbtech.io)

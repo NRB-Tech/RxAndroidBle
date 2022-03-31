@@ -3,11 +3,11 @@ apply plugin: 'groovyx.android'
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 1
         versionName VERSION_NAME
     }
@@ -23,6 +23,10 @@ android {
     compileOptions {
         sourceCompatibility rootProject.ext.targetCompatibilityVersion
         targetCompatibility rootProject.ext.targetCompatibilityVersion
+    }
+
+    publishing {
+        singleVariant('release')
     }
 
     testOptions {
@@ -43,6 +47,16 @@ android {
     preBuild.dependsOn 'checkstyle'
 }
 
+// add explicit dependencies to prevent warnings
+afterEvaluate {
+    tasks.named('testDebugUnitTest') {
+        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+    }
+    tasks.named('testReleaseUnitTest') {
+        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
+    }
+}
+
 androidGroovy {
     skipJavaC = true
 }
@@ -59,8 +73,4 @@ dependencies {
     testImplementation rootProject.ext.libs.junit
     testImplementation rootProject.ext.libs.groovy
     testImplementation rootProject.ext.libs.spock
-    testImplementation(rootProject.ext.libs.robolectric)
-    testImplementation(rootProject.ext.libs.electricspock){
-        exclude group: 'org.robolectric', module: 'android-all'
-    }
 }
