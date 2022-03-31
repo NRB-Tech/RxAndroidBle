@@ -24,11 +24,18 @@ public class InternalToExternalScanResultConverter implements Function<RxBleInte
     public ScanResult apply(RxBleInternalScanResult rxBleInternalScanResult) {
         return new ScanResult(
                 deviceProvider.getBleDevice(rxBleInternalScanResult.getBluetoothDevice().getAddress()),
+                rxBleInternalScanResult.isLegacy(),
+                rxBleInternalScanResult.isConnectable(),
+                rxBleInternalScanResult.getDataStatus(),
+                rxBleInternalScanResult.getPrimaryPhy(),
+                rxBleInternalScanResult.getSecondaryPhy(),
+                rxBleInternalScanResult.getAdvertisingSid(),
+                rxBleInternalScanResult.getTxPower(),
                 rxBleInternalScanResult.getRssi(),
-                rxBleInternalScanResult.getTimestampNanos(),
-                rxBleInternalScanResult.getScanCallbackType(),
+                rxBleInternalScanResult.getPeriodicAdvertisingInterval(),
                 rxBleInternalScanResult.getScanRecord(),
-                rxBleInternalScanResult.isConnectable()
+                rxBleInternalScanResult.getTimestampNanos(),
+                rxBleInternalScanResult.getScanCallbackType()
         );
     }
 }

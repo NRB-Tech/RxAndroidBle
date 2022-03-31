@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import io.nrbtech.rxandroidble.RxBleClient;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.RxBleScanResult;
-import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.scan.BackgroundScanner;
 import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanFilter;
@@ -361,7 +360,7 @@ public class RxBleClientMock extends RxBleClient {
                     @Override
                     public boolean test(ScanResult scanResult) {
                         for (ScanFilter filter : scanFilters) {
-                            if (!filter.matches((RxBleScanResultMock) scanResult)) {
+                            if (!filter.matches(scanResult)) {
                                 return false;
                             }
                         }
@@ -371,27 +370,41 @@ public class RxBleClientMock extends RxBleClient {
     }
 
     @NonNull
-    private RxBleScanResultMock createScanResult(RxBleDeviceMock rxBleDeviceMock) {
+    private ScanResult createScanResult(RxBleDeviceMock rxBleDeviceMock) {
         return convertToPublicScanResult(
                 rxBleDeviceMock,
+                null,
+                rxBleDeviceMock.getIsConnectable(),
+                null,
+                null,
+                null,
+                null,
+                null,
                 rxBleDeviceMock.getRssi(),
-                rxBleDeviceMock.getScanRecord(),
-                rxBleDeviceMock.getIsConnectable()
+                null,
+                rxBleDeviceMock.getScanRecord()
         );
     }
 
     @NonNull
-    private static RxBleScanResultMock convertToPublicScanResult(RxBleDevice bleDevice,
-                                                                 Integer rssi,
-                                                                 ScanRecord scanRecord,
-                                                                 ScanResultInterface.IsConnectableStatus isConnectable) {
-        return new RxBleScanResultMock(
+    private static ScanResult convertToPublicScanResult(RxBleDevice bleDevice, Boolean isLegacy, Boolean isConnectableStatus,
+                                                        Integer dataStatus, Integer primaryPhy, Integer secondaryPhy,
+                                                        Integer advertisingSid, Integer txPower, int rssi,
+                                                        Integer periodicAdvertisingInterval, ScanRecord scanRecord) {
+        return new ScanResult(
                 bleDevice,
+                isLegacy,
+                isConnectableStatus,
+                dataStatus,
+                primaryPhy,
+                secondaryPhy,
+                advertisingSid,
+                txPower,
                 rssi,
-                System.currentTimeMillis() * 1000000,
-                ScanCallbackType.CALLBACK_TYPE_FIRST_MATCH,
+                periodicAdvertisingInterval,
                 scanRecord,
-                isConnectable);
+                System.currentTimeMillis() * 1000000,
+                ScanCallbackType.CALLBACK_TYPE_FIRST_MATCH);
     }
 
     private static boolean maskedDataEquals(@NonNull byte[] data1, @NonNull byte[] data2, @Nullable byte[] mask) {

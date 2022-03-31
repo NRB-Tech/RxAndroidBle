@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import io.nrbtech.rxandroidble.ClientScope;
 import io.nrbtech.rxandroidble.internal.RxBleLog;
-import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.internal.util.ScanRecordParser;
 import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanRecord;
@@ -34,22 +33,33 @@ public class InternalScanResultCreator {
 
     public RxBleInternalScanResult create(BluetoothDevice bluetoothDevice, int rssi, byte[] scanRecord) {
         final ScanRecord scanRecordObj = scanRecordParser.parseFromBytes(scanRecord);
-        return new RxBleInternalScanResult(bluetoothDevice, rssi, System.nanoTime(), scanRecordObj,
-                ScanCallbackType.CALLBACK_TYPE_UNSPECIFIED, ScanResultInterface.IsConnectableStatus.LEGACY_UNKNOWN);
+        return new RxBleInternalScanResult(bluetoothDevice, null, null, null, null, null, null,
+                null, rssi, null, scanRecordObj, System.nanoTime(),
+                ScanCallbackType.CALLBACK_TYPE_UNSPECIFIED);
+    }
+
+    @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
+    private RxBleInternalScanResult create(ScanCallbackType scanCallbackType, ScanResult result) {
+        final ScanRecordImplNativeWrapper scanRecord = new ScanRecordImplNativeWrapper(result.getScanRecord(), scanRecordParser);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return new RxBleInternalScanResult(result.getDevice(), result.isLegacy(), result.isConnectable(), result.getDataStatus(),
+                    result.getPrimaryPhy(), result.getSecondaryPhy(), result.getAdvertisingSid(), result.getTxPower(), result.getRssi(),
+                    result.getPeriodicAdvertisingInterval(), scanRecord, result.getTimestampNanos(), scanCallbackType);
+        } else {
+            return new RxBleInternalScanResult(result.getDevice(), null, null, null, null, null, null,
+                    null, result.getRssi(), null, scanRecord, result.getTimestampNanos(),
+                    scanCallbackType);
+        }
     }
 
     @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
     public RxBleInternalScanResult create(ScanResult result) {
-        final ScanRecordImplNativeWrapper scanRecord = new ScanRecordImplNativeWrapper(result.getScanRecord(), scanRecordParser);
-        return new RxBleInternalScanResult(result.getDevice(), result.getRssi(), result.getTimestampNanos(), scanRecord,
-                ScanCallbackType.CALLBACK_TYPE_BATCH, isConnectable(result));
+        return create(ScanCallbackType.CALLBACK_TYPE_BATCH, result);
     }
 
     @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
     public RxBleInternalScanResult create(int callbackType, ScanResult result) {
-        final ScanRecordImplNativeWrapper scanRecord = new ScanRecordImplNativeWrapper(result.getScanRecord(), scanRecordParser);
-        return new RxBleInternalScanResult(result.getDevice(), result.getRssi(), result.getTimestampNanos(), scanRecord,
-                toScanCallbackType(callbackType), isConnectable(result));
+        return create(toScanCallbackType(callbackType), result);
     }
 
     @RequiresApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
@@ -65,14 +75,5 @@ public class InternalScanResultCreator {
                 RxBleLog.w("Unknown callback type %d -> check android.bluetooth.le.ScanSettings", callbackType);
                 return CALLBACK_TYPE_UNKNOWN;
         }
-    }
-
-    private ScanResultInterface.IsConnectableStatus isConnectable(ScanResult scanResult) {
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return ScanResultInterface.IsConnectableStatus.LEGACY_UNKNOWN;
-        }
-        return scanResult.isConnectable()
-                ? ScanResultInterface.IsConnectableStatus.CONNECTABLE
-                : ScanResultInterface.IsConnectableStatus.NOT_CONNECTABLE;
     }
 }

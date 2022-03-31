@@ -374,9 +374,9 @@ import java.util.UUID;
             }
         }
 
-        ScanResultInterface.IsConnectableStatus isConnectable = scanResult.isConnectable();
-        if (mIsConnectable != null && isConnectable != ScanResultInterface.IsConnectableStatus.LEGACY_UNKNOWN) {
-            if ((isConnectable == ScanResultInterface.IsConnectableStatus.CONNECTABLE) != mIsConnectable) {
+        Boolean isConnectable = scanResult.isConnectable();
+        if (mIsConnectable != null && isConnectable != null) {
+            if (isConnectable != mIsConnectable) {
                 return false;
             }
         }

@@ -13,7 +13,6 @@ import io.nrbtech.rxandroidble.RxBleDeviceServices;
 import io.nrbtech.rxandroidble.Timeout;
 import io.nrbtech.rxandroidble.exceptions.BleAlreadyConnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleException;
-import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleCharacteristicReadCallback;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleCharacteristicWriteCallback;
 import io.nrbtech.rxandroidble.mockrxandroidble.callbacks.RxBleDescriptorReadCallback;
@@ -54,13 +53,13 @@ public class RxBleDeviceMock implements RxBleDevice {
     private List<UUID> advertisedUUIDs;
     private BluetoothDevice bluetoothDevice;
     private AtomicBoolean isConnected = new AtomicBoolean(false);
-    private ScanResultInterface.IsConnectableStatus isConnectable;
+    private boolean isConnectable;
 
     private RxBleDeviceMock(String name,
                             String macAddress,
                             @Nullable BluetoothDevice bluetoothDevice,
                             RxBleConnectionMock connectionMock,
-                            ScanResultInterface.IsConnectableStatus isConnectable) {
+                            boolean isConnectable) {
         this.name = name;
         this.macAddress = macAddress;
         this.rssi = connectionMock.getRssi();
@@ -78,7 +77,7 @@ public class RxBleDeviceMock implements RxBleDevice {
                            RxBleDeviceServices rxBleDeviceServices,
                            Map<UUID, Observable<byte[]>> characteristicNotificationSources,
                            @Nullable BluetoothDevice bluetoothDevice,
-                           ScanResultInterface.IsConnectableStatus isConnectable) {
+                           boolean isConnectable) {
         this(
                 name,
                 macAddress,
@@ -101,7 +100,7 @@ public class RxBleDeviceMock implements RxBleDevice {
                            ScanRecord scanRecord,
                            @Nullable BluetoothDevice bluetoothDevice,
                            RxBleConnectionMock connectionMock,
-                           ScanResultInterface.IsConnectableStatus isConnectable
+                           boolean isConnectable
     ) {
         this(
                 name,
@@ -122,7 +121,7 @@ public class RxBleDeviceMock implements RxBleDevice {
         private BluetoothDevice bluetoothDevice;
         RxBleConnectionMock connectionMock;
         RxBleConnectionMock.Builder connectionMockBuilder;
-        ScanResultInterface.IsConnectableStatus isConnectable;
+        boolean isConnectable = true;
 
         /**
          * Build a new {@link RxBleDevice}.
@@ -261,8 +260,7 @@ public class RxBleDeviceMock implements RxBleDevice {
          * Set if the mock is connectable
          */
         public Builder isConnectable(boolean isConnectable) {
-            this.isConnectable = isConnectable ? ScanResultInterface.IsConnectableStatus.CONNECTABLE
-                    : ScanResultInterface.IsConnectableStatus.NOT_CONNECTABLE;
+            this.isConnectable = isConnectable;
             return this;
         }
     }
@@ -365,7 +363,7 @@ public class RxBleDeviceMock implements RxBleDevice {
         return scanRecord;
     }
 
-    public ScanResultInterface.IsConnectableStatus getIsConnectable() {
+    public boolean getIsConnectable() {
         return isConnectable;
     }
 

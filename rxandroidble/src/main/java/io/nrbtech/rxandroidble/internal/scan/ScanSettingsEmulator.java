@@ -167,11 +167,18 @@ public class ScanSettingsEmulator {
             public RxBleInternalScanResult apply(RxBleInternalScanResult rxBleInternalScanResult) {
                 return new RxBleInternalScanResult(
                         rxBleInternalScanResult.getBluetoothDevice(),
+                        rxBleInternalScanResult.isLegacy(),
+                        rxBleInternalScanResult.isConnectable(),
+                        rxBleInternalScanResult.getDataStatus(),
+                        rxBleInternalScanResult.getPrimaryPhy(),
+                        rxBleInternalScanResult.getSecondaryPhy(),
+                        rxBleInternalScanResult.getAdvertisingSid(),
+                        rxBleInternalScanResult.getTxPower(),
                         rxBleInternalScanResult.getRssi(),
-                        rxBleInternalScanResult.getTimestampNanos(),
+                        rxBleInternalScanResult.getPeriodicAdvertisingInterval(),
                         rxBleInternalScanResult.getScanRecord(),
-                        ScanCallbackType.CALLBACK_TYPE_FIRST_MATCH,
-                        rxBleInternalScanResult.isConnectable()
+                        rxBleInternalScanResult.getTimestampNanos(),
+                        ScanCallbackType.CALLBACK_TYPE_FIRST_MATCH
                 );
             }
         };
@@ -191,11 +198,18 @@ public class ScanSettingsEmulator {
             public RxBleInternalScanResult apply(RxBleInternalScanResult rxBleInternalScanResult) {
                 return new RxBleInternalScanResult(
                         rxBleInternalScanResult.getBluetoothDevice(),
+                        rxBleInternalScanResult.isLegacy(),
+                        rxBleInternalScanResult.isConnectable(),
+                        rxBleInternalScanResult.getDataStatus(),
+                        rxBleInternalScanResult.getPrimaryPhy(),
+                        rxBleInternalScanResult.getSecondaryPhy(),
+                        rxBleInternalScanResult.getAdvertisingSid(),
+                        rxBleInternalScanResult.getTxPower(),
                         rxBleInternalScanResult.getRssi(),
-                        rxBleInternalScanResult.getTimestampNanos(),
+                        rxBleInternalScanResult.getPeriodicAdvertisingInterval(),
                         rxBleInternalScanResult.getScanRecord(),
-                        ScanCallbackType.CALLBACK_TYPE_MATCH_LOST,
-                        rxBleInternalScanResult.isConnectable()
+                        rxBleInternalScanResult.getTimestampNanos(),
+                        ScanCallbackType.CALLBACK_TYPE_MATCH_LOST
                 );
             }
         };

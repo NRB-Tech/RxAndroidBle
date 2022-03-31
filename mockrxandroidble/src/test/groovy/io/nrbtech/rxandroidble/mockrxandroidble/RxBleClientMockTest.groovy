@@ -4,7 +4,7 @@ package io.nrbtech.rxandroidble.mockrxandroidble
 import android.os.ParcelUuid
 import io.nrbtech.rxandroidble.RxBleClient
 import io.nrbtech.rxandroidble.RxBleConnection
-import io.nrbtech.rxandroidble.internal.ScanResultInterface
+
 import io.nrbtech.rxandroidble.scan.ScanFilter
 import io.nrbtech.rxandroidble.scan.ScanSettings
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -400,7 +400,7 @@ public class RxBleClientMockTest extends Specification {
                 .test()
 
         then:
-        testSubscriber.assertValue(ScanResultInterface.IsConnectableStatus.CONNECTABLE)
+        testSubscriber.assertValue(true)
     }
 
     def "should return BluetoothDevices that were added on the fly"() {
