@@ -1,8 +1,6 @@
 package io.nrbtech.rxandroidble.mockrxandroidble;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -169,21 +167,6 @@ public class RxBleDeviceMock implements RxBleDevice {
         }
 
         /**
-         * Add a {@link BluetoothGattService} to the device. Calling this method is not required.
-         *
-         * @param uuid            service UUID
-         * @param characteristics characteristics that the service should report. Use {@link RxBleClientMock.CharacteristicsBuilder} to
-         *                        create them.
-         * @deprecated Use {@link #connection(RxBleConnectionMock connectionMock)} and
-         *             {@link RxBleConnectionMock.Builder#addService(UUID uuid, List characteristics)}
-         */
-        @Deprecated
-        public Builder addService(@NonNull UUID uuid, @NonNull List<BluetoothGattCharacteristic> characteristics) {
-            connectionMockBuilder.addService(uuid, characteristics);
-            return this;
-        }
-
-        /**
          * Set a device mac address. Calling this method is required.
          */
         public Builder deviceMacAddress(@NonNull String deviceMacAddress) {
@@ -204,31 +187,6 @@ public class RxBleDeviceMock implements RxBleDevice {
          */
         public Builder bluetoothDevice(@NonNull BluetoothDevice bluetoothDevice) {
             this.bluetoothDevice = bluetoothDevice;
-            return this;
-        }
-
-        /**
-         * Set an {@link Observable} that will be used to fire characteristic change notifications. It will be subscribed to after
-         * a call to {@link io.nrbtech.rxandroidble.RxBleConnection#setupNotification(UUID)}. Calling this method is not required.
-         *
-         * @param characteristicUUID UUID of the characteristic that will be observed for notifications
-         * @param sourceObservable   Observable that will be subscribed to in order to receive characteristic change notifications
-         * @deprecated Use {@link #connectionMock} and
-         *             {@link RxBleConnectionMock.Builder#notificationSource(UUID characteristicUUID, Observable sourceObservable)}
-         */
-        @Deprecated
-        public Builder notificationSource(@NonNull UUID characteristicUUID, @NonNull Observable<byte[]> sourceObservable) {
-            connectionMockBuilder.notificationSource(characteristicUUID, sourceObservable);
-            return this;
-        }
-
-        /**
-         * Set a rssi that will be reported. Calling this method is required.
-         * @deprecated Use {@link #connectionMock} and {@link RxBleConnectionMock.Builder#rssi(int rssi)}
-         */
-        @Deprecated
-        public Builder rssi(int rssi) {
-            connectionMockBuilder.rssi(rssi);
             return this;
         }
 

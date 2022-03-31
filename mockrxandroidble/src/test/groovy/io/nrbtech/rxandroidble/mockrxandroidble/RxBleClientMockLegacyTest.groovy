@@ -22,28 +22,8 @@ public class RxBleClientMockLegacyTest extends Specification {
     def RxBleClient rxBleClient
     def PublishSubject characteristicNotificationSubject = PublishSubject.create()
 
-    def createDeviceWithLegacyScanRecord(deviceName, macAddress, rssi) {
-        new RxBleClientMock.DeviceBuilder()
-                .deviceMacAddress(macAddress)
-                .deviceName(deviceName)
-                .scanRecord("ScanRecord".getBytes())
-                .rssi(rssi)
-                .notificationSource(characteristicNotifiedUUID, characteristicNotificationSubject)
-                .addService(
-                serviceUUID,
-                new RxBleClientMock.CharacteristicsBuilder()
-                        .addCharacteristic(
-                        characteristicUUID,
-                        characteristicData,
-                        new RxBleClientMock.DescriptorsBuilder()
-                                .addDescriptor(descriptorUUID, descriptorData)
-                                .build()
-                ).build()
-        ).build()
-    }
-
     def createDevice(deviceName, macAddress, rssi) {
-        new RxBleClientMock.DeviceBuilder()
+        new RxBleDeviceMock.Builder()
                 .deviceMacAddress(macAddress)
                 .deviceName(deviceName)
                 .scanRecord(
@@ -57,19 +37,24 @@ public class RxBleClientMockLegacyTest extends Specification {
                         .setDeviceName("TestDeviceAdv")
                         .build()
                 )
-                .rssi(rssi)
-                .notificationSource(characteristicNotifiedUUID, characteristicNotificationSubject)
-                .addService(
-                        serviceUUID,
-                        new RxBleClientMock.CharacteristicsBuilder()
-                                .addCharacteristic(
-                                        characteristicUUID,
-                                        characteristicData,
-                                        new RxBleClientMock.DescriptorsBuilder()
-                                                .addDescriptor(descriptorUUID, descriptorData)
-                                                .build()
-                                ).build()
-                ).build()
+                .connection(
+                    new RxBleConnectionMock.Builder()
+                        .rssi(rssi)
+                        .notificationSource(characteristicNotifiedUUID, characteristicNotificationSubject)
+                        .addService(
+                                serviceUUID,
+                                new RxBleClientMock.CharacteristicsBuilder()
+                                        .addCharacteristic(
+                                                characteristicUUID,
+                                                characteristicData,
+                                                new RxBleClientMock.DescriptorsBuilder()
+                                                        .addDescriptor(descriptorUUID, descriptorData)
+                                                        .build()
+                                        ).build()
+                        )
+                        .build()
+                )
+                .build()
     }
 
     def setup() {
@@ -77,21 +62,6 @@ public class RxBleClientMockLegacyTest extends Specification {
                 .addDevice(
                 createDevice("TestDevice", "AA:BB:CC:DD:EE:FF", 42)
         ).build()
-    }
-
-    def "should return filtered BluetoothDevice with legacy filter"() {
-        when:
-        rxBleClient = new RxBleClientMock.Builder()
-                .addDevice(
-                        createDeviceWithLegacyScanRecord("TestDevice", "AA:BB:CC:DD:EE:FF", 42)
-                ).build()
-        def testSubscriber = rxBleClient.scanBleDevices(serviceUUID)
-                .take(1)
-                .map { scanResult -> scanResult.getBleDevice().getMacAddress() }
-                .test()
-
-        then:
-        testSubscriber.assertValue("AA:BB:CC:DD:EE:FF")
     }
 
     def "should return filtered BluetoothDevice filtered on service UUID"() {

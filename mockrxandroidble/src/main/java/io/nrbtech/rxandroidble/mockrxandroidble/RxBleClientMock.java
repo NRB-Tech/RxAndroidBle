@@ -93,15 +93,6 @@ public class RxBleClientMock extends RxBleClient {
         }
     }
 
-    /**
-     * Device builder class.
-     * @deprecated Use {@link RxBleDeviceMock.Builder}
-     */
-    @Deprecated
-    public static class DeviceBuilder extends RxBleDeviceMock.Builder {
-
-    }
-
     public static class CharacteristicsBuilder {
 
         private List<BluetoothGattCharacteristic> bluetoothGattCharacteristics;
