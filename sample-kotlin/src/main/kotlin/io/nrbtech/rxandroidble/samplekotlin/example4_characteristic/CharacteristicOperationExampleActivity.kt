@@ -11,6 +11,7 @@ import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1Binding
 import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample4Binding
 import io.nrbtech.rxandroidble.samplekotlin.util.hasProperty
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
@@ -47,13 +48,12 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var bleDevice: RxBleDevice
 
     private val inputBytes: ByteArray
-        get() = binding!!.writeInput.text.toString().toByteArray()
+        get() = binding.writeInput.text.toString().toByteArray()
 
-    private var binding: ActivityExample4Binding? = null
+    private lateinit var binding: ActivityExample4Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_example4)
 
         val macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         characteristicUuid = intent.getSerializableExtra(EXTRA_CHARACTERISTIC_UUID) as UUID
@@ -63,10 +63,12 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
 
         binding = ActivityExample4Binding.inflate(layoutInflater)
 
-        binding!!.connect.setOnClickListener { onConnectToggleClick() }
-        binding!!.read.setOnClickListener { onReadClick() }
-        binding!!.write.setOnClickListener { onWriteClick() }
-        binding!!.notify.setOnClickListener { onNotifyClick() }
+        setContentView(binding.root)
+
+        binding.connect.setOnClickListener { onConnectToggleClick() }
+        binding.read.setOnClickListener { onReadClick() }
+        binding.write.setOnClickListener { onWriteClick() }
+        binding.notify.setOnClickListener { onNotifyClick() }
     }
 
     private fun prepareConnectionObservable(): Observable<RxBleConnection> =
@@ -83,7 +85,7 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                 .flatMapSingle { it.discoverServices() }
                 .flatMapSingle { it.getCharacteristic(characteristicUuid) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { binding!!.connect.setText(R.string.connecting) }
+                .doOnSubscribe { binding.connect.setText(R.string.connecting) }
                 .subscribe(
                     { characteristic ->
                         updateUI(characteristic)
@@ -103,9 +105,9 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                 .flatMap { it.readCharacteristic(characteristicUuid) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
-                    binding!!.readOutput.text = String(bytes)
-                    binding!!.readHexOutput.text = bytes.toHex()
-                    binding!!.writeInput.setText(bytes.toHex())
+                    binding.readOutput.text = String(bytes)
+                    binding.readHexOutput.text = bytes.toHex()
+                    binding.writeInput.setText(bytes.toHex())
                 }, { onReadFailure(it) })
                 .let { connectionDisposable.add(it) }
         }
@@ -163,16 +165,16 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
      */
     private fun updateUI(characteristic: BluetoothGattCharacteristic?) {
         if (characteristic == null) {
-            binding!!.connect.setText(R.string.button_connect)
-            binding!!.read.isEnabled = false
-            binding!!.write.isEnabled = false
-            binding!!.notify.isEnabled = false
+            binding.connect.setText(R.string.button_connect)
+            binding.read.isEnabled = false
+            binding.write.isEnabled = false
+            binding.notify.isEnabled = false
         } else {
-            binding!!.connect.setText(R.string.button_disconnect)
+            binding.connect.setText(R.string.button_disconnect)
             with(characteristic) {
-                binding!!.read.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_READ)
-                binding!!.write.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
-                binding!!.notify.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
+                binding.read.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_READ)
+                binding.write.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
+                binding.notify.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
             }
         }
     }

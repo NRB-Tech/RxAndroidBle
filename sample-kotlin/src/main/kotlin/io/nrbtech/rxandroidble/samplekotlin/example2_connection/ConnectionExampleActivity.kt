@@ -10,6 +10,7 @@ import io.nrbtech.rxandroidble.RxBleConnection
 import io.nrbtech.rxandroidble.RxBleDevice
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1Binding
 import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample2Binding
 import io.nrbtech.rxandroidble.samplekotlin.util.isConnected
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
@@ -36,16 +37,17 @@ class ConnectionExampleActivity : AppCompatActivity() {
 
     private val mtuDisposable = CompositeDisposable()
 
-    private var binding: ActivityExample2Binding? = null
+    private lateinit var binding: ActivityExample2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_example2)
 
         binding = ActivityExample2Binding.inflate(layoutInflater)
 
-        binding!!.connectToggle.setOnClickListener { onConnectToggleClick() }
-        binding!!.setMtu.setOnClickListener { onSetMtu() }
+        setContentView(binding.root)
+
+        binding.connectToggle.setOnClickListener { onConnectToggleClick() }
+        binding.setMtu.setOnClickListener { onSetMtu() }
 
         val macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         title = getString(R.string.mac_address, macAddress)
@@ -63,7 +65,7 @@ class ConnectionExampleActivity : AppCompatActivity() {
         if (bleDevice.isConnected) {
             triggerDisconnect()
         } else {
-            bleDevice.establishConnection(binding!!.autoconnect.isChecked)
+            bleDevice.establishConnection(binding.autoconnect.isChecked)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally { dispose() }
                 .subscribe({ onConnectionReceived() }, { onConnectionFailure(it) })
@@ -73,7 +75,7 @@ class ConnectionExampleActivity : AppCompatActivity() {
 
     @TargetApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
     private fun onSetMtu() {
-        binding!!.newMtu.text.toString().toIntOrNull()?.let { mtu ->
+        binding.newMtu.text.toString().toIntOrNull()?.let { mtu ->
             bleDevice.establishConnection(false)
                 .flatMapSingle { rxBleConnection -> rxBleConnection.requestMtu(mtu) }
                 .take(1) // Disconnect automatically after discovery
@@ -89,7 +91,7 @@ class ConnectionExampleActivity : AppCompatActivity() {
     private fun onConnectionReceived() = showSnackbarShort("Connection received")
 
     private fun onConnectionStateChange(newState: RxBleConnection.RxBleConnectionState) {
-        binding!!.connectionState.text = newState.toString()
+        binding.connectionState.text = newState.toString()
         updateUI()
     }
 
@@ -103,8 +105,8 @@ class ConnectionExampleActivity : AppCompatActivity() {
     private fun triggerDisconnect() = connectionDisposable?.dispose()
 
     private fun updateUI() {
-        binding!!.connectToggle.setText(if (bleDevice.isConnected) R.string.button_disconnect else R.string.button_connect)
-        binding!!.autoconnect.isEnabled = !bleDevice.isConnected
+        binding.connectToggle.setText(if (bleDevice.isConnected) R.string.button_disconnect else R.string.button_connect)
+        binding.autoconnect.isEnabled = !bleDevice.isConnected
     }
 
     override fun onPause() {

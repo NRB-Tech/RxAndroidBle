@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.nrbtech.rxandroidble.exceptions.BleScanException
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1Binding
 import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1aBinding
 import io.nrbtech.rxandroidble.samplekotlin.util.isLocationPermissionGranted
 import io.nrbtech.rxandroidble.samplekotlin.util.requestLocationPermission
@@ -30,18 +31,19 @@ class BackgroundScanActivity : AppCompatActivity() {
 
     private var hasClickedScan = false
 
-    private var binding: ActivityExample1aBinding? = null
+    private lateinit var binding: ActivityExample1aBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_example1a)
 
         callbackIntent = ScanReceiver.newPendingIntent(this)
 
         binding = ActivityExample1aBinding.inflate(layoutInflater)
 
-        binding!!.scanStartBtn.setOnClickListener { onScanStartClick() }
-        binding!!.scanStopBtn.setOnClickListener { onScanStopClick() }
+        setContentView(binding.root)
+
+        binding.scanStartBtn.setOnClickListener { onScanStartClick() }
+        binding.scanStopBtn.setOnClickListener { onScanStopClick() }
     }
 
     private fun onScanStartClick() {

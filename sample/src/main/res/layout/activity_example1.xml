@@ -26,6 +26,13 @@
         android:layout_height="wrap_content"
         android:text="@string/start_scan"/>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/show_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Show Details"
+        android:minHeight="48dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scan_results"
         android:layout_width="match_parent"

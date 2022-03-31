@@ -1,6 +1,7 @@
 package io.nrbtech.rxandroidble.sample.example1_scanning;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,12 @@ class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHol
         notifyDataSetChanged();
     }
 
+    private boolean showDetails = false;
+    void setShowDetails(boolean showDetails) {
+        this.showDetails = showDetails;
+        notifyDataSetChanged();
+    }
+
     ScanResult getItemAtPosition(int childAdapterPosition) {
         return data.get(childAdapterPosition);
     }
@@ -89,7 +96,31 @@ class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHol
         final ScanResult rxBleScanResult = data.get(position);
         final RxBleDevice bleDevice = rxBleScanResult.getBleDevice();
         holder.line1.setText(String.format(Locale.getDefault(), "%s (%s)", bleDevice.getMacAddress(), bleDevice.getName()));
-        holder.line2.setText(String.format(Locale.getDefault(), "RSSI: %d", rxBleScanResult.getRssi()));
+        if (showDetails) {
+            holder.line2.setText(String.format(Locale.getDefault(),
+                    "RSSI: %d\n" +
+                            "legacy: %s\n" +
+                            "connectable: %s\n" +
+                            "data status: %d\n" +
+                            "primary phy: %d\n" +
+                            "secondary phy %d\n" +
+                            "advertising sid: %d\n" +
+                            "tx power: %d\n" +
+                            "periodic adv interval: %d",
+                    rxBleScanResult.getRssi(),
+                    rxBleScanResult.isLegacy(),
+                    rxBleScanResult.isConnectable(),
+                    rxBleScanResult.getDataStatus(),
+                    rxBleScanResult.getPrimaryPhy(),
+                    rxBleScanResult.getSecondaryPhy(),
+                    rxBleScanResult.getAdvertisingSid(),
+                    rxBleScanResult.getTxPower(),
+                    rxBleScanResult.getPeriodicAdvertisingInterval()));
+        } else {
+            holder.line2.setText(String.format(Locale.getDefault(),
+                    "RSSI: %d",
+                    rxBleScanResult.getRssi()));
+        }
     }
 
     @Override

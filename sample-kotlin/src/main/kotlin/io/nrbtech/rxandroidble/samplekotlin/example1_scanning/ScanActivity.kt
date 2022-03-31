@@ -32,21 +32,25 @@ class ScanActivity : AppCompatActivity() {
     private val isScanning: Boolean
         get() = scanDisposable != null
 
-    private var binding: ActivityExample1Binding? = null
+    private lateinit var binding: ActivityExample1Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_example1)
-        configureResultList()
 
         binding = ActivityExample1Binding.inflate(layoutInflater)
 
-        binding!!.backgroundScanBtn.setOnClickListener { startActivity(BackgroundScanActivity.newInstance(this)) }
-        binding!!.scanToggleBtn.setOnClickListener { onScanToggleClick() }
+        setContentView(binding.root)
+
+        configureResultList()
+
+        binding.backgroundScanBtn.setOnClickListener { startActivity(BackgroundScanActivity.newInstance(this)) }
+        binding.scanToggleBtn.setOnClickListener { onScanToggleClick() }
+        binding.showDetails.setOnClickListener { onShowDetailsToggleClick() }
     }
 
     private fun configureResultList() {
-        with(binding!!.scanResults) {
+        with(binding.scanResults) {
+            resultsAdapter.setShowDetails(binding.showDetails.isChecked)
             setHasFixedSize(true)
             itemAnimator = null
             adapter = resultsAdapter
@@ -69,6 +73,10 @@ class ScanActivity : AppCompatActivity() {
             }
         }
         updateButtonUIState()
+    }
+
+    private fun onShowDetailsToggleClick() {
+        resultsAdapter.setShowDetails(binding.showDetails.isChecked)
     }
 
     private fun scanBleDevices(): Observable<ScanResult> {
@@ -96,7 +104,7 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun updateButtonUIState() =
-        binding!!.scanToggleBtn.setText(if (isScanning) R.string.button_stop_scan else R.string.button_start_scan)
+        binding.scanToggleBtn.setText(if (isScanning) R.string.button_stop_scan else R.string.button_start_scan)
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (isLocationPermissionGranted(requestCode, grantResults) && hasClickedScan) {

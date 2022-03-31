@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Button;
@@ -30,6 +31,8 @@ public class ScanActivity extends AppCompatActivity {
 
     @BindView(R.id.scan_toggle_btn)
     Button scanToggleButton;
+    @BindView(R.id.show_details)
+    SwitchCompat showdetails;
     @BindView(R.id.scan_results)
     RecyclerView recyclerView;
     private RxBleClient rxBleClient;
@@ -66,6 +69,11 @@ public class ScanActivity extends AppCompatActivity {
         }
 
         updateButtonUIState();
+    }
+
+    @OnClick(R.id.show_details)
+    public void onShowDetailsToggleClick() {
+        resultsAdapter.setShowDetails(showdetails.isChecked());
     }
 
     private void scanBleDevices() {
@@ -118,6 +126,7 @@ public class ScanActivity extends AppCompatActivity {
             final ScanResult itemAtPosition = resultsAdapter.getItemAtPosition(childAdapterPosition);
             onAdapterItemClick(itemAtPosition);
         });
+        resultsAdapter.setShowDetails(showdetails.isChecked());
     }
 
     private boolean isScanning() {

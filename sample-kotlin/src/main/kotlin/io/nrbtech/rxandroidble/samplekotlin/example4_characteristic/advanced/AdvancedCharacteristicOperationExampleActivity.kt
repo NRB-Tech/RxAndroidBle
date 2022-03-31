@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding4.view.clicks
 import io.nrbtech.rxandroidble.samplekotlin.R
 import io.nrbtech.rxandroidble.samplekotlin.SampleApplication
+import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample1Binding
 import io.nrbtech.rxandroidble.samplekotlin.databinding.ActivityExample4AdvancedBinding
 import io.nrbtech.rxandroidble.samplekotlin.util.showSnackbarShort
 import io.nrbtech.rxandroidble.samplekotlin.util.toHex
@@ -58,13 +59,12 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var presenterEventObservable: Observable<PresenterEvent>
 
     private val inputBytes: ByteArray
-        get() = binding!!.writeButton.text.toString().toByteArray()
+        get() = binding.writeButton.text.toString().toByteArray()
 
-    private var binding: ActivityExample4AdvancedBinding? = null
+    private lateinit var binding: ActivityExample4AdvancedBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_example4_advanced)
 
         val macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         val characteristicUuid = intent.getSerializableExtra(EXTRA_CHARACTERISTIC_UUID) as UUID
@@ -74,21 +74,23 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         binding = ActivityExample4AdvancedBinding.inflate(layoutInflater)
 
+        setContentView(binding.root)
+
         /*
          * Since in this activity we use the same button for user interaction for connecting the peripheral, disconnecting before connection
          * is established and disconnecting after the connection is being made we need to share the same activatedClicksObservable.
          * It would be perfectly fine to use three different buttons and pass those observables to the Presenter.
          */
-        val sharedConnectButtonClicks = binding!!.connectButton.activatedClicksObservable().share()
+        val sharedConnectButtonClicks = binding.connectButton.activatedClicksObservable().share()
         // same goes for setting up notifications and indications below
-        val sharedNotifyButtonClicks = binding!!.notifyButton.activatedClicksObservable().share()
-        val sharedIndicateButtonClicks = binding!!.indicateButton.activatedClicksObservable().share()
+        val sharedNotifyButtonClicks = binding.notifyButton.activatedClicksObservable().share()
+        val sharedIndicateButtonClicks = binding.indicateButton.activatedClicksObservable().share()
 
         // We setup the button texts reflecting the current state of the button for connect button, notification button
         // and indication button.
         val (connect, connecting, disconnect) =
             sharedConnectButtonClicks.setupButtonTexts(
-                binding!!.connectButton,
+                binding.connectButton,
                 R.string.button_connect,
                 R.string.connecting,
                 R.string.button_disconnect
@@ -96,7 +98,7 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         val (setupNotification, settingNotification, teardownNotification) =
             sharedNotifyButtonClicks.setupButtonTexts(
-                binding!!.notifyButton,
+                binding.notifyButton,
                 R.string.button_setup_notification,
                 R.string.setting_notification,
                 R.string.teardown_notification
@@ -104,20 +106,20 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
 
         val (setupIndication, settingIndication, teardownIndication) =
             sharedIndicateButtonClicks.setupButtonTexts(
-                binding!!.indicateButton,
+                binding.indicateButton,
                 R.string.button_setup_indication,
                 R.string.setting_indication,
                 R.string.teardown_indication
             )
 
-        val readObservable = binding!!.readButton.activatedClicksObservable()
+        val readObservable = binding.readButton.activatedClicksObservable()
 
         /*
          * Write button clicks are then mapped to byte[] from the editText. If there is a problem parsing input then a notification
          * is shown and we wait for another click to write to try to parse again.
          */
         val writeObservable =
-            binding!!.writeButton.activatedClicksObservable()
+            binding.writeButton.activatedClicksObservable()
                 .map { inputBytes }
                 .doOnError { throwable -> showSnackbarShort("Could not parse input: $throwable") }
                 .retryWhen { it }
@@ -170,7 +172,7 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
      * Handles compatibility mode event.
      */
     private fun CompatibilityModeEvent.handleCompatibility() {
-        binding!!.compatOnlyWarning.visibility = if (isCompatibility) View.VISIBLE else View.INVISIBLE
+        binding.compatOnlyWarning.visibility = if (isCompatibility) View.VISIBLE else View.INVISIBLE
         if (isCompatibility) {
             /*
             All characteristics that have PROPERTY_NOTIFY or PROPERTY_INDICATE should contain
@@ -195,9 +197,9 @@ class AdvancedCharacteristicOperationExampleActivity : AppCompatActivity() {
     private fun ResultEvent.handleResult() {
         when (type) {
             Type.READ -> {
-                binding!!.readOutput.text = String(result.toByteArray())
-                binding!!.readHexOutput.text = result.toByteArray().toHex()
-                binding!!.writeInput.setText(result.toByteArray().toHex())
+                binding.readOutput.text = String(result.toByteArray())
+                binding.readHexOutput.text = result.toByteArray().toHex()
+                binding.writeInput.setText(result.toByteArray().toHex())
             }
             Type.WRITE -> showSnackbarShort("Write success")
             Type.NOTIFY -> showSnackbarShort("Notification: ${result.toByteArray().toHex()}")
