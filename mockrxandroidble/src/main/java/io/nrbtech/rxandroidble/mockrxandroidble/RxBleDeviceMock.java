@@ -118,7 +118,6 @@ public class RxBleDeviceMock implements RxBleDevice {
         private ScanRecord scanRecord;
         private BluetoothDevice bluetoothDevice;
         RxBleConnectionMock connectionMock;
-        RxBleConnectionMock.Builder connectionMockBuilder;
         boolean isConnectable = true;
 
         /**
@@ -129,7 +128,6 @@ public class RxBleDeviceMock implements RxBleDevice {
          * are optional.
          */
         public Builder() {
-            this.connectionMockBuilder = new RxBleConnectionMock.Builder();
         }
 
         /**
@@ -141,7 +139,7 @@ public class RxBleDeviceMock implements RxBleDevice {
             if (this.scanRecord == null && this.legacyScanRecord == null)
                 throw new IllegalStateException("ScanRecord required. DeviceBuilder#scanRecord should be called.");
 
-            RxBleConnectionMock connMock = connectionMock == null ? connectionMockBuilder.build() : connectionMock;
+            RxBleConnectionMock connMock = connectionMock == null ? new RxBleConnectionMock.Builder().build() : connectionMock;
             // legacy
             if (scanRecord == null) {
                 RxBleDeviceMock rxBleDeviceMock = new RxBleDeviceMock(deviceName,
