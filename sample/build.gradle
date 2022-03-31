@@ -31,6 +31,8 @@ android {
         sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
         targetCompatibility = rootProject.ext.targetCompatibilityVersion
     }
+
+    preBuild.dependsOn 'checkstyle'
 }
 
 configurations.all {
