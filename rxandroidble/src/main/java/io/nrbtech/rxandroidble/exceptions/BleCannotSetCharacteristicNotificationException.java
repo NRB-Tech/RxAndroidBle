@@ -13,18 +13,12 @@ import java.util.UUID;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class BleCannotSetCharacteristicNotificationException extends BleException {
 
-    @IntDef({UNKNOWN, CANNOT_SET_LOCAL_NOTIFICATION, CANNOT_FIND_CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR,
+    @IntDef({CANNOT_SET_LOCAL_NOTIFICATION, CANNOT_FIND_CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR,
             CANNOT_WRITE_CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Reason {
 
     }
-
-    /**
-     * The unknown reason (probably because someone is externally instantiating {@link BleCannotSetCharacteristicNotificationException}
-     */
-    @Deprecated
-    public static final int UNKNOWN = -1;
 
     /**
      * Used when call to {@link android.bluetooth.BluetoothGatt#setCharacteristicNotification(BluetoothGattCharacteristic, boolean)}
@@ -59,14 +53,6 @@ public class BleCannotSetCharacteristicNotificationException extends BleExceptio
 
     @Reason
     private final int reason;
-
-    // TODO [DS] 08.07.2017 Remove in 2.0.0
-    @Deprecated
-    public BleCannotSetCharacteristicNotificationException(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
-        super(createMessage(bluetoothGattCharacteristic, UNKNOWN));
-        this.bluetoothGattCharacteristic = bluetoothGattCharacteristic;
-        this.reason = UNKNOWN;
-    }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
     public BleCannotSetCharacteristicNotificationException(BluetoothGattCharacteristic bluetoothGattCharacteristic, @Reason int reason,
@@ -105,7 +91,6 @@ public class BleCannotSetCharacteristicNotificationException extends BleExceptio
                 return "Cannot write client characteristic config descriptor";
             case CANNOT_SET_LOCAL_NOTIFICATION:
                 return "Cannot set local notification";
-            case UNKNOWN:
             default:
                 return "Unknown error";
         }
