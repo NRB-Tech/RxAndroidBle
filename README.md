@@ -22,7 +22,7 @@ This repository is a fork of the [original project](https://github.com/polidea/R
 
 ## Collaborators
 
-We are actively seeking collaborators. If you have good knowledge of RxJava, Bluetooth and ideally Dagger, or just a keen interest in helping build RxAndroidBle, we'd love to hear from you. Create an issue, submit a PR or [contact us](https://www.nrbtech.io/contact).
+NRB Tech is actively seeking collaborators to maintain this fork. If you have good knowledge of RxJava, Bluetooth and ideally Dagger, or just a keen interest in helping build RxAndroidBle, we'd love to hear from you. Create an issue, submit a PR or [contact us](https://www.nrbtech.io/contact).
 
 ## Getting Started
 
