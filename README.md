@@ -31,7 +31,7 @@ The first step is to include RxAndroidBle into your project.
 ### Gradle
 If you use Gradle to build your project — as a Gradle project implementation dependency:
 ```groovy
-implementation "io.nrbtech.rxandroidble:rxandroidble:2.1.0"
+implementation "io.nrbtech.rxandroidble:rxandroidble:2.2.0"
 ```
 #### Development
 If you want to help build the library, add it as a submodule to your project in `RxAndroidBle` and substitute the dependencies in `settings.gradle`:
@@ -51,7 +51,7 @@ If you use Maven to build your project — as a Maven project dependency:
 <dependency>
   <groupId>io.nrbtech.rxandroidble</groupId>
   <artifactId>rxandroidble</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
   <type>aar</type>
 </dependency>
 ```

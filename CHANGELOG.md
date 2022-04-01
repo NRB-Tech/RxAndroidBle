@@ -1,9 +1,15 @@
 Change Log
 ==========
 
+## Version 2.2.0 – 1 April 22
+
+* Changed `ScanResult` property types to enums where appropriate
+* Improved scan result details in sample apps
+
 ## Version 2.1.0 – 31 March 22
 
 * Added additional info to scan results when available
+* Added scan result details in sample apps
 * Removed `IsConnectableStatus` enum – changed relevant properties to nullable `Boolean`s to match other added properties
 
 ## Version 2.0.0 – 29 March 22
