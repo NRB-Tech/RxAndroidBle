@@ -17,22 +17,26 @@ import io.reactivex.rxjava3.core.Observable;
 public interface RxBleDevice {
 
     /**
-     * Bluetooth LE 1M PHY. Used to refer to LE 1M Physical Channel for advertising, scanning or
-     * connection.
+     * The physical layers data can be transmitted on
      */
-    int PHY_LE_1M = 1;
-
-    /**
-     * Bluetooth LE 2M PHY. Used to refer to LE 2M Physical Channel for advertising, scanning or
-     * connection.
-     */
-    int PHY_LE_2M = 2;
-
-    /**
-     * Bluetooth LE Coded PHY. Used to refer to LE Coded Physical Channel for advertising, scanning
-     * or connection.
-     */
-    int PHY_LE_CODED = 3;
+    enum Phy {
+        /**
+         * Bluetooth LE 1M PHY. Used to refer to LE 1M Physical Channel for advertising, scanning or connection.
+         */
+        LE1M,
+        /**
+         * Bluetooth LE 2M PHY. Used to refer to LE 2M Physical Channel for advertising, scanning or connection.
+         */
+        LE2M,
+        /**
+         * Bluetooth LE Coded PHY. Used to refer to LE Coded Physical Channel for advertising, scanning or connection.
+         */
+        LECoded,
+        /**
+         * Indicates that the physical layer was not used.
+         */
+        Unused
+    }
 
     /**
      * Observe changes to connection state of the device's {@link android.bluetooth.BluetoothGatt}.

@@ -14,6 +14,7 @@ import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanFilter;
 import io.nrbtech.rxandroidble.scan.ScanRecord;
 import io.nrbtech.rxandroidble.scan.ScanResult;
+import io.nrbtech.rxandroidble.scan.ScanResultInterface;
 import io.nrbtech.rxandroidble.scan.ScanSettings;
 
 import java.nio.ByteBuffer;
@@ -379,8 +380,8 @@ public class RxBleClientMock extends RxBleClient {
 
     @NonNull
     private static ScanResult convertToPublicScanResult(RxBleDevice bleDevice, Boolean isLegacy, Boolean isConnectableStatus,
-                                                        Integer dataStatus, Integer primaryPhy, Integer secondaryPhy,
-                                                        Integer advertisingSid, Integer txPower, int rssi,
+                                                        ScanResultInterface.DataStatus dataStatus, RxBleDevice.Phy primaryPhy,
+                                                        RxBleDevice.Phy secondaryPhy, Integer advertisingSid, Integer txPower, int rssi,
                                                         Integer periodicAdvertisingInterval, ScanRecord scanRecord) {
         return new ScanResult(
                 bleDevice,

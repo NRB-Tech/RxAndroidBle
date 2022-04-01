@@ -14,11 +14,13 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import io.nrbtech.rxandroidble.ClientScope;
+import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.internal.RxBleLog;
 import io.nrbtech.rxandroidble.internal.util.ScanRecordParser;
 import io.nrbtech.rxandroidble.scan.ScanCallbackType;
 import io.nrbtech.rxandroidble.scan.ScanRecord;
 import bleshadow.javax.inject.Inject;
+import io.nrbtech.rxandroidble.scan.ScanResultInterface;
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 @ClientScope
@@ -42,9 +44,10 @@ public class InternalScanResultCreator {
     private RxBleInternalScanResult create(ScanCallbackType scanCallbackType, ScanResult result) {
         final ScanRecordImplNativeWrapper scanRecord = new ScanRecordImplNativeWrapper(result.getScanRecord(), scanRecordParser);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return new RxBleInternalScanResult(result.getDevice(), result.isLegacy(), result.isConnectable(), result.getDataStatus(),
-                    result.getPrimaryPhy(), result.getSecondaryPhy(), result.getAdvertisingSid(), result.getTxPower(), result.getRssi(),
-                    result.getPeriodicAdvertisingInterval(), scanRecord, result.getTimestampNanos(), scanCallbackType);
+            return new RxBleInternalScanResult(result.getDevice(), result.isLegacy(), result.isConnectable(),
+                    toDataStatus(result.getDataStatus()), toPhy(result.getPrimaryPhy()), toPhy(result.getSecondaryPhy()),
+                    result.getAdvertisingSid(), result.getTxPower(), result.getRssi(), result.getPeriodicAdvertisingInterval(), scanRecord,
+                    result.getTimestampNanos(), scanCallbackType);
         } else {
             return new RxBleInternalScanResult(result.getDevice(), null, null, null, null, null, null,
                     null, result.getRssi(), null, scanRecord, result.getTimestampNanos(),
@@ -74,6 +77,32 @@ public class InternalScanResultCreator {
             default:
                 RxBleLog.w("Unknown callback type %d -> check android.bluetooth.le.ScanSettings", callbackType);
                 return CALLBACK_TYPE_UNKNOWN;
+        }
+    }
+
+    private static ScanResultInterface.DataStatus toDataStatus(int dataStatus) {
+        switch (dataStatus) {
+            case ScanResult.DATA_COMPLETE:
+                return ScanResultInterface.DataStatus.DataComplete;
+            case ScanResult.DATA_TRUNCATED:
+                return ScanResultInterface.DataStatus.DataTruncated;
+            default:
+                return null;
+        }
+    }
+
+    private static RxBleDevice.Phy toPhy(int phy) {
+        switch (phy) {
+            case ScanResult.PHY_UNUSED:
+                return RxBleDevice.Phy.Unused;
+            case BluetoothDevice.PHY_LE_1M:
+                return RxBleDevice.Phy.LE1M;
+            case BluetoothDevice.PHY_LE_2M:
+                return RxBleDevice.Phy.LE2M;
+            case BluetoothDevice.PHY_LE_CODED:
+                return RxBleDevice.Phy.LECoded;
+            default:
+                return null;
         }
     }
 }

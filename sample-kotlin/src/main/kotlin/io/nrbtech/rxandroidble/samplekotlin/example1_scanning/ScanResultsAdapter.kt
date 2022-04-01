@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.nrbtech.rxandroidble.samplekotlin.example1_scanning.ScanResultsAdapter.ViewHolder
 import io.nrbtech.rxandroidble.scan.ScanResult
+import io.nrbtech.rxandroidble.scan.ScanResultInterface
 import java.util.*
 
 internal class ScanResultsAdapter(
@@ -55,39 +56,40 @@ internal class ScanResultsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(data[position]) {
             holder.device.text = String.format("%s (%s)", bleDevice.macAddress, bleDevice.name)
+            var details = String.format(
+                Locale.getDefault(),
+                "RSSI: %d",
+                rssi
+            )
             if (showDetails) {
-                holder.rssi.setText(
-                    String.format(
-                        Locale.getDefault(),
-                        "RSSI: %d\n" +
-                                "legacy: %s\n" +
-                                "connectable: %s\n" +
-                                "data status: %d\n" +
-                                "primary phy: %d\n" +
-                                "secondary phy %d\n" +
-                                "advertising sid: %d\n" +
-                                "tx power: %d\n" +
-                                "periodic adv interval: %d",
-                        rssi,
-                        isLegacy,
-                        isConnectable,
-                        dataStatus,
-                        primaryPhy,
-                        secondaryPhy,
-                        advertisingSid,
-                        txPower,
-                        periodicAdvertisingInterval
-                    )
-                )
-            } else {
-                holder.rssi.setText(
-                    String.format(
-                        Locale.getDefault(),
-                        "RSSI: %d",
-                        rssi
-                    )
+                details += String.format(
+                    Locale.getDefault(),
+                    """
+                        
+                        legacy: %s
+                        connectable: %s
+                        data status: %s
+                        primary phy: %s
+                        secondary phy: %s
+                        advertising sid: %s
+                        tx power: %s
+                        periodic adv interval: %s
+                        """.trimIndent(),
+                    isLegacy,
+                    isConnectable,
+                    dataStatus,
+                    primaryPhy,
+                    secondaryPhy,
+                    if (advertisingSid == ScanResultInterface.SID_NOT_PRESENT)
+                        "not present" else advertisingSid,
+                    if (txPower == ScanResultInterface.TX_POWER_NOT_PRESENT)
+                        "not present" else txPower,
+                    if (periodicAdvertisingInterval
+                        == ScanResultInterface.PERIODIC_INTERVAL_NOT_PRESENT)
+                        "not present" else periodicAdvertisingInterval
                 )
             }
+            holder.rssi.text = details
             holder.itemView.setOnClickListener { onClickListener(this) }
         }
     }

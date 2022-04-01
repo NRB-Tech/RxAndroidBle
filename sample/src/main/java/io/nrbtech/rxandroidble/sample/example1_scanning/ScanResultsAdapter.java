@@ -17,6 +17,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.nrbtech.rxandroidble.scan.ScanResultInterface;
+
 import java.util.Locale;
 
 class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHolder> {
@@ -95,31 +97,34 @@ class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHol
         final ScanResult rxBleScanResult = data.get(position);
         final RxBleDevice bleDevice = rxBleScanResult.getBleDevice();
         holder.line1.setText(String.format(Locale.getDefault(), "%s (%s)", bleDevice.getMacAddress(), bleDevice.getName()));
+        String details = String.format(Locale.getDefault(), "RSSI: %d", rxBleScanResult.getRssi());
         if (showDetails) {
-            holder.line2.setText(String.format(Locale.getDefault(),
-                    "RSSI: %d\n"
-                            + "legacy: %s\n"
-                            + "connectable: %s\n"
-                            + "data status: %d\n"
-                            + "primary phy: %d\n"
-                            + "secondary phy %d\n"
-                            + "advertising sid: %d\n"
-                            + "tx power: %d\n"
-                            + "periodic adv interval: %d",
-                    rxBleScanResult.getRssi(),
+            details += String.format(Locale.getDefault(),
+                    "\nlegacy: %s"
+                            + "\nconnectable: %s"
+                            + "\ndata status: %s"
+                            + "\nprimary phy: %s"
+                            + "\nsecondary phy: %s"
+                            + "\nadvertising sid: %s"
+                            + "\ntx power: %s"
+                            + "\nperiodic adv interval: %s",
                     rxBleScanResult.isLegacy(),
                     rxBleScanResult.isConnectable(),
                     rxBleScanResult.getDataStatus(),
                     rxBleScanResult.getPrimaryPhy(),
                     rxBleScanResult.getSecondaryPhy(),
-                    rxBleScanResult.getAdvertisingSid(),
-                    rxBleScanResult.getTxPower(),
-                    rxBleScanResult.getPeriodicAdvertisingInterval()));
-        } else {
-            holder.line2.setText(String.format(Locale.getDefault(),
-                    "RSSI: %d",
-                    rxBleScanResult.getRssi()));
+                    rxBleScanResult.getAdvertisingSid() == ScanResultInterface.SID_NOT_PRESENT
+                            ? "not present"
+                            : rxBleScanResult.getAdvertisingSid(),
+                    rxBleScanResult.getTxPower() == ScanResultInterface.TX_POWER_NOT_PRESENT
+                            ? "not present"
+                            : rxBleScanResult.getTxPower(),
+                    rxBleScanResult.getPeriodicAdvertisingInterval() == ScanResultInterface.PERIODIC_INTERVAL_NOT_PRESENT
+                            ? "not present"
+                            : rxBleScanResult.getPeriodicAdvertisingInterval()
+            );
         }
+        holder.line2.setText(details);
     }
 
     @Override

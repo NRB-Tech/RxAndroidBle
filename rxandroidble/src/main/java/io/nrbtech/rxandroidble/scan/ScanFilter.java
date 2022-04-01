@@ -7,7 +7,6 @@ import android.os.ParcelUuid;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 
-import io.nrbtech.rxandroidble.internal.ScanResultInterface;
 import io.nrbtech.rxandroidble.internal.logger.LoggerUtil;
 import io.nrbtech.rxandroidble.internal.scan.ScanFilterInterface;
 import java.util.Arrays;
