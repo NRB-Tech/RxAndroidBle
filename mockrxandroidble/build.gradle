@@ -32,9 +32,6 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-    }
 
     preBuild.dependsOn 'checkstyle'
 
@@ -44,6 +41,9 @@ android {
                 srcDir("../rxandroidble/src/test/java") // Add android stubs from main lib tests
             }
         }
+    }
+    lint {
+        abortOnError false
     }
 }
 

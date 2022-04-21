@@ -39,10 +39,10 @@ android {
             }
         }
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
+
 
     preBuild.dependsOn 'checkstyle'
 }
