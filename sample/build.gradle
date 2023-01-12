@@ -12,12 +12,14 @@ repositories {
 }
 
 android {
-    compileSdkVersion 31
+    namespace 'io.nrbtech.rxandroidble.sample'
+
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "io.nrbtech.rxandroidble.sample"
         minSdkVersion 18
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
