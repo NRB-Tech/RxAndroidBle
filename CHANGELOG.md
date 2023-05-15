@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## Version 2.2.1 – 15 May 23
+
+* Upgraded to Gradle 8
+* Upgraded dependencies
+
 ## Version 2.2.0 – 1 April 22
 
 * Changed `ScanResult` property types to enums where appropriate
