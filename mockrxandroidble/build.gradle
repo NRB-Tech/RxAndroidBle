@@ -10,8 +10,6 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 33
-        versionCode 1
-        versionName VERSION_NAME
     }
 
     compileOptions {
