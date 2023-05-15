@@ -19,7 +19,6 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransf
 shadowJar {
     mustRunAfter jar
     transform(ServiceFileTransformer)
-    classifier = ''
 }
 
 dependencies {

@@ -40,7 +40,7 @@ afterEvaluate { project ->
         }
     } else {
         task javadocs(type: Javadoc) {
-            source = sourceSets.main.java.source
+            source = sourceSets.main.java.classesDirectory
             classpath += configurations.compileClasspath
             title = null
             options.noTimestamp(false)

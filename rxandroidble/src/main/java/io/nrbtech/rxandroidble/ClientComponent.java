@@ -198,13 +198,17 @@ public interface ClientComponent {
                 @Named(PlatformConstants.INT_TARGET_SDK) int targetSdk
         ) {
             int sdkVersion = Math.min(deviceSdk, targetSdk);
-            if (sdkVersion < 31  /* pre Android 12 */) {
-                // Before API 31 (Android 12) no connect permissions are needed
-                return new String[][]{};
-            }
 
             // Since API 31 (Android 12) BLUETOOTH_CONNECT is required to establish a connection to a device
-            return new String[][]{new String[]{Manifest.permission.BLUETOOTH_CONNECT}};
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (sdkVersion < 31  /* pre Android 12 */) {
+                    // Before API 31 (Android 12) no connect permissions are needed
+                    return new String[][]{};
+                }
+                return new String[][]{new String[]{Manifest.permission.BLUETOOTH_CONNECT}};
+            }
+            // Before API 31 (Android 12) no connect permissions are needed
+            return new String[][]{};
         }
 
         @Provides
@@ -213,7 +217,12 @@ public interface ClientComponent {
                 Context context
         ) {
             try {
-                return context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    return context.getPackageManager()
+                            .getPackageInfo(context.getPackageName(), PackageManager.PackageInfoFlags.of(0));
+                } else {
+                    return context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
+                }
             } catch (Exception e) {
                 return new PackageInfo();
             }
