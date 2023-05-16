@@ -15,7 +15,7 @@ import io.reactivex.rxjava3.functions.Action;
  * Example use:
  * <pre>
  * UUID characteristicUUID = UUID.fromString("70a5bfcc-a0ec-4091-985e-d5506a31c921");
- * Observable<RxBleConnection> connectionObservable = bleDevice
+ * {@literal Observable<RxBleConnection> connectionObservable = bleDevice}
  * .establishConnection(this, false)
  * .compose(new ConnectionSharingAdapter());
  *
@@ -32,7 +32,7 @@ import io.reactivex.rxjava3.functions.Action;
  * </pre>
  *
  * @deprecated As of RxAndroidBLE 1.6.0, the connection sharing adapter is deprecated. Consider implementing your own way of maintaining the
- * connection state or use ReplayingShare (http://github.com/JakeWharton/RxReplayingShare)
+ * connection state or use ReplayingShare (<a href="http://github.com/JakeWharton/RxReplayingShare">...</a>)
  *
  * @see io.nrbtech.rxandroidble.exceptions.BleAlreadyConnectedException
  */

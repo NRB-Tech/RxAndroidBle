@@ -76,10 +76,10 @@ public class LogOptions {
     }
 
     /**
-     * The builder for {@link #LogOptions(Integer, Integer, Integer, Boolean, Boolean, Logger)}
+     * The builder for {@link LogOptions}.
      * If a particular setting will not be defined on the builder the produced
-     * {@link #LogOptions(Integer, Integer, Integer, Boolean, Boolean, Logger)} will not overwrite them in the library when passed to
-     * {@link io.nrbtech.rxandroidble.RxBleClient#updateLogOptions(LogOptions)}.
+     * {@link LogOptions#LogOptions(Integer, Integer, Integer, Boolean, Boolean, Logger)} will not overwrite them in the library when passed
+     * to {@link io.nrbtech.rxandroidble.RxBleClient#updateLogOptions(LogOptions)}.
      */
     public static class Builder {
 

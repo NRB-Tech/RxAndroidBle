@@ -86,8 +86,7 @@ public class BleScanException extends BleException {
      * On API >=25 there is an undocumented scan throttling mechanism. If 5 scans were started by the app during a 30 second window
      * the next scan in that window will be silently skipped with only a log warning. In this situation there should be
      * a retryDateSuggestion {@link Date} set with a time when the scan should work again.
-     *
-     * @link https://blog.classycode.com/undocumented-android-7-ble-behavior-changes-d1a9bd87d983
+     * @see <a href="https://blog.classycode.com/undocumented-android-7-ble-behavior-changes-d1a9bd87d983">...</a>
      */
     public static final int UNDOCUMENTED_SCAN_THROTTLE = Integer.MAX_VALUE - 1;
 

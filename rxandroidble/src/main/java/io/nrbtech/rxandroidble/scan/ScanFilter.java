@@ -18,11 +18,13 @@ import java.util.UUID;
  * restrict scan results to only those that are of interest to them.
  * <p>
  * Current filtering on the following fields are supported:
- * <li>Service UUIDs which identify the bluetooth gatt services running on the device.
- * <li>Name of remote Bluetooth LE device.
- * <li>Mac address of the remote device.
- * <li>Service data which is the data associated with a service.
- * <li>Manufacturer specific data which is the data associated with a particular manufacturer.
+ * <ul>
+ * <li>Service UUIDs which identify the bluetooth gatt services running on the device.</li>
+ * <li>Name of remote Bluetooth LE device.</li>
+ * <li>Mac address of the remote device.</li>
+ * <li>Service data which is the data associated with a service.</li>
+ * <li>Manufacturer specific data which is the data associated with a particular manufacturer.</li>
+ * </ul>
  *
  * @see ScanResult
  * @see BluetoothLeScanner
@@ -536,7 +538,7 @@ import java.util.UUID;
 
     /**
      * Checks if the scanfilter is empty
-     * @hide
+     * @hidden
      */
     public boolean isAllFieldsEmpty() {
         return this.equals(EMPTY);

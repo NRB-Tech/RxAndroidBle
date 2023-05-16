@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
 
 /**
- * @inheritDoc
+ * Represents a custom operation that will be enqueued for future execution within the client instance.
  * @deprecated use {@link RxBleCustomOperation}
  */
 public interface RxBleRadioOperationCustom<T> extends RxBleCustomOperation<T> {

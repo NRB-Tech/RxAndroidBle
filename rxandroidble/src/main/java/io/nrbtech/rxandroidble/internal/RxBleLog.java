@@ -83,7 +83,6 @@ public class RxBleLog {
      * <p>
      * Example how to forward logs to Timber:<br>
      *
-     * <code>
      * <pre>
      * RxBleLog.setLogger(new RxBleLog.Logger() {
      *    &#64;Override
@@ -92,7 +91,6 @@ public class RxBleLog {
      *    }
      * });
      * </pre>
-     * </code>
      *
      * @deprecated use {@link io.nrbtech.rxandroidble.RxBleClient#updateLogOptions(LogOptions)}
      */

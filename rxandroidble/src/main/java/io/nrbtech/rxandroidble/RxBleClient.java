@@ -214,20 +214,20 @@ public abstract class RxBleClient {
      * a different (finer) permission is needed. Prior to Android 12.0 only a single permission returned by this function is needed to
      * perform a scan. It is up to the user to decide which one. The result array is sorted with the least permissive values first. Since
      * Android 12 all permissions returned by this function are needed.
-     * <p>
+     *
      * Returned values:
-     * <p>
-     * case: API < 23<p>
+     *
+     * case: API &lt; 23
      * Empty array. No runtime permissions needed.
-     * <p>
-     * case: 23 <= API < 29<p>
+     *
+     * case: 23 &lt;= API &lt; 29
      * {@link android.Manifest.permission#ACCESS_COARSE_LOCATION}
      * {@link android.Manifest.permission#ACCESS_FINE_LOCATION}
-     * <p>
-     * case: 29 <= API < 31<p>
+     *
+     * case: 29 &lt;= API &lt; 31
      * {@link android.Manifest.permission#ACCESS_FINE_LOCATION}
-     * <p>
-     * case: 31 <= API<p>
+     *
+     * case: 31 &lt;= API
      * {@link android.Manifest.permission#BLUETOOTH_SCAN}
      * optionally {@link android.Manifest.permission#ACCESS_FINE_LOCATION} if BLUETOOTH_SCAN does not have a "neverForLocation" flag
      *
@@ -246,13 +246,13 @@ public abstract class RxBleClient {
     /**
      * Returns permission strings needed by the application to connect to Bluetooth devices or retrieve bonded devices, or an empty array
      * if no runtime permissions are needed.
-     * <p>
+     *
      * Returned values:
-     * <p>
-     * case: API < 31<p>
+     *
+     * case: API &lt; 31
      * Empty array. No runtime permissions needed.
-     * <p>
-     * case: 31 <= API<p>
+     *
+     * case: 31 &lt;= API
      * {@link android.Manifest.permission#BLUETOOTH_CONNECT}
      * @return an ordered array of possible connect permissions
      */

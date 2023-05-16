@@ -277,7 +277,7 @@ public interface RxBleConnection {
 
     /**
      * Setup characteristic notification in order to receive callbacks when given characteristic has been changed. Returned observable will
-     * emit Observable<byte[]> once the notification setup has been completed. It is possible to setup more observables for the same
+     * emit {@code Observable<byte[]>} once the notification setup has been completed. It is possible to setup more observables for the same
      * characteristic and the lifecycle of the notification will be shared among them.
      * <p>
      * Notification is automatically unregistered once this observable is unsubscribed.
@@ -297,7 +297,7 @@ public interface RxBleConnection {
 
     /**
      * Setup characteristic notification in order to receive callbacks when given characteristic has been changed. Returned observable will
-     * emit Observable<byte[]> once the notification setup has been completed. It is possible to setup more observables for the same
+     * emit {@code Observable<byte[]>} once the notification setup has been completed. It is possible to setup more observables for the same
      * characteristic and the lifecycle of the notification will be shared among them.
      * <p>
      * Notification is automatically unregistered once this observable is unsubscribed.
@@ -330,7 +330,7 @@ public interface RxBleConnection {
 
     /**
      * Setup characteristic indication in order to receive callbacks when given characteristic has been changed. Returned observable will
-     * emit Observable<byte[]> once the indication setup has been completed. It is possible to setup more observables for the same
+     * emit {@code Observable<byte[]>} once the indication setup has been completed. It is possible to setup more observables for the same
      * characteristic and the lifecycle of the indication will be shared among them.
      * <p>
      * Indication is automatically unregistered once this observable is unsubscribed.
@@ -350,7 +350,7 @@ public interface RxBleConnection {
 
     /**
      * Setup characteristic indication in order to receive callbacks when given characteristic has been changed. Returned observable will
-     * emit Observable<byte[]> once the indication setup has been completed. It is possible to setup more observables for the same
+     * emit {@code Observable<byte[]>} once the indication setup has been completed. It is possible to setup more observables for the same
      * characteristic and the lifecycle of the indication will be shared among them.
      * <p>
      * Indication is automatically unregistered once this observable is unsubscribed.
