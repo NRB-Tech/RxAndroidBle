@@ -88,7 +88,7 @@ public class ScanRecordDataConstructor {
      * @return shortest representation of {@code uuid} as bytes.
      * @throws IllegalArgumentException If the {@code uuid} is null.
      *
-     * @hide
+     * @hidden
      */
     public static byte[] uuidToBytes(ParcelUuid uuid) {
         if (uuid == null) {
@@ -125,7 +125,7 @@ public class ScanRecordDataConstructor {
      * @param parcelUuid
      * @return true if the parcelUuid can be converted to 16 bit uuid, false otherwise.
      *
-     * @hide
+     * @hidden
      */
     public static boolean is16BitUuid(ParcelUuid parcelUuid) {
         UUID uuid = parcelUuid.getUuid();
@@ -140,7 +140,7 @@ public class ScanRecordDataConstructor {
      * @param parcelUuid
      * @return true if the parcelUuid can be converted to 32 bit uuid, false otherwise.
      *
-     * @hide
+     * @hidden
      */
     public static boolean is32BitUuid(ParcelUuid parcelUuid) {
         UUID uuid = parcelUuid.getUuid();

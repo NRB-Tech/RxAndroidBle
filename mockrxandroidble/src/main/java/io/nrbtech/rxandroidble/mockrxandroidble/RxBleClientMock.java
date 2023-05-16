@@ -100,7 +100,7 @@ public class RxBleClientMock extends RxBleClient {
 
         /**
          * Build a new {@link BluetoothGattCharacteristic} list.
-         * Should be used in pair with {@link RxBleDeviceMock.Builder#addService}
+         * Should be used in pair with {@link RxBleConnectionMock.Builder#addService(UUID, List)}
          */
         public CharacteristicsBuilder() {
             this.bluetoothGattCharacteristics = new ArrayList<>();
