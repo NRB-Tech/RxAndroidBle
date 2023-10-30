@@ -1,27 +1,27 @@
 ext {
-    rxJavaVersion = '3.1.6'
+    rxJavaVersion = '3.1.8'
     sourceCompatibilityVersion = JavaVersion.VERSION_17
     targetCompatibilityVersion = JavaVersion.VERSION_17
     shadowPluginVersion = '7.1.2'
-    daggerVersion = '2.46.1'
+    daggerVersion = '2.48.1'
     libs = [
             /* Library-only dependencies */
             rxjava                : "io.reactivex.rxjava3:rxjava:$rxJavaVersion",
             rxandroid             : 'io.reactivex.rxjava3:rxandroid:3.0.2',
             rxrelay               : 'com.jakewharton.rxrelay3:rxrelay:3.0.1',
-            junit                  : 'org.junit.jupiter:junit-jupiter:5.9.3',
-            groovy                : ['org.codehaus.groovy:groovy:3.0.17', 'org.codehaus.groovy:groovy-test:3.0.17'],
-            spock                 : 'org.spockframework:spock-core:2.3-groovy-3.0',
+            junit                  : 'org.junit.jupiter:junit-jupiter:5.10.0',
+            groovy                : ['org.codehaus.groovy:groovy:3.0.19', 'org.codehaus.groovy:groovy-test:3.0.19'],
+            spock                 : 'org.spockframework:spock-core:2.4-M1-groovy-3.0',
             dagger                : "com.google.dagger:dagger:$daggerVersion",
             dagger_compiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
-            bytebuddy             : "net.bytebuddy:byte-buddy:1.14.4",
+            bytebuddy             : "net.bytebuddy:byte-buddy:1.14.8",
             objenisis             : "org.objenesis:objenesis:3.3",
             /* Shared library-sample apps dependencies */
-            annotations           : "androidx.annotation:annotation:1.6.0",
+            annotations           : "androidx.annotation:annotation:1.7.0",
             /* Sample apps-only dependencies */
             rxjava_replayingshare : 'com.jakewharton.rx3:replaying-share:3.0.0',
             rxjava_binding        : 'com.jakewharton.rxbinding4:rxbinding:4.0.0',
             appcompat             : 'androidx.appcompat:appcompat:1.6.1',
-            material_design       : 'com.google.android.material:material:1.9.0'
+            material_design       : 'com.google.android.material:material:1.10.0'
     ]
 }
