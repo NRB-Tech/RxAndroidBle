@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## Version 2.2.2 – 30 October 23
+
+* Upgraded to Gradle 8.1.2
+* Upgraded dependencies
+
 ## Version 2.2.1 – 15 May 23
 
 * Upgraded to Gradle 8
