@@ -14,12 +14,12 @@ repositories {
 android {
     namespace 'io.nrbtech.rxandroidble.sample'
 
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "io.nrbtech.rxandroidble.sample"
         minSdkVersion 18
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
@@ -37,7 +37,7 @@ android {
     preBuild.dependsOn 'checkstyle'
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 

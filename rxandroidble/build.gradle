@@ -5,11 +5,11 @@ apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 android {
     namespace 'io.nrbtech.rxandroidble'
 
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 33
+        targetSdkVersion 34
     }
 
     buildTypes {
