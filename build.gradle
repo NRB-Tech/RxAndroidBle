@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath 'com.android.tools.build:gradle:8.2.0'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
         classpath 'gradle.plugin.org.codehaus.groovy:groovy-android-gradle-plugin:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -54,16 +54,18 @@ allprojects {
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
+        tasks.withType(JavaCompile).configureEach {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
 
-        tasks.withType(Test) {
-            useJUnitPlatform()
-            testLogging {
-                exceptionFormat "full"
-                events "started", "skipped", "passed", "failed"
-                showStandardStreams true
+        tasks.withType(Test).tap {
+            configureEach {
+                useJUnitPlatform()
+                testLogging {
+                    exceptionFormat "full"
+                    events "started", "skipped", "passed", "failed"
+                    showStandardStreams true
+                }
             }
         }
     }
@@ -71,6 +73,6 @@ allprojects {
 
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
