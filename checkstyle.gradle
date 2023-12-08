@@ -5,7 +5,7 @@ subprojects { project ->
     apply plugin: 'checkstyle'
 
     checkstyle {
-        toolVersion = '8.20'
+        toolVersion = '10.12.6'
     }
 
     task checkstyle(type: Checkstyle) {
@@ -16,5 +16,11 @@ subprojects { project ->
         include '**/*.java'
 
         classpath = files()
+    }
+
+    configurations.checkstyle {
+        resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+            select("com.google.guava:guava:0")
+        }
     }
 }
