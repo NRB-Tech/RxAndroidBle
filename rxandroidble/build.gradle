@@ -7,6 +7,10 @@ android {
 
     compileSdk 34
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 34
