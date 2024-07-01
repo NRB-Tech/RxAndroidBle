@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Version 2.2.4 - 1 July 24
+
+* Fixed issue with publishing
+
 ## Version 2.2.3 – 30 June 24
 
 * Upgraded dependencies and gradle

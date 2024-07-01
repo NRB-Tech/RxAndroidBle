@@ -3,14 +3,18 @@ apply from: rootProject.file('gradle/gradle-mvn-config.gradle')
 apply from: 'dependencies.gradle'
 apply from: 'checkstyle.gradle'
 
+
+
 buildscript {
     ext.kotlinVersion = '1.8.21'
+    ext.shadowPluginVersion = '8.1.1'
     repositories {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -19,12 +23,13 @@ buildscript {
         classpath 'gradle.plugin.org.codehaus.groovy:groovy-android-gradle-plugin:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath "com.github.johnrengelman:shadow:$shadowPluginVersion"
     }
 }
 
 allprojects {
     apply plugin: 'com.github.ben-manes.versions'
-    
+
     repositories {
         google()
         maven {
@@ -74,5 +79,5 @@ allprojects {
 }
 
 tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    delete rootProject.getLayout().getBuildDirectory()
 }
