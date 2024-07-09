@@ -22,44 +22,42 @@ version = VERSION_NAME
 group = GROUP
 
 afterEvaluate { project ->
-    if(!project.tasks.findByName('shadowJar')) {
-        if (isAndroidProject(project)) {
-            android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
-                tasks.register('javadocs', Javadoc) {
-                    dependsOn 'assembleRelease'
-                    source = android.sourceSets.main.java.source
-                    classpath += project.files(
-                            files(releaseVariant.javaCompileProvider.get().classpath),
-                            project.android.getBootClasspath().join(File.pathSeparator),
-                            files("$buildDir/intermediates/classes/release"),
-                            files("$buildDir/generated/ap_generated_sources/release/out"),
-                            files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
-                    )
-                    title = null
-                    options.noTimestamp(false)
-                }
-            }
-        } else {
+    if (isAndroidProject(project)) {
+        android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
             tasks.register('javadocs', Javadoc) {
-                source = sourceSets.main.java.classesDirectory
-                classpath += configurations.compileClasspath
+                dependsOn 'assembleRelease'
+                source = android.sourceSets.main.java.source
+                classpath += project.files(
+                        files(releaseVariant.javaCompileProvider.get().classpath),
+                        project.android.getBootClasspath().join(File.pathSeparator),
+                        files("$buildDir/intermediates/classes/release"),
+                        files("$buildDir/generated/ap_generated_sources/release/out"),
+                        files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
+                )
                 title = null
                 options.noTimestamp(false)
             }
         }
-        tasks.register('javadocsJar', Jar) {
-            dependsOn javadocs
-            archiveClassifier.set('javadoc')
-            from javadocs.destinationDir
+    } else {
+        tasks.register('javadocs', Javadoc) {
+            source = sourceSets.main.java.classesDirectory
+            classpath += configurations.compileClasspath
+            title = null
+            options.noTimestamp(false)
         }
+    }
+    tasks.register('javadocsJar', Jar) {
+        dependsOn javadocs
+        archiveClassifier.set('javadoc')
+        from javadocs.destinationDir
+    }
 
-        tasks.register('sourcesJar', Jar) {
-            archiveClassifier.set('sources')
-            if (isAndroidProject(project)) {
-                from android.sourceSets.main.java.source
-            } else {
-                from sourceSets.main.allSource
-            }
+    tasks.register('sourcesJar', Jar) {
+        archiveClassifier.set('sources')
+        if (isAndroidProject(project)) {
+            from android.sourceSets.main.java.source
+        } else {
+            from sourceSets.main.allSource
         }
     }
     publishing {
@@ -73,9 +71,9 @@ afterEvaluate { project ->
                         project.shadow.component(publication)
                     } else {
                         from isAndroidProject(project) ? components.release : components.java
-                        artifact sourcesJar
-                        artifact javadocsJar
                     }
+                    artifact sourcesJar
+                    artifact javadocsJar
                     pom {
                         name = POM_NAME
                         description = POM_DESCRIPTION
