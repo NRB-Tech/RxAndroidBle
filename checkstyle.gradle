@@ -5,10 +5,10 @@ subprojects { project ->
     apply plugin: 'checkstyle'
 
     checkstyle {
-        toolVersion = '10.12.6'
+        toolVersion = '10.21.4'
     }
 
-    task checkstyle(type: Checkstyle) {
+    tasks.register('checkstyle', Checkstyle) {
         configFile rootProject.file('checkstyle.xml')
         source 'src/main/java'
         ignoreFailures false

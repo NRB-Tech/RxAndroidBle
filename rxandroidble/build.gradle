@@ -1,19 +1,24 @@
-apply plugin: 'com.android.library'
-apply plugin: 'groovyx.android'
+plugins {
+    id 'com.android.library'
+    id 'groovyx.android'
+}
+
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+
+
 
 android {
     namespace 'io.nrbtech.rxandroidble'
 
-    compileSdk 34
+    compileSdk 35
 
     buildFeatures {
         buildConfig true
     }
 
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 34
+        minSdkVersion 30
+        targetSdk 35
     }
 
     buildTypes {
@@ -66,17 +71,18 @@ androidGroovy {
 }
 
 dependencies {
-    api rootProject.ext.libs.rxjava
-    api rootProject.ext.libs.annotations
-    implementation rootProject.ext.libs.rxrelay
+    api libs.io.reactivex.rxjava3.rxjava
+    api libs.androidx.annotation
+    implementation libs.com.jakewharton.rxrelay3.rxrelay
     implementation project(path: ':dagger-library-shadow', transitive: false, configuration: 'shadow')
     annotationProcessor project(path: ':dagger-compiler-shadow', transitive: false, configuration: 'shadow')
 
     // Test dependencies
     testImplementation project(path: ':dagger-library-shadow', transitive: false, configuration: 'shadow')
-    testImplementation rootProject.ext.libs.junit
-    testImplementation rootProject.ext.libs.groovy
-    testImplementation rootProject.ext.libs.spock
-    testRuntimeOnly rootProject.ext.libs.bytebuddy
-    testRuntimeOnly rootProject.ext.libs.objenisis
+    testImplementation libs.org.junit.jupiter.junit.jupiter
+    testImplementation libs.org.junit.platform.junit.platform.launcher
+    testImplementation libs.org.apache.groovy
+    testImplementation libs.org.spockframework.spock.core
+    testRuntimeOnly libs.net.bytebuddy.byte.buddy
+    testRuntimeOnly libs.org.objenesis
 }

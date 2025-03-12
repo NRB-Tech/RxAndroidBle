@@ -1,12 +1,7 @@
-apply plugin: "io.github.gradle-nexus.publish-plugin"
-apply from: rootProject.file('gradle/gradle-mvn-config.gradle')
-apply from: 'dependencies.gradle'
-apply from: 'checkstyle.gradle'
-
-
+import org.gradle.internal.jvm.Jvm
 
 buildscript {
-    ext.kotlinVersion = '1.8.21'
+    ext.kotlinVersion = '2.1.0'
     ext.shadowPluginVersion = '8.1.1'
     repositories {
         maven {
@@ -18,14 +13,33 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.1'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
-        classpath 'gradle.plugin.org.codehaus.groovy:groovy-android-gradle-plugin:3.0.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
-        classpath "com.github.johnrengelman:shadow:$shadowPluginVersion"
+        classpath libs.com.android.tools.build.gradle
+        classpath libs.com.github.ben.manes.gradle.versions.plugin
+        classpath libs.gradle.plugin.org.codehaus.groovy.groovy.android.gradle.plugin
+        classpath libs.org.jetbrains.kotlin.kotlin.gradle.plugin
+        classpath libs.io.github.gradle.nexus.publish.plugin
+        classpath libs.com.github.johnrengelman.shadow
     }
 }
+
+plugins {
+    alias(libs.plugins.nl.littlerobots.version.catalog.update) apply true
+}
+
+apply plugin: "io.github.gradle-nexus.publish-plugin"
+apply plugin: "com.github.ben-manes.versions"
+apply from: rootProject.file('gradle/gradle-mvn-config.gradle')
+apply from: 'dependencies.gradle'
+apply from: 'checkstyle.gradle'
+
+// Until Groovy 5 is released, and spock supports it, we can't use JVM 19+ due to a groovy bug:
+// https://github.com/apache/groovy/pull/2037
+// Use JVM 17 until then, as it works with that version.
+def currentJvm = Jvm.current()
+def javaVersion = currentJvm.javaVersion.majorVersion
+println "Current Java version: $currentJvm (major version: $javaVersion)"
+assert javaVersion == "17" : "Error: Java 17 is required but found Java $javaVersion. Change in " +
+        "Settings > Build, Execution and Deployment > Build Tools > Gradle > Gradle JVM"
 
 allprojects {
     apply plugin: 'com.github.ben-manes.versions'
@@ -80,4 +94,16 @@ allprojects {
 
 tasks.register('clean', Delete) {
     delete rootProject.getLayout().getBuildDirectory()
+}
+
+def isNonStable = { String version ->
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
+// https://github.com/ben-manes/gradle-versions-plugin
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
 }

@@ -24,7 +24,7 @@ artifacts {
 }
 
 dependencies {
-    implementation rootProject.ext.libs.dagger
+    implementation libs.com.google.dagger
 }
 
 java {

@@ -15,6 +15,7 @@ ext {
             dagger_compiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
             bytebuddy             : "net.bytebuddy:byte-buddy:1.14.17",
             objenisis             : "org.objenesis:objenesis:3.4",
+            junit_platform_launcher: 'org.junit.platform:junit-platform-launcher:1.12.0',
             /* Shared library-sample apps dependencies */
             annotations           : "androidx.annotation:annotation:1.8.0",
             /* Sample apps-only dependencies */

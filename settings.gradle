@@ -1,3 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 include ':rxandroidble', ':dagger-compiler-shadow', ':dagger-library-shadow'
 include ':sample', ':sample-kotlin', ':mockrxandroidble'
 

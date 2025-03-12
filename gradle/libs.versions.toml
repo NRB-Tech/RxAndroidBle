@@ -1,0 +1,113 @@
+[versions]
+com-android-tools-utp = "31.9.0"
+com-google-dagger = "2.51.1"
+com-google-testing-platform = "0.0.9-alpha03"
+com-jakewharton = "10.2.3"
+org-codehaus-groovy = "3.0.21"
+org-jetbrains-kotlin = "2.1.0"
+
+[libraries]
+androidx-annotation = "androidx.annotation:annotation:1.8.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
+androidx-databinding-viewbinding = "androidx.databinding:viewbinding:8.9.0"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.0"
+com-android-tools-build-gradle = "com.android.tools.build:gradle:8.9.0"
+com-android-tools-utp-android-device-provider-ddmlib = { module = "com.android.tools.utp:android-device-provider-ddmlib", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-device-provider-gradle = { module = "com.android.tools.utp:android-device-provider-gradle", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-additional-test-output = { module = "com.android.tools.utp:android-test-plugin-host-additional-test-output", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-apk-installer = { module = "com.android.tools.utp:android-test-plugin-host-apk-installer", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-coverage = { module = "com.android.tools.utp:android-test-plugin-host-coverage", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-device-info = { module = "com.android.tools.utp:android-test-plugin-host-device-info", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-emulator-control = { module = "com.android.tools.utp:android-test-plugin-host-emulator-control", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-logcat = { module = "com.android.tools.utp:android-test-plugin-host-logcat", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-host-retention = { module = "com.android.tools.utp:android-test-plugin-host-retention", version.ref = "com-android-tools-utp" }
+com-android-tools-utp-android-test-plugin-result-listener-gradle = { module = "com.android.tools.utp:android-test-plugin-result-listener-gradle", version.ref = "com-android-tools-utp" }
+com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.52.0"
+com-github-johnrengelman-shadow = "com.github.johnrengelman:shadow:8.1.1"
+com-google-android-material = "com.google.android.material:material:1.12.0"
+com-google-dagger = { module = "com.google.dagger:dagger", version.ref = "com-google-dagger" }
+com-google-dagger-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "com-google-dagger" }
+com-google-testing-platform-android-driver-instrumentation = { module = "com.google.testing.platform:android-driver-instrumentation", version.ref = "com-google-testing-platform" }
+com-google-testing-platform-android-test-plugin = { module = "com.google.testing.platform:android-test-plugin", version.ref = "com-google-testing-platform" }
+com-google-testing-platform-core = { module = "com.google.testing.platform:core", version.ref = "com-google-testing-platform" }
+com-google-testing-platform-launcher = { module = "com.google.testing.platform:launcher", version.ref = "com-google-testing-platform" }
+com-jakewharton-butterknife = { module = "com.jakewharton:butterknife", version.ref = "com-jakewharton" }
+com-jakewharton-butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "com-jakewharton" }
+com-jakewharton-rx3-replaying-share = "com.jakewharton.rx3:replaying-share:3.0.0"
+com-jakewharton-rxbinding4-rxbinding = "com.jakewharton.rxbinding4:rxbinding:4.0.0"
+com-jakewharton-rxrelay3-rxrelay = "com.jakewharton.rxrelay3:rxrelay:3.0.1"
+com-puppycrawl-tools-checkstyle = "com.puppycrawl.tools:checkstyle:10.12.6"
+gradle-plugin-org-codehaus-groovy-groovy-android-gradle-plugin = "gradle.plugin.org.codehaus.groovy:groovy-android-gradle-plugin:3.0.0"
+io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus:publish-plugin:1.1.0"
+io-reactivex-rxjava3-rxandroid = "io.reactivex.rxjava3:rxandroid:3.0.2"
+io-reactivex-rxjava3-rxjava = "io.reactivex.rxjava3:rxjava:3.1.8"
+io-reactivex-rxjava3-rxkotlin = "io.reactivex.rxjava3:rxkotlin:3.0.0"
+net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.14.17"
+org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.17.1"
+org-codehaus-groovy = { module = "org.codehaus.groovy:groovy", version.ref = "org-codehaus-groovy" }
+org-codehaus-groovy-groovy-test = { module = "org.codehaus.groovy:groovy-test", version.ref = "org-codehaus-groovy" }
+org-jetbrains-kotlin-kotlin-build-tools-impl = { module = "org.jetbrains.kotlin:kotlin-build-tools-impl", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kotlin-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kotlin-klib-commonizer-embeddable = { module = "org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "org-jetbrains-kotlin" }
+org-junit-jupiter-junit-jupiter = "org.junit.jupiter:junit-jupiter:5.10.3"
+org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.12.0"
+org-objenesis = "org.objenesis:objenesis:3.4"
+org-spockframework-spock-core = "org.spockframework:spock-core:2.4-M4-groovy-3.0"
+
+[plugins]
+android = "android:8.9.0"
+android-library = "android-library:8.9.0"
+android-reporting = "android-reporting:8.9.0"
+com-android-ai-pack = "com.android.ai-pack:8.9.0"
+com-android-application = "com.android.application:8.9.0"
+com-android-asset-pack = "com.android.asset-pack:8.9.0"
+com-android-asset-pack-bundle = "com.android.asset-pack-bundle:8.9.0"
+com-android-base = "com.android.base:8.9.0"
+com-android-dynamic-feature = "com.android.dynamic-feature:8.9.0"
+com-android-fused-library = "com.android.fused-library:8.9.0"
+com-android-internal-ai-pack = "com.android.internal.ai-pack:8.9.0"
+com-android-internal-application = "com.android.internal.application:8.9.0"
+com-android-internal-asset-pack = "com.android.internal.asset-pack:8.9.0"
+com-android-internal-asset-pack-bundle = "com.android.internal.asset-pack-bundle:8.9.0"
+com-android-internal-dynamic-feature = "com.android.internal.dynamic-feature:8.9.0"
+com-android-internal-fused-library = "com.android.internal.fused-library:8.9.0"
+com-android-internal-kotlin-multiplatform-library = "com.android.internal.kotlin.multiplatform.library:8.9.0"
+com-android-internal-library = "com.android.internal.library:8.9.0"
+com-android-internal-lint = "com.android.internal.lint:8.9.0"
+com-android-internal-privacy-sandbox-sdk = "com.android.internal.privacy-sandbox-sdk:8.9.0"
+com-android-internal-reporting = "com.android.internal.reporting:8.9.0"
+com-android-internal-test = "com.android.internal.test:8.9.0"
+com-android-internal-version-check = "com.android.internal.version-check:8.9.0"
+com-android-kotlin-multiplatform-library = "com.android.kotlin.multiplatform.library:8.9.0"
+com-android-library = "com.android.library:8.9.0"
+com-android-lint = "com.android.lint:8.9.0"
+com-android-privacy-sandbox-sdk = "com.android.privacy-sandbox-sdk:8.9.0"
+com-android-reporting = "com.android.reporting:8.9.0"
+com-android-test = "com.android.test:8.9.0"
+com-github-ben-manes-versions = "com.github.ben-manes.versions:0.52.0"
+com-github-johnrengelman-shadow = "com.github.johnrengelman.shadow:8.1.1"
+groovyx-android = "groovyx.android:3.0.0"
+io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:1.1.0"
+kotlin = "kotlin:2.1.0"
+kotlin-android = "kotlin-android:2.1.0"
+kotlin-android-extensions = "kotlin-android-extensions:2.1.0"
+kotlin-kapt = "kotlin-kapt:2.1.0"
+kotlin-multiplatform = "kotlin-multiplatform:2.1.0"
+kotlin-native-cocoapods = "kotlin-native-cocoapods:2.1.0"
+kotlin-native-performance = "kotlin-native-performance:2.1.0"
+kotlin-parcelize = "kotlin-parcelize:2.1.0"
+kotlin-scripting = "kotlin-scripting:2.1.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.5"
+org-codehaus-groovy-android = "org.codehaus.groovy.android:3.0.0"
+org-jetbrains-kotlin-android = "org.jetbrains.kotlin.android:2.1.0"
+org-jetbrains-kotlin-android-extensions = "org.jetbrains.kotlin.android.extensions:2.1.0"
+org-jetbrains-kotlin-js = "org.jetbrains.kotlin.js:2.1.0"
+org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:2.1.0"
+org-jetbrains-kotlin-kapt = "org.jetbrains.kotlin.kapt:2.1.0"
+org-jetbrains-kotlin-multiplatform = "org.jetbrains.kotlin.multiplatform:2.1.0"
+org-jetbrains-kotlin-native-cocoapods = "org.jetbrains.kotlin.native.cocoapods:2.1.0"
+org-jetbrains-kotlin-native-performance = "org.jetbrains.kotlin.native.performance:2.1.0"
+org-jetbrains-kotlin-plugin-parcelize = "org.jetbrains.kotlin.plugin.parcelize:2.1.0"
+org-jetbrains-kotlin-plugin-scripting = "org.jetbrains.kotlin.plugin.scripting:2.1.0"

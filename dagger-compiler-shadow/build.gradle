@@ -19,7 +19,7 @@ shadowJar {
 }
 
 dependencies {
-    implementation rootProject.ext.libs.dagger_compiler
+    implementation libs.com.google.dagger.dagger.compiler
 }
 
 java {

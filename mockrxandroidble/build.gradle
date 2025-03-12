@@ -6,11 +6,11 @@ apply plugin: 'com.github.johnrengelman.shadow'
 android {
     namespace 'io.nrbtech.rxandroidble.mockrxandroidble'
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 34
+        minSdkVersion 30
+        targetSdkVersion 35
     }
 
     compileOptions {
@@ -61,9 +61,10 @@ afterEvaluate {
 dependencies {
 
     // Test dependencies
-    testImplementation rootProject.ext.libs.junit
-    testImplementation rootProject.ext.libs.groovy
-    testImplementation rootProject.ext.libs.spock
+    testImplementation libs.org.junit.jupiter.junit.jupiter
+    testImplementation libs.org.junit.platform.junit.platform.launcher
+    testImplementation libs.org.apache.groovy
+    testImplementation libs.org.spockframework.spock.core
     api project(path: ':rxandroidble')
-    api rootProject.ext.libs.rxjava
+    api libs.io.reactivex.rxjava3.rxjava
 }
