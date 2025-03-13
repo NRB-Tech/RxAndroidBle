@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Version 2.2.5 - 13 March 25
+
+* Upgraded dependencies
+
 ## Version 2.2.4 - 1 July 24
 
 * Fixed issue with publishing
