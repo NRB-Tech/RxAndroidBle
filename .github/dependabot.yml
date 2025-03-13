@@ -1,5 +1,35 @@
 version: 2
 updates:
+  # Enable version updates for Gradle/Maven dependencies
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "gradle"
+
+  # Check for updates to dependencies in the mockrxandroidble module
+  - package-ecosystem: "gradle"
+    directory: "/mockrxandroidble"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "gradle"
+
+  # Check for updates to dependencies in the rxandroidble module
+  - package-ecosystem: "gradle"
+    directory: "/rxandroidble"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "gradle"
+
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"

@@ -6,11 +6,11 @@ apply plugin: 'com.github.johnrengelman.shadow'
 android {
     namespace 'io.nrbtech.rxandroidble.mockrxandroidble'
 
-    compileSdk 35
+    compileSdk libs.versions.compileSDK.get().toInteger()
 
     defaultConfig {
-        minSdkVersion 30
-        targetSdkVersion 35
+        minSdkVersion libs.versions.minSDK.get().toInteger()
+        targetSdk libs.versions.targetSDK.get().toInteger()
     }
 
     compileOptions {

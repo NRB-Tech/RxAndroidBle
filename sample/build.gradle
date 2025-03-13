@@ -14,12 +14,12 @@ repositories {
 android {
     namespace 'io.nrbtech.rxandroidble.sample'
 
-    compileSdk 35
+    compileSdk libs.versions.compileSDK.get().toInteger()
 
     defaultConfig {
         applicationId "io.nrbtech.rxandroidble.sample"
-        minSdkVersion 30
-        targetSdkVersion 35
+        minSdkVersion libs.versions.minSDK.get().toInteger()
+        targetSdk libs.versions.targetSDK.get().toInteger()
         versionCode 1
         versionName "1.0"
     }

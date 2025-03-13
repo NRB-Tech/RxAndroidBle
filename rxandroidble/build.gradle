@@ -10,15 +10,15 @@ apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 android {
     namespace 'io.nrbtech.rxandroidble'
 
-    compileSdk 35
+    compileSdk libs.versions.compileSDK.get().toInteger()
 
     buildFeatures {
         buildConfig true
     }
 
     defaultConfig {
-        minSdkVersion 30
-        targetSdk 35
+        minSdkVersion libs.versions.minSDK.get().toInteger()
+        targetSdk libs.versions.targetSDK.get().toInteger()
     }
 
     buildTypes {

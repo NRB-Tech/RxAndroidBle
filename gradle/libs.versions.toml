@@ -3,6 +3,9 @@ com-google-dagger = "2.55"
 com-jakewharton = "10.2.3"
 org-apache-groovy = "4.0.26"
 org-jetbrains-kotlin = "2.1.10"
+minSDK = "30"
+compileSDK = "35"
+targetSDK = "35"
 
 [libraries]
 androidx-annotation = "androidx.annotation:annotation:1.9.1"
