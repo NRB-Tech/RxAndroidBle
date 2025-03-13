@@ -10,19 +10,17 @@ import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding4.view.RxView;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;
 import io.nrbtech.rxandroidble.sample.R;
 import io.nrbtech.rxandroidble.sample.SampleApplication;
+import io.nrbtech.rxandroidble.sample.databinding.ActivityExample4AdvancedBinding;
 import io.nrbtech.rxandroidble.sample.util.HexString;
 
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableTransformer;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -49,24 +47,8 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
 
     private static final String TAG = AdvancedCharacteristicOperationExampleActivity.class.getSimpleName();
     public static final String EXTRA_CHARACTERISTIC_UUID = "extra_uuid";
-    @BindView(R.id.connect)
-    Button connectButton;
-    @BindView(R.id.read_output)
-    TextView readOutputView;
-    @BindView(R.id.read_hex_output)
-    TextView readHexOutputView;
-    @BindView(R.id.write_input)
-    TextView writeInput;
-    @BindView(R.id.compat_only_warning)
-    TextView compatOnlyWarningTextView;
-    @BindView(R.id.read)
-    Button readButton;
-    @BindView(R.id.write)
-    Button writeButton;
-    @BindView(R.id.notify)
-    Button notifyButton;
-    @BindView(R.id.indicate)
-    Button indicateButton;
+
+    private ActivityExample4AdvancedBinding binding;
     private Disposable activityFlowDisposable;
     private Observable<PresenterEvent> presenterEventObservable;
 
@@ -80,10 +62,11 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example4_advanced);
-        ButterKnife.bind(this);
+        binding = ActivityExample4AdvancedBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         final String macAddress = getIntent().getStringExtra(DeviceActivity.EXTRA_MAC_ADDRESS);
-        final UUID characteristicUuid = (UUID) getIntent().getSerializableExtra(EXTRA_CHARACTERISTIC_UUID);
+        final UUID characteristicUuid = getIntent().getSerializableExtra(EXTRA_CHARACTERISTIC_UUID, UUID.class);
         final RxBleDevice bleDevice = SampleApplication.getRxBleClient(this).getBleDevice(macAddress);
         //noinspection ConstantConditions
         getSupportActionBar().setSubtitle(getString(R.string.mac_address, macAddress));
@@ -93,31 +76,31 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
          * is established and disconnecting after the connection is being made we need to share the same activatedClicksObservable.
          * It would be perfectly fine to use three different buttons and pass those observables to the Presenter.
          */
-        final Observable<Boolean> sharedConnectButtonClicks = activatedClicksObservable(connectButton).share();
+        final Observable<Boolean> sharedConnectButtonClicks = activatedClicksObservable(binding.connect).share();
         // same goes for setting up notifications and indications below
-        final Observable<Boolean> sharedNotifyButtonClicks = activatedClicksObservable(notifyButton).share();
-        final Observable<Boolean> sharedIndicateButtonClicks = activatedClicksObservable(indicateButton).share();
+        final Observable<Boolean> sharedNotifyButtonClicks = activatedClicksObservable(binding.notify).share();
+        final Observable<Boolean> sharedIndicateButtonClicks = activatedClicksObservable(binding.indicate).share();
 
         presenterEventObservable = Presenter.prepareActivityLogic(
                 bleDevice,
                 characteristicUuid,
-                sharedConnectButtonClicks.compose(onSubscribeSetText(connectButton, R.string.connect)),
-                sharedConnectButtonClicks.compose(onSubscribeSetText(connectButton, R.string.connecting)),
-                sharedConnectButtonClicks.compose(onSubscribeSetText(connectButton, R.string.disconnect)),
-                activatedClicksObservable(readButton),
+                sharedConnectButtonClicks.compose(onSubscribeSetText(binding.connect, R.string.connect)),
+                sharedConnectButtonClicks.compose(onSubscribeSetText(binding.connect, R.string.connecting)),
+                sharedConnectButtonClicks.compose(onSubscribeSetText(binding.connect, R.string.disconnect)),
+                activatedClicksObservable(binding.read),
                 /*
                  * Write button clicks are then mapped to byte[] from the editText. If there is a problem parsing input then a notification
                  * is shown and we wait for another click to write to try to parse again.
                  */
-                activatedClicksObservable(writeButton).map(aBoolean -> getInputBytes())
+                activatedClicksObservable(binding.write).map(aBoolean -> getInputBytes())
                         .doOnError(throwable -> showNotification("Could not parse input: " + throwable))
                         .retryWhen(errorNotificationHandler -> errorNotificationHandler),
-                sharedNotifyButtonClicks.compose(onSubscribeSetText(notifyButton, R.string.setup_notification)),
-                sharedNotifyButtonClicks.compose(onSubscribeSetText(notifyButton, R.string.setting_notification)),
-                sharedNotifyButtonClicks.compose(onSubscribeSetText(notifyButton, R.string.teardown_notification)),
-                sharedIndicateButtonClicks.compose(onSubscribeSetText(indicateButton, R.string.setup_indication)),
-                sharedIndicateButtonClicks.compose(onSubscribeSetText(indicateButton, R.string.setting_indication)),
-                sharedIndicateButtonClicks.compose(onSubscribeSetText(indicateButton, R.string.teardown_indication))
+                sharedNotifyButtonClicks.compose(onSubscribeSetText(binding.notify, R.string.setup_notification)),
+                sharedNotifyButtonClicks.compose(onSubscribeSetText(binding.notify, R.string.setting_notification)),
+                sharedNotifyButtonClicks.compose(onSubscribeSetText(binding.notify, R.string.teardown_notification)),
+                sharedIndicateButtonClicks.compose(onSubscribeSetText(binding.indicate, R.string.setup_indication)),
+                sharedIndicateButtonClicks.compose(onSubscribeSetText(binding.indicate, R.string.setting_indication)),
+                sharedIndicateButtonClicks.compose(onSubscribeSetText(binding.indicate, R.string.teardown_indication))
         );
     }
 
@@ -174,11 +157,11 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
     }
 
     private byte[] getInputBytes() {
-        return HexString.hexToBytes(writeInput.getText().toString());
+        return HexString.hexToBytes(binding.writeInput.getText().toString());
     }
 
     private void showNotification(String text) {
-        Snackbar.make(findViewById(R.id.main), text, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.main, text, Snackbar.LENGTH_SHORT).show();
     }
 
     private void handleEvent(PresenterEvent presenterEvent) {
@@ -191,7 +174,7 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
         if (presenterEvent instanceof CompatibilityModeEvent) {
             final CompatibilityModeEvent compatibilityModeEvent = (CompatibilityModeEvent) presenterEvent;
             final boolean isCompatibility = compatibilityModeEvent.show;
-            compatOnlyWarningTextView.setVisibility(isCompatibility ? View.VISIBLE : View.INVISIBLE);
+            binding.compatOnlyWarning.setVisibility(isCompatibility ? View.VISIBLE : View.INVISIBLE);
             if (isCompatibility) {
                 /*
                 All characteristics that have PROPERTY_NOTIFY or PROPERTY_INDICATE should contain
@@ -212,10 +195,10 @@ public class AdvancedCharacteristicOperationExampleActivity extends AppCompatAct
                 case READ:
                     final byte[] updateReadValue = resultEvent.result;
                     final String stringValue = new String(updateReadValue);
-                    readOutputView.setText(stringValue);
+                    binding.readOutput.setText(stringValue);
                     final String hexValueText = HexString.bytesToHex(updateReadValue);
-                    readHexOutputView.setText(hexValueText);
-                    writeInput.setText(hexValueText);
+                    binding.readHexOutput.setText(hexValueText);
+                    binding.writeInput.setText(hexValueText);
                     break;
                 case WRITE:
                     showNotification("Write success");

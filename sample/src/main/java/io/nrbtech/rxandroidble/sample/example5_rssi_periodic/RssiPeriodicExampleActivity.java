@@ -3,18 +3,14 @@ package io.nrbtech.rxandroidble.sample.example5_rssi_periodic;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
-import android.widget.Button;
-import android.widget.TextView;
 
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;
 import io.nrbtech.rxandroidble.sample.R;
 import io.nrbtech.rxandroidble.sample.SampleApplication;
+import io.nrbtech.rxandroidble.sample.databinding.ActivityExample5Binding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -23,19 +19,31 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class RssiPeriodicExampleActivity extends AppCompatActivity {
 
-    @BindView(R.id.connection_state)
-    TextView connectionStateView;
-    @BindView(R.id.rssi)
-    TextView rssiView;
-    @BindView(R.id.connect_toggle)
-    Button connectButton;
+    private ActivityExample5Binding binding;
     private RxBleDevice bleDevice;
     private Disposable connectionDisposable;
     private Disposable stateDisposable;
 
-    @OnClick(R.id.connect_toggle)
-    public void onConnectToggleClick() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityExample5Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        String macAddress = getIntent().getStringExtra(DeviceActivity.EXTRA_MAC_ADDRESS);
+        setTitle(getString(R.string.mac_address, macAddress));
+        bleDevice = SampleApplication.getRxBleClient(this).getBleDevice(macAddress);
+
+        // Set up click listener for connect button
+        binding.connectToggle.setOnClickListener(v -> onConnectToggleClick());
+
+        // How to listen for connection state changes
+        stateDisposable = bleDevice.observeConnectionStateChanges()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onConnectionStateChange);
+    }
+
+    private void onConnectToggleClick() {
         if (isConnected()) {
             triggerDisconnect();
         } else {
@@ -49,22 +57,7 @@ public class RssiPeriodicExampleActivity extends AppCompatActivity {
     }
 
     private void updateRssi(int rssiValue) {
-        rssiView.setText(getString(R.string.read_rssi, rssiValue));
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example5);
-        ButterKnife.bind(this);
-        String macAddress = getIntent().getStringExtra(DeviceActivity.EXTRA_MAC_ADDRESS);
-        setTitle(getString(R.string.mac_address, macAddress));
-        bleDevice = SampleApplication.getRxBleClient(this).getBleDevice(macAddress);
-
-        // How to listen for connection state changes
-        stateDisposable = bleDevice.observeConnectionStateChanges()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onConnectionStateChange);
+        binding.rssi.setText(getString(R.string.read_rssi, rssiValue));
     }
 
     private boolean isConnected() {
@@ -77,7 +70,7 @@ public class RssiPeriodicExampleActivity extends AppCompatActivity {
     }
 
     private void onConnectionStateChange(RxBleConnection.RxBleConnectionState newState) {
-        connectionStateView.setText(newState.toString());
+        binding.connectionState.setText(newState.toString());
         updateUI();
     }
 
@@ -87,7 +80,6 @@ public class RssiPeriodicExampleActivity extends AppCompatActivity {
     }
 
     private void triggerDisconnect() {
-
         if (connectionDisposable != null) {
             connectionDisposable.dispose();
         }
@@ -95,20 +87,18 @@ public class RssiPeriodicExampleActivity extends AppCompatActivity {
 
     private void updateUI() {
         final boolean connected = isConnected();
-        connectButton.setText(connected ? R.string.disconnect : R.string.connect);
+        binding.connectToggle.setText(connected ? R.string.disconnect : R.string.connect);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         triggerDisconnect();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         if (stateDisposable != null) {
             stateDisposable.dispose();
         }

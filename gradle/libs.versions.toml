@@ -14,8 +14,6 @@ com-github-johnrengelman-shadow = "com.github.johnrengelman:shadow:8.1.1"
 com-google-android-material = "com.google.android.material:material:1.12.0"
 com-google-dagger = { module = "com.google.dagger:dagger", version.ref = "com-google-dagger" }
 com-google-dagger-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "com-google-dagger" }
-com-jakewharton-butterknife = { module = "com.jakewharton:butterknife", version.ref = "com-jakewharton" }
-com-jakewharton-butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "com-jakewharton" }
 com-jakewharton-rx3-replaying-share = "com.jakewharton.rx3:replaying-share:3.0.0"
 com-jakewharton-rxbinding4-rxbinding = "com.jakewharton.rxbinding4:rxbinding:4.0.0"
 com-jakewharton-rxrelay3-rxrelay = "com.jakewharton.rxrelay3:rxrelay:3.0.1"

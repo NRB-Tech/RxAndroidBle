@@ -3,48 +3,32 @@ package io.nrbtech.rxandroidble.sample.example2_connection;
 import android.annotation.TargetApi;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import com.google.android.material.snackbar.Snackbar;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleDevice;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;
 import io.nrbtech.rxandroidble.sample.R;
 import io.nrbtech.rxandroidble.sample.SampleApplication;
+import io.nrbtech.rxandroidble.sample.databinding.ActivityExample2Binding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class ConnectionExampleActivity extends AppCompatActivity {
 
-    @BindView(R.id.connection_state)
-    TextView connectionStateView;
-    @BindView(R.id.connect_toggle)
-    Button connectButton;
-    @BindView(R.id.newMtu)
-    EditText textMtu;
-    @BindView(R.id.set_mtu)
-    Button setMtuButton;
-    @BindView(R.id.autoconnect)
-    SwitchCompat autoConnectToggleSwitch;
+    private ActivityExample2Binding binding;
     private RxBleDevice bleDevice;
     private Disposable connectionDisposable;
     private final CompositeDisposable mtuDisposable = new CompositeDisposable();
     private Disposable stateDisposable;
 
-    @OnClick(R.id.connect_toggle)
     public void onConnectToggleClick() {
         if (isConnected()) {
             triggerDisconnect();
         } else {
-            connectionDisposable = bleDevice.establishConnection(autoConnectToggleSwitch.isChecked())
+            connectionDisposable = bleDevice.establishConnection(binding.autoconnect.isChecked())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(this::dispose)
                     .subscribe(this::onConnectionReceived, this::onConnectionFailure);
@@ -52,7 +36,6 @@ public class ConnectionExampleActivity extends AppCompatActivity {
     }
 
     @TargetApi(21 /* Build.VERSION_CODES.LOLLIPOP */)
-    @OnClick(R.id.set_mtu)
     public void onSetMtu() {
         final Disposable disposable = bleDevice.establishConnection(false)
                 .flatMapSingle(rxBleConnection -> rxBleConnection.requestMtu(72))
@@ -66,11 +49,17 @@ public class ConnectionExampleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example2);
-        ButterKnife.bind(this);
+        binding = ActivityExample2Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         String macAddress = getIntent().getStringExtra(DeviceActivity.EXTRA_MAC_ADDRESS);
         setTitle(getString(R.string.mac_address, macAddress));
         bleDevice = SampleApplication.getRxBleClient(this).getBleDevice(macAddress);
+
+        // Set up click listeners
+        binding.connectToggle.setOnClickListener(v -> onConnectToggleClick());
+        binding.setMtu.setOnClickListener(v -> onSetMtu());
+
         // How to listen for connection state changes
         // Note: it is meant for UI updates only — one should not observeConnectionStateChanges() with BLE connection logic
         stateDisposable = bleDevice.observeConnectionStateChanges()
@@ -94,7 +83,7 @@ public class ConnectionExampleActivity extends AppCompatActivity {
     }
 
     private void onConnectionStateChange(RxBleConnection.RxBleConnectionState newState) {
-        connectionStateView.setText(newState.toString());
+        binding.connectionState.setText(newState.toString());
         updateUI();
     }
 
@@ -109,7 +98,6 @@ public class ConnectionExampleActivity extends AppCompatActivity {
     }
 
     private void triggerDisconnect() {
-
         if (connectionDisposable != null) {
             connectionDisposable.dispose();
         }
@@ -117,8 +105,8 @@ public class ConnectionExampleActivity extends AppCompatActivity {
 
     private void updateUI() {
         final boolean connected = isConnected();
-        connectButton.setText(connected ? R.string.disconnect : R.string.connect);
-        autoConnectToggleSwitch.setEnabled(!connected);
+        binding.connectToggle.setText(connected ? R.string.disconnect : R.string.connect);
+        binding.autoconnect.setEnabled(!connected);
     }
 
     @Override

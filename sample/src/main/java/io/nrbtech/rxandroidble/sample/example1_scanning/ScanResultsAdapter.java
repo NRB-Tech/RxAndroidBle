@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.nrbtech.rxandroidble.scan.ScanResultInterface;
 
 import java.util.Locale;
@@ -25,14 +23,13 @@ class ScanResultsAdapter extends RecyclerView.Adapter<ScanResultsAdapter.ViewHol
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(android.R.id.text1)
         TextView line1;
-        @BindView(android.R.id.text2)
         TextView line2;
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            line1 = itemView.findViewById(android.R.id.text1);
+            line2 = itemView.findViewById(android.R.id.text2);
         }
     }
 

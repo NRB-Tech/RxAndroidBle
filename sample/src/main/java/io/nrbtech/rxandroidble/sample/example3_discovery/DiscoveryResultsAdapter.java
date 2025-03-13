@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 class DiscoveryResultsAdapter extends RecyclerView.Adapter<DiscoveryResultsAdapter.ViewHolder> {
 
     static class AdapterItem {
@@ -40,14 +37,13 @@ class DiscoveryResultsAdapter extends RecyclerView.Adapter<DiscoveryResultsAdapt
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(android.R.id.text1)
         TextView line1;
-        @BindView(android.R.id.text2)
         TextView line2;
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            line1 = itemView.findViewById(android.R.id.text1);
+            line2 = itemView.findViewById(android.R.id.text2);
         }
     }
 
@@ -68,41 +64,13 @@ class DiscoveryResultsAdapter extends RecyclerView.Adapter<DiscoveryResultsAdapt
         }
     };
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return getItem(position).type;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final int itemViewType = holder.getItemViewType();
-        final AdapterItem item = getItem(position);
-
-        if (itemViewType == AdapterItem.SERVICE) {
-            holder.line1.setText(String.format("Service: %s", item.description));
-        } else {
-            holder.line1.setText(String.format("Characteristic: %s", item.description));
-        }
-
-        holder.line2.setText(item.uuid.toString());
-    }
-
-    @Override
-    @NonNull
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final int layout = viewType == AdapterItem.SERVICE ? R.layout.item_discovery_service : R.layout.item_discovery_characteristic;
-        final View itemView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
-        itemView.setOnClickListener(onClickListener);
-        return new ViewHolder(itemView);
-    }
-
     void setOnAdapterItemClickListener(OnAdapterItemClickListener onAdapterItemClickListener) {
         this.onAdapterItemClickListener = onAdapterItemClickListener;
+    }
+
+    void clearSubscriptions() {
+        data.clear();
+        notifyDataSetChanged();
     }
 
     void swapScanResult(RxBleDeviceServices services) {
@@ -121,16 +89,51 @@ class DiscoveryResultsAdapter extends RecyclerView.Adapter<DiscoveryResultsAdapt
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final int itemViewType = getItemViewType(position);
+        final AdapterItem item = data.get(position);
+
+        if (itemViewType == AdapterItem.SERVICE) {
+            holder.line1.setText(String.format("Service: %s", item.description));
+        } else {
+            holder.line1.setText(String.format("Characteristic: %s", item.description));
+        }
+
+        holder.line2.setText(item.uuid.toString());
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).type;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        final int layout = viewType == AdapterItem.SERVICE
+                ? R.layout.item_discovery_service
+                : R.layout.item_discovery_characteristic;
+        final View itemView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+        itemView.setOnClickListener(onClickListener);
+        return new ViewHolder(itemView);
+    }
+
+    AdapterItem getItem(int position) {
+        return data.get(position);
+    }
+
     private String describeProperties(BluetoothGattCharacteristic characteristic) {
         List<String> properties = new ArrayList<>();
         if (isCharacteristicReadable(characteristic)) properties.add("Read");
         if (isCharacteristicWriteable(characteristic)) properties.add("Write");
         if (isCharacteristicNotifiable(characteristic)) properties.add("Notify");
         return TextUtils.join(" ", properties);
-    }
-
-    AdapterItem getItem(int position) {
-        return data.get(position);
     }
 
     private String getServiceType(BluetoothGattService service) {

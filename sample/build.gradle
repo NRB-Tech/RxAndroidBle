@@ -29,6 +29,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    
+    buildFeatures {
+        viewBinding true
+    }
+    
     compileOptions {
         sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
         targetCompatibility = rootProject.ext.targetCompatibilityVersion
@@ -45,8 +50,6 @@ dependencies {
     implementation project(path: ':rxandroidble')
     implementation libs.androidx.appcompat
     implementation libs.com.google.android.material
-    implementation libs.com.jakewharton.butterknife
-    annotationProcessor libs.com.jakewharton.butterknife.compiler
     implementation libs.io.reactivex.rxjava3.rxandroid
     implementation libs.io.reactivex.rxjava3.rxjava
     implementation libs.com.jakewharton.rxbinding4.rxbinding

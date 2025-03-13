@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.widget.Button;
 
 import io.nrbtech.rxandroidble.RxBleClient;
 import io.nrbtech.rxandroidble.exceptions.BleScanException;
 import io.nrbtech.rxandroidble.sample.DeviceActivity;
 import io.nrbtech.rxandroidble.sample.R;
 import io.nrbtech.rxandroidble.sample.SampleApplication;
+import io.nrbtech.rxandroidble.sample.databinding.ActivityExample1Binding;
 import io.nrbtech.rxandroidble.sample.example1a_background_scanning.BackgroundScanActivity;
 import io.nrbtech.rxandroidble.sample.util.ScanExceptionHandler;
 import io.nrbtech.rxandroidble.sample.util.LocationPermission;
@@ -21,20 +19,12 @@ import io.nrbtech.rxandroidble.scan.ScanFilter;
 import io.nrbtech.rxandroidble.scan.ScanResult;
 import io.nrbtech.rxandroidble.scan.ScanSettings;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class ScanActivity extends AppCompatActivity {
 
-    @BindView(R.id.scan_toggle_btn)
-    Button scanToggleButton;
-    @BindView(R.id.show_details)
-    SwitchCompat showdetails;
-    @BindView(R.id.scan_results)
-    RecyclerView recyclerView;
+    private ActivityExample1Binding binding;
     private RxBleClient rxBleClient;
     private Disposable scanDisposable;
     private ScanResultsAdapter resultsAdapter;
@@ -43,20 +33,24 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example1);
-        ButterKnife.bind(this);
+        binding = ActivityExample1Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         rxBleClient = SampleApplication.getRxBleClient(this);
+
+        // Set up click listeners
+        binding.backgroundScanBtn.setOnClickListener(v -> onBackgroundScanRequested());
+        binding.scanToggleBtn.setOnClickListener(v -> onScanToggleClick());
+        binding.showDetails.setOnClickListener(v -> onShowDetailsToggleClick());
+
         configureResultList();
     }
 
-    @OnClick(R.id.background_scan_btn)
     public void onBackgroundScanRequested() {
         startActivity(new Intent(this, BackgroundScanActivity.class));
     }
 
-    @OnClick(R.id.scan_toggle_btn)
     public void onScanToggleClick() {
-
         if (isScanning()) {
             scanDisposable.dispose();
         } else {
@@ -71,9 +65,8 @@ public class ScanActivity extends AppCompatActivity {
         updateButtonUIState();
     }
 
-    @OnClick(R.id.show_details)
     public void onShowDetailsToggleClick() {
-        resultsAdapter.setShowDetails(showdetails.isChecked());
+        resultsAdapter.setShowDetails(binding.showDetails.isChecked());
     }
 
     private void scanBleDevices() {
@@ -115,18 +108,18 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void configureResultList() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(null);
+        binding.scanResults.setHasFixedSize(true);
+        binding.scanResults.setItemAnimator(null);
         LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(recyclerLayoutManager);
+        binding.scanResults.setLayoutManager(recyclerLayoutManager);
         resultsAdapter = new ScanResultsAdapter();
-        recyclerView.setAdapter(resultsAdapter);
+        binding.scanResults.setAdapter(resultsAdapter);
         resultsAdapter.setOnAdapterItemClickListener(view -> {
-            final int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
+            final int childAdapterPosition = binding.scanResults.getChildAdapterPosition(view);
             final ScanResult itemAtPosition = resultsAdapter.getItemAtPosition(childAdapterPosition);
             onAdapterItemClick(itemAtPosition);
         });
-        resultsAdapter.setShowDetails(showdetails.isChecked());
+        resultsAdapter.setShowDetails(binding.showDetails.isChecked());
     }
 
     private boolean isScanning() {
@@ -153,6 +146,6 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void updateButtonUIState() {
-        scanToggleButton.setText(isScanning() ? R.string.stop_scan : R.string.start_scan);
+        binding.scanToggleBtn.setText(isScanning() ? R.string.stop_scan : R.string.start_scan);
     }
 }

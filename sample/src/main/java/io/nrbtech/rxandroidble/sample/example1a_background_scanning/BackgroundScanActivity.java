@@ -11,15 +11,12 @@ import android.util.Log;
 
 import io.nrbtech.rxandroidble.RxBleClient;
 import io.nrbtech.rxandroidble.exceptions.BleScanException;
-import io.nrbtech.rxandroidble.sample.R;
 import io.nrbtech.rxandroidble.sample.SampleApplication;
+import io.nrbtech.rxandroidble.sample.databinding.ActivityExample1aBinding;
 import io.nrbtech.rxandroidble.sample.util.ScanExceptionHandler;
 import io.nrbtech.rxandroidble.sample.util.LocationPermission;
 import io.nrbtech.rxandroidble.scan.ScanFilter;
 import io.nrbtech.rxandroidble.scan.ScanSettings;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class BackgroundScanActivity extends AppCompatActivity {
 
@@ -27,19 +24,24 @@ public class BackgroundScanActivity extends AppCompatActivity {
     private RxBleClient rxBleClient;
     private PendingIntent callbackIntent;
     private boolean hasClickedScan;
+    private ActivityExample1aBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example1a);
-        ButterKnife.bind(this);
+        binding = ActivityExample1aBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         rxBleClient = SampleApplication.getRxBleClient(this);
         callbackIntent = PendingIntent.getBroadcast(this, SCAN_REQUEST_CODE,
                 new Intent(this, ScanReceiver.class), 0);
+
+        // Set up click listeners
+        binding.scanStartBtn.setOnClickListener(v -> onScanStartClick());
+        binding.scanStopBtn.setOnClickListener(v -> onScanStopClick());
     }
 
-    @OnClick(R.id.scan_start_btn)
-    public void onScanStartClick() {
+    private void onScanStartClick() {
         hasClickedScan = true;
         if (rxBleClient.isScanRuntimePermissionGranted()) {
             scanBleDeviceInBackground();
@@ -72,6 +74,7 @@ public class BackgroundScanActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions,
             @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (LocationPermission.isRequestLocationPermissionGranted(requestCode, permissions, grantResults, rxBleClient)
                 && hasClickedScan) {
             hasClickedScan = false;
@@ -79,11 +82,9 @@ public class BackgroundScanActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.scan_stop_btn)
-    public void onScanStopClick() {
+    private void onScanStopClick() {
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
             rxBleClient.getBackgroundScanner().stopBackgroundBleScan(callbackIntent);
         }
     }
-
 }
