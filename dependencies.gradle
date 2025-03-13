@@ -1,27 +1,4 @@
 ext {
-    rxJavaVersion = '3.1.8'
     sourceCompatibilityVersion = JavaVersion.VERSION_17
     targetCompatibilityVersion = JavaVersion.VERSION_17
-    daggerVersion = '2.51.1'
-    libs = [
-            /* Library-only dependencies */
-            rxjava                : "io.reactivex.rxjava3:rxjava:$rxJavaVersion",
-            rxandroid             : 'io.reactivex.rxjava3:rxandroid:3.0.2',
-            rxrelay               : 'com.jakewharton.rxrelay3:rxrelay:3.0.1',
-            junit                  : 'org.junit.jupiter:junit-jupiter:5.10.3',
-            groovy                : ['org.codehaus.groovy:groovy:3.0.21', 'org.codehaus.groovy:groovy-test:3.0.21'],
-            spock                 : 'org.spockframework:spock-core:2.4-M4-groovy-3.0',
-            dagger                : "com.google.dagger:dagger:$daggerVersion",
-            dagger_compiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
-            bytebuddy             : "net.bytebuddy:byte-buddy:1.14.17",
-            objenisis             : "org.objenesis:objenesis:3.4",
-            junit_platform_launcher: 'org.junit.platform:junit-platform-launcher:1.12.0',
-            /* Shared library-sample apps dependencies */
-            annotations           : "androidx.annotation:annotation:1.8.0",
-            /* Sample apps-only dependencies */
-            rxjava_replayingshare : 'com.jakewharton.rx3:replaying-share:3.0.0',
-            rxjava_binding        : 'com.jakewharton.rxbinding4:rxbinding:4.0.0',
-            appcompat             : 'androidx.appcompat:appcompat:1.7.0',
-            material_design       : 'com.google.android.material:material:1.12.0'
-    ]
 }
