@@ -1,17 +1,19 @@
 [versions]
-com-google-dagger = "2.55"
-com-jakewharton = "10.2.3"
-org-apache-groovy = "4.0.26"
-org-jetbrains-kotlin = "2.1.10"
-minSDK = "21"
+com-google-dagger = "2.56.1"
+# @keep this version
 compileSDK = "35"
+# @keep this version
+minSDK = "21"
+org-apache-groovy = "4.0.26"
+org-jetbrains-kotlin = "2.1.20"
+# @keep this version
 targetSDK = "35"
 
 [libraries]
 androidx-annotation = "androidx.annotation:annotation:1.9.1"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
 androidx-recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
-com-android-tools-build-gradle = "com.android.tools.build:gradle:8.9.0"
+com-android-tools-build-gradle = "com.android.tools.build:gradle:8.9.1"
 com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.52.0"
 com-github-johnrengelman-shadow = "com.github.johnrengelman:shadow:8.1.1"
 com-google-android-material = "com.google.android.material:material:1.12.0"
@@ -25,14 +27,14 @@ io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus:publish-plugin:2
 io-reactivex-rxjava3-rxandroid = "io.reactivex.rxjava3:rxandroid:3.0.2"
 io-reactivex-rxjava3-rxjava = "io.reactivex.rxjava3:rxjava:3.1.10"
 io-reactivex-rxjava3-rxkotlin = "io.reactivex.rxjava3:rxkotlin:3.0.1"
-net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.17.2"
+net-bytebuddy-byte-buddy = "net.bytebuddy:byte-buddy:1.17.5"
 org-apache-groovy = { module = "org.apache.groovy:groovy", version.ref = "org-apache-groovy" }
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "org-jetbrains-kotlin" }
-org-junit-jupiter-junit-jupiter = "org.junit.jupiter:junit-jupiter:5.12.0"
-org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.12.0"
+org-junit-jupiter-junit-jupiter = "org.junit.jupiter:junit-jupiter:5.12.2"
+org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.12.2"
 org-objenesis = "org.objenesis:objenesis:3.4"
 org-spockframework-spock-core = "org.spockframework:spock-core:2.4-M5-groovy-4.0"
 
 [plugins]
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.5"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"

@@ -101,9 +101,8 @@ def isNonStable = { String version ->
     def regex = /^[0-9,.v-]+(-r)?$/
     return !stableKeyword && !(version ==~ regex)
 }
-// https://github.com/ben-manes/gradle-versions-plugin
-tasks.named("dependencyUpdates").configure {
-    rejectVersionIf {
-        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+versionCatalogUpdate {
+    versionSelector {
+        !(isNonStable(it.candidate.version) && !isNonStable(it.currentVersion))
     }
 }
