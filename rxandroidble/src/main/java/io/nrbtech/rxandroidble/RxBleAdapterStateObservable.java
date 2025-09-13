@@ -67,7 +67,12 @@ public class RxBleAdapterStateObservable extends Observable<RxBleAdapterStateObs
                         emitter.onNext(internalState);
                     }
                 };
-                context.registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+                IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(receiver, filter, android.content.Context.RECEIVER_NOT_EXPORTED);
+                } else {
+                    context.registerReceiver(receiver, filter);
+                }
                 emitter.setCancellable(new Cancellable() {
                     @Override
                     public void cancel() {

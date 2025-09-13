@@ -40,7 +40,12 @@ public class LocationServicesOkObservableApi23Factory {
                     }
                 };
                 emitter.onNext(initialValue);
-                context.registerReceiver(broadcastReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
+                IntentFilter filter = new IntentFilter(LocationManager.MODE_CHANGED_ACTION);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(broadcastReceiver, filter, android.content.Context.RECEIVER_NOT_EXPORTED);
+                } else {
+                    context.registerReceiver(broadcastReceiver, filter);
+                }
                 emitter.setCancellable(new Cancellable() {
                     @Override
                     public void cancel() {
