@@ -6,7 +6,7 @@ compileSDK = "36"
 targetSDK = "36"
 # @keep this version
 minSDK = "21"
-org-apache-groovy = "5.0.1"
+org-apache-groovy = "4.0.23"
 org-jetbrains-kotlin = "2.1.20"
 androidx-annotation = "1.9.1"
 androidx-appcompat = "1.7.1"
