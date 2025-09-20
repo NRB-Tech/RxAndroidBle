@@ -4,9 +4,7 @@ buildscript {
     ext.kotlinVersion = '2.1.0'
     ext.shadowPluginVersion = '8.1.1'
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        maven { url = uri("https://plugins.gradle.org/m2/") }
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -47,9 +45,9 @@ allprojects {
     repositories {
         google()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url = uri("https://plugins.gradle.org/m2/")
         }
-        maven { url 'https://jitpack.io' }
+        maven { url = uri('https://jitpack.io') }
         mavenCentral()
     }
 
@@ -73,17 +71,15 @@ allprojects {
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).configureEach {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-        }
+        tasks.withType(JavaCompile).configureEach { options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" }
 
         tasks.withType(Test).tap {
             configureEach {
                 useJUnitPlatform()
                 testLogging {
-                    exceptionFormat "full"
+                    exceptionFormat = "full"
                     events "started", "skipped", "passed", "failed"
-                    showStandardStreams true
+                    showStandardStreams = true
                 }
             }
         }

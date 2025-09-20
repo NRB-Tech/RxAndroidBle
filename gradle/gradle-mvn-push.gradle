@@ -102,7 +102,7 @@ afterEvaluate { project ->
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        required = isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives")
         useInMemoryPgpKeys(getSigningKey(), getSigningKeyPassword())
         sign(publishing.publications.release)
     }

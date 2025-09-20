@@ -4,13 +4,13 @@ apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply plugin: 'com.github.johnrengelman.shadow'
 
 android {
-    namespace 'io.nrbtech.rxandroidble.mockrxandroidble'
+    namespace = 'io.nrbtech.rxandroidble.mockrxandroidble'
 
-    compileSdk libs.versions.compileSDK.get().toInteger()
+    compileSdk = libs.versions.compileSDK.get().toInteger()
 
     defaultConfig {
         minSdkVersion libs.versions.minSDK.get().toInteger()
-        targetSdk libs.versions.targetSDK.get().toInteger()
+        targetSdk = libs.versions.targetSDK.get().toInteger()
     }
 
     compileOptions {
@@ -44,7 +44,7 @@ android {
         }
     }
     lint {
-        abortOnError false
+        abortOnError = false
     }
 }
 

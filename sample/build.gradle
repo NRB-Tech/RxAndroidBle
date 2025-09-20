@@ -12,26 +12,26 @@ repositories {
 }
 
 android {
-    namespace 'io.nrbtech.rxandroidble.sample'
+    namespace = 'io.nrbtech.rxandroidble.sample'
 
-    compileSdk libs.versions.compileSDK.get().toInteger()
+    compileSdk = libs.versions.compileSDK.get().toInteger()
 
     defaultConfig {
         applicationId "io.nrbtech.rxandroidble.sample"
         minSdkVersion libs.versions.minSDK.get().toInteger()
-        targetSdk libs.versions.targetSDK.get().toInteger()
-        versionCode 1
-        versionName "1.0"
+        targetSdk = libs.versions.targetSDK.get().toInteger()
+        versionCode = 1
+        versionName = "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
     
     compileOptions {

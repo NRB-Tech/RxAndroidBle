@@ -9,10 +9,10 @@ subprojects { project ->
     }
 
     tasks.register('checkstyle', Checkstyle) {
-        configFile rootProject.file('checkstyle.xml')
+        configFile = rootProject.file('checkstyle.xml')
         source 'src/main/java'
-        ignoreFailures false
-        showViolations true
+        ignoreFailures = false
+        showViolations = true
         include '**/*.java'
 
         classpath = files()

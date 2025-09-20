@@ -8,22 +8,22 @@ apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 
 
 android {
-    namespace 'io.nrbtech.rxandroidble'
+    namespace = 'io.nrbtech.rxandroidble'
 
-    compileSdk libs.versions.compileSDK.get().toInteger()
+    compileSdk = libs.versions.compileSDK.get().toInteger()
 
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
 
     defaultConfig {
         minSdkVersion libs.versions.minSDK.get().toInteger()
-        targetSdk libs.versions.targetSDK.get().toInteger()
+        targetSdk = libs.versions.targetSDK.get().toInteger()
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             consumerProguardFiles 'proguard-rules.pro'
         }
@@ -49,7 +49,7 @@ android {
         }
     }
     lint {
-        abortOnError false
+        abortOnError = false
     }
 
 
