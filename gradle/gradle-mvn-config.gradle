@@ -7,9 +7,9 @@ if (secretPropsFile.exists()) {
     p.each { name, value -> ext[name] = value }
 } else {
     // Use system environment variables
-    ext["ossrhUsername"] = System.getenv('SONATYPE_NEXUS_USERNAME')
-    ext["ossrhPassword"] = System.getenv('SONATYPE_NEXUS_PASSWORD')
     ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
+    ext["centralPortalTokenKey"] = System.getenv('CENTRAL_PORTAL_TOKEN_KEY')
+    ext["centralPortalTokenSecret"] = System.getenv('CENTRAL_PORTAL_TOKEN_SECRET')
     ext["signing.key"] = System.getenv('PGP_SIGNING_KEY')
     ext["signing.password"] = System.getenv('PGP_SIGNING_PASSWORD')
     ext["versionName"] = System.getenv('VERSION_NAME')
@@ -34,11 +34,13 @@ ext.isAndroidProject = { project ->
 }
 
 def getSonatypeUsername() {
-    return hasProperty('ossrhUsername') ? ossrhUsername : ""
+    return (hasProperty('centralPortalTokenKey') && centralPortalTokenKey) ? centralPortalTokenKey
+            : ""
 }
 
 def getSonatypePassword() {
-    return hasProperty('ossrhPassword') ? ossrhPassword : ""
+    return (hasProperty('centralPortalTokenSecret') && centralPortalTokenSecret) ? centralPortalTokenSecret
+            : ""
 }
 
 ext.getSigningKey = {
@@ -56,7 +58,7 @@ def getSonatypeReleaseRepositoryUrl() {
 
 def getSonatypeSnapshotRepositoryUrl() {
     return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
-            : "https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots/"
+            : "https://central.sonatype.com/repository/maven-snapshots/"
 }
 
 nexusPublishing {
