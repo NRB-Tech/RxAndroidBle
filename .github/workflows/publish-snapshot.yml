@@ -28,8 +28,8 @@ jobs:
         id: extract_branch
       - name: Build and Publish
         env:
-          SONATYPE_NEXUS_USERNAME: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-          SONATYPE_NEXUS_PASSWORD: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          CENTRAL_PORTAL_TOKEN_KEY: ${{ secrets.CENTRAL_PORTAL_TOKEN_KEY }}
+          CENTRAL_PORTAL_TOKEN_SECRET: ${{ secrets.CENTRAL_PORTAL_TOKEN_SECRET }}
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
           SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
