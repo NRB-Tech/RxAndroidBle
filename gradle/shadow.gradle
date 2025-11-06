@@ -1,4 +1,5 @@
 shadowJar {
     relocate 'dagger', 'bleshadow.dagger'
     relocate 'javax.inject', 'bleshadow.javax.inject'
+    relocate 'org.jspecify', 'bleshadow.org.jspecify'
 }
