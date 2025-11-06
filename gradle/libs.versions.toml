@@ -1,17 +1,17 @@
 [versions]
-com-google-dagger = "2.57.1"
+com-google-dagger = "2.57.2"
 # @keep this version
 compileSDK = "36"
 # @keep this version
 targetSDK = "36"
 # @keep this version
 minSDK = "21"
-org-apache-groovy = "4.0.23"
-org-jetbrains-kotlin = "2.1.20"
+org-apache-groovy = "4.0.29"
+org-jetbrains-kotlin = "2.2.0"
 androidx-annotation = "1.9.1"
 androidx-appcompat = "1.7.1"
 androidx-recyclerview = "1.4.0"
-com-android-tools-build-gradle = "8.11.2"
+com-android-tools-build-gradle = "8.13.0"
 com-github-ben-manes-gradle-versions-plugin = "0.52.0"
 com-github-johnrengelman-shadow = "8.1.1"
 com-google-android-material = "1.13.0"
@@ -21,14 +21,14 @@ com-jakewharton-rxrelay3-rxrelay = "3.0.1"
 gradle-plugin-org-codehaus-groovy-groovy-android-gradle-plugin = "3.0.0"
 io-github-gradle-nexus-publish-plugin = "2.0.0"
 io-reactivex-rxjava3-rxandroid = "3.0.2"
-io-reactivex-rxjava3-rxjava = "3.1.11"
+io-reactivex-rxjava3-rxjava = "3.1.12"
 io-reactivex-rxjava3-rxkotlin = "3.0.1"
-net-bytebuddy-byte-buddy = "1.17.7"
-org-junit-jupiter-junit-jupiter = "5.13.4"
-org-junit-platform-junit-platform-launcher = "1.13.4"
+net-bytebuddy-byte-buddy = "1.17.8"
+org-junit-jupiter-junit-jupiter = "6.0.1"
+org-junit-platform-junit-platform-launcher = "6.0.1"
 org-objenesis = "3.4"
 org-spockframework-spock-core = "2.4-M6-groovy-4.0"
-nl-littlerobots-version-catalog-update = "1.0.0"
+nl-littlerobots-version-catalog-update = "1.0.1"
 
 [libraries]
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
