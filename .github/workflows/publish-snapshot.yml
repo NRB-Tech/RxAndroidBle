@@ -24,7 +24,10 @@ jobs:
           java-version: '17'
       - name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          echo "Branch name: $BRANCH_NAME"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
         id: extract_branch
       - name: Build and Publish
         env:
