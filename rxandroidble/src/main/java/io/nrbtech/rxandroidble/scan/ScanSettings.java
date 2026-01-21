@@ -138,6 +138,8 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
     @MatchNum
     private int mNumOfMatchesPerFilter;
 
+    private boolean mLegacy;
+
     private boolean mShouldCheckLocationProviderState;
 
     @ScanMode
@@ -161,6 +163,17 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
     }
 
     /**
+     * Returns whether only legacy advertisements will be returned.
+     * Legacy advertisements include advertisements as specified by the Bluetooth core specification 4.2 and below.
+     * Setting this to false allows scanning of extended advertisements which are available on Bluetooth 5.0+.
+     *
+     * @return true if only legacy advertisements will be returned
+     */
+    public boolean getLegacy() {
+        return mLegacy;
+    }
+
+    /**
      * Returns report delay timestamp based on the device clock.
      */
     public long getReportDelayMillis() {
@@ -173,12 +186,14 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
     }
 
     ScanSettings(int scanMode, int callbackType,
-                 long reportDelayMillis, int matchMode, int numOfMatchesPerFilter, boolean shouldCheckLocationServicesState) {
+                 long reportDelayMillis, int matchMode, int numOfMatchesPerFilter, boolean legacy,
+                 boolean shouldCheckLocationServicesState) {
         mScanMode = scanMode;
         mCallbackType = callbackType;
         mReportDelayMillis = reportDelayMillis;
         mNumOfMatchesPerFilter = numOfMatchesPerFilter;
         mMatchMode = matchMode;
+        mLegacy = legacy;
         mShouldCheckLocationProviderState = shouldCheckLocationServicesState;
     }
 
@@ -192,6 +207,7 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
         mMatchMode = in.readInt();
         //noinspection WrongConstant
         mNumOfMatchesPerFilter = in.readInt();
+        mLegacy = in.readInt() != 0;
         mShouldCheckLocationProviderState = in.readInt() != 0;
     }
 
@@ -202,6 +218,7 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
         dest.writeLong(mReportDelayMillis);
         dest.writeInt(mMatchMode);
         dest.writeInt(mNumOfMatchesPerFilter);
+        dest.writeInt(mLegacy ? 1 : 0);
         dest.writeInt(mShouldCheckLocationProviderState ? 1 : 0);
     }
 
@@ -231,6 +248,7 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
                 this.mReportDelayMillis,
                 this.mMatchMode,
                 this.mNumOfMatchesPerFilter,
+                this.mLegacy,
                 this.mShouldCheckLocationProviderState
         );
     }
@@ -245,6 +263,7 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
         private long mReportDelayMillis = 0;
         private int mMatchMode = MATCH_MODE_AGGRESSIVE;
         private int mNumOfMatchesPerFilter = MATCH_NUM_MAX_ADVERTISEMENT;
+        private boolean mLegacy = true;
         private boolean mShouldCheckLocationProviderState = true;
 
         /**
@@ -297,6 +316,22 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
                 return true;
             }
             return callbackType == (CALLBACK_TYPE_FIRST_MATCH | CALLBACK_TYPE_MATCH_LOST);
+        }
+
+        /**
+         * Set whether only legacy advertisements should be returned in scan results.
+         * Legacy advertisements include advertisements as specified by the Bluetooth core specification 4.2 and below.
+         * This is true by default for compatibility with older apps.
+         * <p>
+         * Setting this to false allows scanning of extended advertisements which are available on Bluetooth 5.0+.
+         * This option is supported on Android 8.0 (API 26) and above.
+         *
+         * @param legacy true if only legacy advertisements are returned, false otherwise
+         * @return this builder
+         */
+        public Builder setLegacy(boolean legacy) {
+            mLegacy = legacy;
+            return this;
         }
 
         // [DS 27.04.2017] TODO: when there will be a need
@@ -356,7 +391,7 @@ public class ScanSettings implements Parcelable, ExternalScanSettingsExtension<S
          */
         public ScanSettings build() {
             return new ScanSettings(mScanMode, mCallbackType,
-                    mReportDelayMillis, mMatchMode, mNumOfMatchesPerFilter, mShouldCheckLocationProviderState);
+                    mReportDelayMillis, mMatchMode, mNumOfMatchesPerFilter, mLegacy, mShouldCheckLocationProviderState);
         }
     }
 }
