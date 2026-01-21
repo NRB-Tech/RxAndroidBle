@@ -7,11 +7,16 @@ import androidx.annotation.RequiresApi;
 
 import io.nrbtech.rxandroidble.ClientComponent;
 import io.nrbtech.rxandroidble.RxBleConnection;
+import io.nrbtech.rxandroidble.RxBlePhy;
+import io.nrbtech.rxandroidble.RxBlePhyOption;
+import io.nrbtech.rxandroidble.internal.RxBlePhyImpl;
+import io.nrbtech.rxandroidble.internal.RxBlePhyOptionImpl;
 import io.nrbtech.rxandroidble.internal.connection.ConnectionModule;
 import io.nrbtech.rxandroidble.internal.connection.PayloadSizeLimitProvider;
 import io.nrbtech.rxandroidble.internal.connection.RxBleGattCallback;
 import io.nrbtech.rxandroidble.internal.logger.LoggerUtilBluetoothServices;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import bleshadow.javax.inject.Inject;
@@ -112,5 +117,24 @@ public class OperationsProviderImpl implements OperationsProvider {
                                                                                       TimeUnit timeUnit) {
         return new ConnectionPriorityChangeOperation(rxBleGattCallback, bluetoothGatt, timeoutConfiguration,
                 connectionPriority, new TimeoutConfiguration(delay, timeUnit, timeoutScheduler));
+    }
+
+    @Override
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    public PhyReadOperation providePhyReadOperation() {
+        return new PhyReadOperation(rxBleGattCallback, bluetoothGatt, timeoutConfiguration);
+    }
+
+    @Override
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    public PhyUpdateOperation providePhyUpdateOperation(Set<RxBlePhy> txPhy, Set<RxBlePhy> rxPhy, RxBlePhyOption phyOptions) {
+        return new PhyUpdateOperation(
+                rxBleGattCallback,
+                bluetoothGatt,
+                timeoutConfiguration,
+                RxBlePhyImpl.fromInterface(txPhy),
+                RxBlePhyImpl.fromInterface(rxPhy),
+                RxBlePhyOptionImpl.fromInterface(phyOptions)
+        );
     }
 }

@@ -5,8 +5,11 @@ import android.bluetooth.BluetoothGattDescriptor;
 import androidx.annotation.RequiresApi;
 
 import io.nrbtech.rxandroidble.RxBleConnection;
+import io.nrbtech.rxandroidble.RxBlePhy;
+import io.nrbtech.rxandroidble.RxBlePhyOption;
 import io.nrbtech.rxandroidble.internal.connection.PayloadSizeLimitProvider;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public interface OperationsProvider {
@@ -38,4 +41,10 @@ public interface OperationsProvider {
             long delay,
             TimeUnit timeUnit
     );
+
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    PhyReadOperation providePhyReadOperation();
+
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    PhyUpdateOperation providePhyUpdateOperation(Set<RxBlePhy> txPhy, Set<RxBlePhy> rxPhy, RxBlePhyOption phyOptions);
 }

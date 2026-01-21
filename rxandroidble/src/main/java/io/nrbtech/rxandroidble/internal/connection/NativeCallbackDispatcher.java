@@ -80,6 +80,20 @@ class NativeCallbackDispatcher {
         }
     }
 
+    @TargetApi(26 /* Build.VERSION_CODES.O */)
+    void notifyNativePhyReadCallback(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+        if (nativeCallback != null) {
+            nativeCallback.onPhyRead(gatt, txPhy, rxPhy, status);
+        }
+    }
+
+    @TargetApi(26 /* Build.VERSION_CODES.O */)
+    void notifyNativePhyUpdateCallback(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
+        if (nativeCallback != null) {
+            nativeCallback.onPhyUpdate(gatt, txPhy, rxPhy, status);
+        }
+    }
+
     void setNativeCallback(BluetoothGattCallback callback) {
         this.nativeCallback = callback;
     }

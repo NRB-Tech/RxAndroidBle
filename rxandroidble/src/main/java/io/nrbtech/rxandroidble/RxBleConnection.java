@@ -21,6 +21,7 @@ import io.nrbtech.rxandroidble.internal.operations.CharacteristicLongWriteOperat
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -57,13 +58,9 @@ public interface RxBleConnection {
 
     /**
      * The maximum properly supported value for MTU (Maximum Transfer Unit) used by a bluetooth connection on Android OS.
-     * <p>The theoretical maximum value for MTU Negotiation on Android OS is 517
-     * (https://cs.android.com/android/platform/superproject/+/master:packages/modules/Bluetooth/system/stack/include/gatt_api.h;l=244;drc=1918034a0730839c7a07b1260b1ab74b80d6b4e6)
-     * the real maximal supported MTU is 515 since the buffer size is capped on 512 bytes = 515 - GATT_READ_MTU_OVERHEAD
-     * (https://cs.android.com/android/platform/superproject/+/master:packages/modules/Bluetooth/system/stack/include/gatt_api.h;l=250;drc=1918034a0730839c7a07b1260b1ab74b80d6b4e6;bpv=1;bpt=1)
-     * <p>
-     * <p>NOTE: before Android 13 (API 33) the maximal properly supported MTU was 517
-     * see https://android.googlesource.com/platform/external/bluetooth/bluedroid/+/android-5.1.0_r1/stack/include/gatt_api.h#119
+     * <p>The theoretical maximum value for MTU Negotiation on Android OS is 517. The real maximal supported MTU is 515
+     * since the buffer size is capped on 512 bytes = 515 - GATT_READ_MTU_OVERHEAD.
+     * <p>NOTE: before Android 13 (API 33) the maximal properly supported MTU was 517.
      */
     int GATT_MTU_MAXIMUM = 515;
 
@@ -580,6 +577,38 @@ public interface RxBleConnection {
      * @return currently negotiated MTU value.
      */
     int getMtu();
+
+    /**
+     * Reads the current transmitter PHY and receiver PHY of the connection.
+     * <p>
+     * Requires API 26+ (Android 8.0).
+     *
+     * @return Single emitting the current PHY pair for transmitter and receiver
+     * @throws BleGattCannotStartException with {@link BleGattOperationType#PHY_READ} type, when it wasn't possible to read
+     *                                     the PHY for internal reasons.
+     * @throws BleGattException            in case of GATT operation error with {@link BleGattOperationType#PHY_READ} type.
+     */
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    Single<PhyPair> readPhy();
+
+    /**
+     * Sets the preferred PHY for the connection.
+     * <p>
+     * Requires API 26+ (Android 8.0).
+     * <p>
+     * Note that the PHY preference is just that - a preference. The local and remote devices will
+     * use the PHY that they can agree on. The result will be reported via {@link PhyPair}.
+     *
+     * @param txPhy      Set containing preferred PHYs for transmitting. See {@link RxBlePhy}.
+     * @param rxPhy      Set containing preferred PHYs for receiving. See {@link RxBlePhy}.
+     * @param phyOptions The preferred PHY option when Coded PHY is in use. See {@link RxBlePhyOption}.
+     * @return Single emitting the resulting PHY pair for transmitter and receiver
+     * @throws BleGattCannotStartException with {@link BleGattOperationType#PHY_UPDATE} type, when it wasn't possible to set
+     *                                     the PHY for internal reasons.
+     * @throws BleGattException            in case of GATT operation error with {@link BleGattOperationType#PHY_UPDATE} type.
+     */
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    Single<PhyPair> setPreferredPhy(Set<RxBlePhy> txPhy, Set<RxBlePhy> rxPhy, RxBlePhyOption phyOptions);
 
     /**
      * <b>This method requires deep knowledge of RxAndroidBLE internals. Use it only as a last resort if you know

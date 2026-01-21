@@ -1,0 +1,168 @@
+package io.nrbtech.rxandroidble.internal;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import io.nrbtech.rxandroidble.PhyPair;
+import io.nrbtech.rxandroidble.RxBlePhy;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+
+public final class RxBlePhyImpl implements RxBlePhy {
+
+    /**
+     * Bluetooth LE 1M PHY.
+     */
+    public static final RxBlePhyImpl PHY_1M = new RxBlePhyImpl("PHY_1M", 1, 1);
+
+    /**
+     * Bluetooth LE 2M PHY.
+     */
+    public static final RxBlePhyImpl PHY_2M = new RxBlePhyImpl("PHY_2M", 1 << 1, 2);
+
+    /**
+     * Bluetooth LE Coded PHY.
+     */
+    public static final RxBlePhyImpl PHY_CODED = new RxBlePhyImpl("PHY_CODED", 1 << 2, 3);
+
+    private static final Set<RxBlePhy> BUILTIN_VALUES;
+
+    static {
+        HashSet<RxBlePhyImpl> builtinValues = new HashSet<>();
+        builtinValues.add(PHY_1M);
+        builtinValues.add(PHY_2M);
+        builtinValues.add(PHY_CODED);
+        BUILTIN_VALUES = Collections.unmodifiableSet(builtinValues);
+    }
+
+    final String toStringOverride;
+    final int mask;
+    final int value;
+
+    private RxBlePhyImpl(final String builtInToString, final int mask, final int value) {
+        this.toStringOverride = builtInToString;
+        this.mask = mask;
+        this.value = value;
+    }
+
+    private RxBlePhyImpl(final int mask, final int value) {
+        this.toStringOverride = null;
+        this.mask = mask;
+        this.value = value;
+    }
+
+    public int getMask() {
+        return mask;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        if (toStringOverride != null) {
+            return toStringOverride;
+        }
+        return "RxBlePhy{[CUSTOM] "
+                + "mask=" + mask
+                + ", value=" + value
+                + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RxBlePhy)) return false;
+        RxBlePhy rxBlePhy = (RxBlePhy) o;
+        return mask == rxBlePhy.getMask() && value == rxBlePhy.getValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mask, value);
+    }
+
+    /**
+     * Gets the PHY static object from an integer value.
+     *
+     * @param value The integer value to get the PHY enum value for
+     * @return The PHY value
+     */
+    @NonNull
+    private static RxBlePhy fromValue(final int value) {
+        for (final RxBlePhy entry : RxBlePhyImpl.BUILTIN_VALUES) {
+            if (entry.getValue() == value) {
+                return entry;
+            }
+        }
+        RxBleLog.e("Encountered an unexpected PHY value=%d. Please consider making a PR to the library.", value);
+        return new RxBlePhyImpl(0, value);
+    }
+
+    /**
+     * Converts the specified enum set to the equivalent values mask.
+     *
+     * @param set The enum set to compute the values mask for
+     * @return If the set is NULL or empty, the default value mask (PHY_1M) is returned.
+     *         Otherwise, the resulting values mask is returned.
+     */
+    public static int enumSetToValuesMask(@Nullable final Set<RxBlePhyImpl> set) {
+        if (set == null || set.size() == 0) {
+            return RxBlePhyImpl.PHY_1M.getMask();
+        }
+
+        final Iterator<RxBlePhyImpl> iterator = set.iterator();
+
+        int result = 0;
+
+        while (iterator.hasNext()) {
+            final int requestedValue = iterator.next().getMask();
+            result |= requestedValue;
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates a PhyPair from the tx and rx PHY values.
+     *
+     * @param txPhy The transmitter PHY value
+     * @param rxPhy The receiver PHY value
+     * @return The PhyPair
+     */
+    @NonNull
+    public static PhyPair toPhyPair(int txPhy, int rxPhy) {
+        RxBlePhy tx = RxBlePhyImpl.fromValue(txPhy);
+        RxBlePhy rx = RxBlePhyImpl.fromValue(rxPhy);
+
+        return new PhyPairImpl(tx, rx);
+    }
+
+    /**
+     * Converts a Set of RxBlePhy interface objects to RxBlePhyImpl objects.
+     *
+     * @param phys The set of RxBlePhy objects
+     * @return The set of RxBlePhyImpl objects
+     */
+    public static Set<RxBlePhyImpl> fromInterface(Set<RxBlePhy> phys) {
+        Set<RxBlePhyImpl> result = new HashSet<>();
+        for (RxBlePhy phy : phys) {
+            int value = phy.getValue();
+            int mask = phy.getMask();
+            if (phy.getClass() == RxBlePhyImpl.class && BUILTIN_VALUES.contains(phy)) {
+                result.add((RxBlePhyImpl) phy);
+            } else {
+                RxBleLog.w("Using a custom RxBlePhy with value=%d, mask=%d. Please consider making a PR to the library.", value, mask);
+                result.add(new RxBlePhyImpl(mask, value));
+            }
+        }
+        return result;
+    }
+
+}

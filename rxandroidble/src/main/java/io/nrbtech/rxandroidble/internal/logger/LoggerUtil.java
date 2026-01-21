@@ -150,6 +150,15 @@ public class LoggerUtil {
                 callbackName, status, interval, interval * 1.25f, latency, timeout, timeout * 10f);
     }
 
+    public static void logPhyCallback(String callbackName, BluetoothGatt gatt, int status, int txPhy, int rxPhy) {
+        if (!RxBleLog.isAtLeast(LogConstants.INFO)) {
+            return;
+        }
+        String customValueMessage = ", txPhy=%d, rxPhy=%d";
+        RxBleLog.i(commonMacMessage(gatt) + commonCallbackMessage() + commonStatusMessage() + customValueMessage,
+                callbackName, status, txPhy, rxPhy);
+    }
+
     public static String commonMacMessage(BluetoothGatt gatt) {
         if (gatt == null) return "MAC=null";
         return commonMacMessage(gatt.getDevice().getAddress());

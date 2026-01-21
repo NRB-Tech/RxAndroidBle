@@ -10,9 +10,12 @@ import androidx.annotation.RequiresApi;
 import io.nrbtech.rxandroidble.ClientComponent;
 import io.nrbtech.rxandroidble.ConnectionParameters;
 import io.nrbtech.rxandroidble.NotificationSetupMode;
+import io.nrbtech.rxandroidble.PhyPair;
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleCustomOperation;
 import io.nrbtech.rxandroidble.RxBleDeviceServices;
+import io.nrbtech.rxandroidble.RxBlePhy;
+import io.nrbtech.rxandroidble.RxBlePhyOption;
 import io.nrbtech.rxandroidble.exceptions.BleDisconnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleException;
 import io.nrbtech.rxandroidble.internal.Priority;
@@ -23,6 +26,7 @@ import io.nrbtech.rxandroidble.internal.serialization.QueueReleaseInterface;
 import io.nrbtech.rxandroidble.internal.util.ByteAssociation;
 import io.nrbtech.rxandroidble.internal.util.QueueReleasingEmitterWrapper;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -305,6 +309,18 @@ public class RxBleConnectionImpl implements RxBleConnection {
     @Override
     public Single<Integer> readRssi() {
         return operationQueue.queue(operationsProvider.provideRssiReadOperation()).firstOrError();
+    }
+
+    @Override
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    public Single<PhyPair> readPhy() {
+        return operationQueue.queue(operationsProvider.providePhyReadOperation()).firstOrError();
+    }
+
+    @Override
+    @RequiresApi(26 /* Build.VERSION_CODES.O */)
+    public Single<PhyPair> setPreferredPhy(Set<RxBlePhy> txPhy, Set<RxBlePhy> rxPhy, RxBlePhyOption phyOptions) {
+        return operationQueue.queue(operationsProvider.providePhyUpdateOperation(txPhy, rxPhy, phyOptions)).firstOrError();
     }
 
     @Override

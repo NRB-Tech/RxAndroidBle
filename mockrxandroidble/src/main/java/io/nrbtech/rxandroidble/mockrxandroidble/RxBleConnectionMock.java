@@ -9,9 +9,13 @@ import android.util.Log;
 
 import io.nrbtech.rxandroidble.ConnectionParameters;
 import io.nrbtech.rxandroidble.NotificationSetupMode;
+import io.nrbtech.rxandroidble.PhyPair;
 import io.nrbtech.rxandroidble.RxBleConnection;
 import io.nrbtech.rxandroidble.RxBleCustomOperation;
 import io.nrbtech.rxandroidble.RxBleDeviceServices;
+import io.nrbtech.rxandroidble.RxBlePhy;
+import io.nrbtech.rxandroidble.RxBlePhyOption;
+import io.nrbtech.rxandroidble.internal.PhyPairImpl;
 import io.nrbtech.rxandroidble.exceptions.BleConflictingNotificationAlreadySetException;
 import io.nrbtech.rxandroidble.exceptions.BleDisconnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleGattCharacteristicException;
@@ -31,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -290,6 +295,18 @@ public class RxBleConnectionMock implements RxBleConnection {
     @Override
     public Single<Integer> readRssi() {
         return Single.just(rssi);
+    }
+
+    @Override
+    public Single<PhyPair> readPhy() {
+        return Single.just(new PhyPairImpl(RxBlePhy.PHY_1M, RxBlePhy.PHY_1M));
+    }
+
+    @Override
+    public Single<PhyPair> setPreferredPhy(Set<RxBlePhy> txPhy, Set<RxBlePhy> rxPhy, RxBlePhyOption phyOptions) {
+        RxBlePhy tx = txPhy.isEmpty() ? RxBlePhy.PHY_1M : txPhy.iterator().next();
+        RxBlePhy rx = rxPhy.isEmpty() ? RxBlePhy.PHY_1M : rxPhy.iterator().next();
+        return Single.just(new PhyPairImpl(tx, rx));
     }
 
     @Override

@@ -14,6 +14,8 @@ public class BleGattOperationType {
     public static final BleGattOperationType READ_RSSI = new BleGattOperationType("READ_RSSI");
     public static final BleGattOperationType ON_MTU_CHANGED = new BleGattOperationType("ON_MTU_CHANGED");
     public static final BleGattOperationType CONNECTION_PRIORITY_CHANGE = new BleGattOperationType("CONNECTION_PRIORITY_CHANGE");
+    public static final BleGattOperationType PHY_READ = new BleGattOperationType("PHY_READ");
+    public static final BleGattOperationType PHY_UPDATE = new BleGattOperationType("PHY_UPDATE");
     private final String description;
 
     private BleGattOperationType(String description) {
