@@ -22,20 +22,21 @@ group = GROUP
 
 afterEvaluate { project ->
     if (isAndroidProject(project)) {
-        android.libraryVariants.matching { it.name == "release" }.each { releaseVariant ->
-            tasks.register('javadocs', Javadoc) {
-                dependsOn 'assembleRelease'
-                source = android.sourceSets.main.java.source
-                classpath += project.files(
-                        files(releaseVariant.javaCompileProvider.get().classpath),
-                        project.android.getBootClasspath().join(File.pathSeparator),
-                        files("${layout.buildDirectory.get()}/intermediates/classes/release"),
-                        files("${layout.buildDirectory.get()}/generated/ap_generated_sources/release/out"),
-                        files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
-                )
-                title = null
-                options.noTimestamp(false)
-            }
+        def javaCompileTask = tasks.named('compileReleaseJavaWithJavac')
+        def bootClasspathFiles = androidComponents.sdkComponents.bootClasspath
+        
+        tasks.register('javadocs', Javadoc) {
+            dependsOn 'assembleRelease'
+            source = android.sourceSets.main.java.srcDirs
+            classpath += project.files(
+                    javaCompileTask.map { it.classpath },
+                    bootClasspathFiles,
+                    files("${layout.buildDirectory.get()}/intermediates/classes/release"),
+                    files("${layout.buildDirectory.get()}/generated/ap_generated_sources/release/out"),
+                    files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
+            )
+            title = null
+            options.noTimestamp(false)
         }
     } else {
         tasks.register('javadocs', Javadoc) {
@@ -54,7 +55,7 @@ afterEvaluate { project ->
     tasks.register('sourcesJar', Jar) {
         archiveClassifier.set('sources')
         if (isAndroidProject(project)) {
-            from android.sourceSets.main.java.source
+            from android.sourceSets.main.java.srcDirs
         } else {
             from sourceSets.main.allSource
         }

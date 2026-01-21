@@ -63,25 +63,27 @@ dependencies {
 
 // Configure Groovy compilation for unit tests
 afterEvaluate {
-    android.unitTestVariants.configureEach { variant ->
-        def variantName = variant.name.capitalize()
+    ['DebugUnitTest', 'ReleaseUnitTest'].each { variantName ->
         def javaCompileTaskName = "compile${variantName}JavaWithJavac"
+        def testTaskName = "test${variantName}"
         
-        tasks.register("compile${variantName}Groovy", GroovyCompile) {
-            def javaCompileTask = tasks.named(javaCompileTaskName).get()
+        if (tasks.findByName(javaCompileTaskName) != null) {
+            tasks.register("compile${variantName}Groovy", GroovyCompile) {
+                def javaCompileTask = tasks.named(javaCompileTaskName).get()
+                
+                dependsOn javaCompileTask
+                
+                source = fileTree('src/test/groovy')
+                classpath = javaCompileTask.classpath + files(javaCompileTask.destinationDirectory)
+                destinationDirectory = javaCompileTask.destinationDirectory
+                sourceCompatibility = rootProject.ext.targetCompatibilityVersion
+                targetCompatibility = rootProject.ext.targetCompatibilityVersion
+                groovyClasspath = configurations.groovyCompilerClasspath
+            }
             
-            dependsOn javaCompileTask
-            
-            source = fileTree('src/test/groovy')
-            classpath = javaCompileTask.classpath + files(javaCompileTask.destinationDirectory)
-            destinationDirectory = javaCompileTask.destinationDirectory
-            sourceCompatibility = rootProject.ext.targetCompatibilityVersion
-            targetCompatibility = rootProject.ext.targetCompatibilityVersion
-            groovyClasspath = configurations.groovyCompilerClasspath
-        }
-        
-        tasks.named("test${variantName}").configure {
-            dependsOn "compile${variantName}Groovy"
+            tasks.named(testTaskName).configure {
+                dependsOn "compile${variantName}Groovy"
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace = 'io.nrbtech.rxandroidble.samplekotlin'
@@ -30,11 +29,15 @@ android {
         targetCompatibility = rootProject.ext.targetCompatibilityVersion
     }
 
+    kotlin {
+        jvmToolchain(17)
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs = [
                 'src/test/kotlin',
-                '../rxandroidble/src/test/java' // this produces a warning about duplicate content roots, but it is still required
+                '../rxandroidble/src/test/java'
         ]
     }
 }
@@ -46,9 +49,6 @@ configurations.configureEach {
 dependencies {
     // RxAndroidBle
     implementation project(path: ':rxandroidble')
-
-    // Kotlin stdlib
-    implementation libs.org.jetbrains.kotlin.kotlin.stdlib.jdk7
 
     // AndroidX
     implementation libs.androidx.appcompat
