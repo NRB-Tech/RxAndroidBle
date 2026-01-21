@@ -1,7 +1,6 @@
 package io.nrbtech.rxandroidble.internal.connection;
 
 
-import com.jakewharton.rxrelay3.BehaviorRelay;
 import io.nrbtech.rxandroidble.RxBleAdapterStateObservable;
 import io.nrbtech.rxandroidble.exceptions.BleDisconnectedException;
 import io.nrbtech.rxandroidble.exceptions.BleException;
@@ -19,6 +18,7 @@ import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 /**
  * A class that is responsible for routing all potential sources of disconnection to an Observable that emits only errors.
@@ -26,7 +26,7 @@ import io.reactivex.rxjava3.functions.Predicate;
 @ConnectionScope
 class DisconnectionRouter implements DisconnectionRouterInput, DisconnectionRouterOutput {
 
-    private final BehaviorRelay<BleException> bleExceptionBehaviorRelay = BehaviorRelay.create();
+    private final BehaviorSubject<BleException> bleExceptionBehaviorSubject = BehaviorSubject.create();
     private final Observable<BleException> firstDisconnectionValueObs;
     private final Observable<Object> firstDisconnectionExceptionObs;
 
@@ -59,14 +59,19 @@ class DisconnectionRouter implements DisconnectionRouterInput, DisconnectionRout
                         RxBleLog.v("An exception received, indicating that the adapter has became unusable.");
                     }
                 })
-                .subscribe(bleExceptionBehaviorRelay, new Consumer<Throwable>() {
+                .subscribe(new Consumer<BleException>() {
+                    @Override
+                    public void accept(BleException t) {
+                        bleExceptionBehaviorSubject.onNext(t);
+                    }
+                }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         RxBleLog.e(throwable, "Failed to monitor adapter state.");
                     }
                 });
 
-        firstDisconnectionValueObs = bleExceptionBehaviorRelay
+        firstDisconnectionValueObs = bleExceptionBehaviorSubject
                 .firstElement()
                 .toObservable()
                 .doOnTerminate(new Action() {
@@ -107,12 +112,17 @@ class DisconnectionRouter implements DisconnectionRouterInput, DisconnectionRout
 
     @Override
     public void onDisconnectedException(BleDisconnectedException disconnectedException) {
-        bleExceptionBehaviorRelay.accept(disconnectedException);
+        bleExceptionBehaviorSubject.onNext(disconnectedException);
     }
 
     @Override
     public void onGattConnectionStateException(BleGattException disconnectedGattException) {
-        bleExceptionBehaviorRelay.accept(disconnectedGattException);
+        bleExceptionBehaviorSubject.onNext(disconnectedGattException);
+    }
+
+    @Override
+    public void close() {
+        bleExceptionBehaviorSubject.onComplete();
     }
 
     @Override
