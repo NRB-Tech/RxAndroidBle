@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+## Version 2.3.0 - 21 January 26
+
+* Upgraded to Android Gradle Plugin 9.0.0 and Gradle 9.1.0
+* Migrated to AGP 9's new DSL and built-in Kotlin support
+* Replaced unmaintained groovy-android-gradle-plugin with manual Groovy compilation for Spock tests
+* Updated Shadow plugin to 9.3.0 for Gradle 9 compatibility
+* Enabled Gradle configuration cache
+
 ## Version 2.2.6 - 7 November 25
 
 * Upgraded dependencies
