@@ -25,8 +25,8 @@ jobs:
       - name: "Run Checkstyle"
         run: ./gradlew checkstyle
       - name: "Run Unit Tests — RxAndroidBle"
-        run: ./gradlew :rxandroidble:testReleaseUnitTest
+        run: ./gradlew :rxandroidble:testDebugUnitTest
       - name: "Run Unit Tests — MockClient"
-        run: ./gradlew :mockrxandroidble:testReleaseUnitTest
+        run: ./gradlew :mockrxandroidble:testDebugUnitTest
       - name: "Run Unit Tests — Sample Kotlin"
-        run: ./gradlew :sample-kotlin:testReleaseUnitTest
+        run: ./gradlew :sample-kotlin:testDebugUnitTest
