@@ -16,7 +16,6 @@
 
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = VERSION_NAME
 group = GROUP
@@ -30,8 +29,8 @@ afterEvaluate { project ->
                 classpath += project.files(
                         files(releaseVariant.javaCompileProvider.get().classpath),
                         project.android.getBootClasspath().join(File.pathSeparator),
-                        files("$buildDir/intermediates/classes/release"),
-                        files("$buildDir/generated/ap_generated_sources/release/out"),
+                        files("${layout.buildDirectory.get()}/intermediates/classes/release"),
+                        files("${layout.buildDirectory.get()}/generated/ap_generated_sources/release/out"),
                         files("$project.rootProject.rootDir/dagger-library-shadow/build/libs/dagger-library-shadow-${project.version}.jar")
                 )
                 title = null
@@ -60,16 +59,30 @@ afterEvaluate { project ->
             from sourceSets.main.allSource
         }
     }
-    publishing {
+    
+    if (isAndroidProject(project)) {
+        // For Android projects, configure publishing after components are available
+        project.components.configureEach { component ->
+            if (component.name == 'release') {
+                configurePublishing(project, component)
+            }
+        }
+    } else {
+        configurePublishing(project, components.java)
+    }
+}
+
+def configurePublishing(project, component) {
+    project.publishing {
         publications {
             release(MavenPublication) { publication ->
                 groupId = GROUP
                 artifactId = POM_ARTIFACT_ID
                 version = VERSION_NAME
-                if (project.tasks.findByName('shadowJar')) {
-                    project.shadow.component(publication)
+                if (project.tasks.findByName('shadowJar') && project.components.findByName('shadow')) {
+                    from project.components.shadow
                 } else {
-                    from isAndroidProject(project) ? components.release : components.java
+                    from component
                 }
                 artifact sourcesJar
                 artifact javadocsJar
@@ -101,9 +114,9 @@ afterEvaluate { project ->
         }
     }
 
-    signing {
-        required = isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives")
+    project.signing {
+        required = isReleaseBuild() && project.gradle.taskGraph.hasTask("uploadArchives")
         useInMemoryPgpKeys(getSigningKey(), getSigningKeyPassword())
-        sign(publishing.publications.release)
+        sign(project.publishing.publications.release)
     }
 }

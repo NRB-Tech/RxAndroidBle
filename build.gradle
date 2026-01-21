@@ -13,10 +13,9 @@ buildscript {
     dependencies {
         classpath libs.com.android.tools.build.gradle
         classpath libs.com.github.ben.manes.gradle.versions.plugin
-        classpath libs.gradle.plugin.org.codehaus.groovy.groovy.android.gradle.plugin
         classpath libs.org.jetbrains.kotlin.kotlin.gradle.plugin
         classpath libs.io.github.gradle.nexus.publish.plugin
-        classpath libs.com.github.johnrengelman.shadow
+        classpath libs.com.gradleup.shadow
     }
 }
 

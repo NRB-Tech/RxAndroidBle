@@ -7,7 +7,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.gradleup.shadow'
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 
 def buildSrcDir = '../gradle'
@@ -19,8 +19,8 @@ shadowJar {
     transform(ServiceFileTransformer)
 }
 
-artifacts {
-    archives shadowJar
+tasks.named('assemble') {
+    dependsOn shadowJar
 }
 
 dependencies {

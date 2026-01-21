@@ -1,7 +1,9 @@
-apply plugin: 'com.android.library'
-apply plugin: 'groovyx.android'
+plugins {
+    id 'com.android.library'
+    id 'groovy-base'
+}
+
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
-apply plugin: 'com.github.johnrengelman.shadow'
 
 android {
     namespace = 'io.nrbtech.rxandroidble.mockrxandroidble'
@@ -33,13 +35,12 @@ android {
         }
     }
 
-
     preBuild.dependsOn 'checkstyle'
 
     sourceSets {
         test {
             java {
-                srcDir("../rxandroidble/src/test/java") // Add android stubs from main lib tests
+                srcDir("../rxandroidble/src/test/java")
             }
         }
     }
@@ -48,13 +49,40 @@ android {
     }
 }
 
-// add explicit dependencies to prevent warnings
-afterEvaluate {
-    tasks.named('testDebugUnitTest') {
-        dependsOn 'compileDebugUnitTestGroovyWithGroovyc'
+// Create a resolvable configuration for Groovy compilation
+configurations {
+    groovyCompilerClasspath {
+        canBeResolved = true
+        canBeConsumed = false
     }
-    tasks.named('testReleaseUnitTest') {
-        dependsOn 'compileReleaseUnitTestGroovyWithGroovyc'
+}
+
+dependencies {
+    groovyCompilerClasspath libs.org.apache.groovy
+}
+
+// Configure Groovy compilation for unit tests
+afterEvaluate {
+    android.unitTestVariants.configureEach { variant ->
+        def variantName = variant.name.capitalize()
+        def javaCompileTaskName = "compile${variantName}JavaWithJavac"
+        
+        tasks.register("compile${variantName}Groovy", GroovyCompile) {
+            def javaCompileTask = tasks.named(javaCompileTaskName).get()
+            
+            dependsOn javaCompileTask
+            
+            source = fileTree('src/test/groovy')
+            classpath = javaCompileTask.classpath + files(javaCompileTask.destinationDirectory)
+            destinationDirectory = javaCompileTask.destinationDirectory
+            sourceCompatibility = rootProject.ext.targetCompatibilityVersion
+            targetCompatibility = rootProject.ext.targetCompatibilityVersion
+            groovyClasspath = configurations.groovyCompilerClasspath
+        }
+        
+        tasks.named("test${variantName}").configure {
+            dependsOn "compile${variantName}Groovy"
+        }
     }
 }
 
