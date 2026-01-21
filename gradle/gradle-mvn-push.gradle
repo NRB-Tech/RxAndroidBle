@@ -40,7 +40,7 @@ afterEvaluate { project ->
         }
     } else {
         tasks.register('javadocs', Javadoc) {
-            source = sourceSets.main.java.classesDirectory
+            source = sourceSets.main.java.srcDirs
             classpath += configurations.compileClasspath
             title = null
             options.noTimestamp(false)
