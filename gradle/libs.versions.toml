@@ -7,7 +7,6 @@ targetSDK = "36"
 # @keep this version
 minSDK = "21"
 org-apache-groovy = "5.0.3"
-org-jetbrains-kotlin = "2.2.10"
 androidx-annotation = "1.9.1"
 androidx-appcompat = "1.7.1"
 androidx-recyclerview = "1.4.0"
@@ -48,8 +47,6 @@ io-reactivex-rxjava3-rxjava = { module = "io.reactivex.rxjava3:rxjava", version.
 io-reactivex-rxjava3-rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "io-reactivex-rxjava3-rxkotlin" }
 net-bytebuddy-byte-buddy = { module = "net.bytebuddy:byte-buddy", version.ref = "net-bytebuddy-byte-buddy" }
 org-apache-groovy = { module = "org.apache.groovy:groovy", version.ref = "org-apache-groovy" }
-org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "org-jetbrains-kotlin" }
 org-junit-jupiter-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "org-junit-jupiter-junit-jupiter" }
 org-junit-platform-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "org-junit-platform-junit-platform-launcher" }
 org-objenesis = { module = "org.objenesis:objenesis", version.ref = "org-objenesis" }
