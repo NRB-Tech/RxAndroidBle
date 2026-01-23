@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+## Version 2.4.0 - 21 January 26
+
+* Merged upstream fixes from Polidea/RxAndroidBle:
+  * Fixed RxBleAdapterStateObservable memory leak (polidea@7f11356)
+  * Fixed maximal supported MTU on Android 13+ (515 instead of 517) (polidea@90d729e)
+  * Fixed CharacteristicLongWriteOperation defaults for Android 13+ buffer limits (polidea@42285c3)
+  * Prepared LoggerUtil for new BluetoothGattCallback methods (polidea@dbb55da)
+  * Added `setLegacy` method to ScanSettings for Bluetooth 5.0 extended advertising (polidea@4371b78)
+  * Added PHY read and update functionality for Bluetooth 5.0 (polidea@e9e45cc)
+
 ## Version 2.3.0 - 21 January 26
 
 * Upgraded to Android Gradle Plugin 9.0.0 and Gradle 9.1.0
