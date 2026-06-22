@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Version 2.4.1 - 22 June 26
+
+* Dependency updates
+
 ## Version 2.4.0 - 21 January 26
 
 * Merged upstream fixes from Polidea/RxAndroidBle:
