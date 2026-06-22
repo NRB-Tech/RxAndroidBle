@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Version 2.5.0 - 22 June 26
+
+* Raised minimum supported SDK to API 23 (Android 6.0), dropping API 21–22 support, to remain compatible with Material Components 1.14.0
+
 ## Version 2.4.1 - 22 June 26
 
 * Dependency updates
