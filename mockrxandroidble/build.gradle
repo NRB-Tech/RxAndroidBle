@@ -13,6 +13,9 @@ android {
     defaultConfig {
         minSdkVersion libs.versions.minSDK.get().toInteger()
         targetSdk = libs.versions.targetSDK.get().toInteger()
+        aarMetadata {
+            minCompileSdk = libs.versions.minCompileSDK.get().toInteger()
+        }
     }
 
     compileOptions {

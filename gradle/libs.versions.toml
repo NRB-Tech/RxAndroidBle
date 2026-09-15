@@ -4,6 +4,8 @@ com-google-dagger = "2.59.2"
 compileSDK = "37"
 # @keep this version
 targetSDK = "37"
+# @keep this version: the lowest compileSdk consumers can use. Kept below compileSDK so apps are not forced onto the newest SDK
+minCompileSDK = "35"
 # @keep this version
 minSDK = "23"
 org-apache-groovy = "5.0.6"
