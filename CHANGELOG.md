@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Version 2.5.1 - 15 September 26
+
+* Apps can use the library with `compileSdk` 35 or higher, including on Android Gradle Plugin 8.x. Version 2.5.0 incorrectly required `compileSdk` 37
+
 ## Version 2.5.0 - 22 June 26
 
 * Raised minimum supported SDK to API 23 (Android 6.0), dropping API 21–22 support, to remain compatible with Material Components 1.14.0
